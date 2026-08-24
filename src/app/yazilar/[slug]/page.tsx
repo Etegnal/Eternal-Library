@@ -35,7 +35,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       <div>
         <Link
           href="/yazilar"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-cozy-amber-dark dark:text-amber-400 hover:text-cozy-amber dark:hover:text-amber-300 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-cozy-amber-dark hover:text-cozy-amber transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Tüm Yazılara Dön</span>
@@ -44,31 +44,31 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
 
       {/* Header Info */}
       <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <div className="flex items-center justify-center gap-4 text-xs text-cozy-coffee-light dark:text-amber-200">
-          <div className="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-950 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-700">
-            <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark dark:text-amber-400" />
+        <div className="flex items-center justify-center gap-4 text-xs text-cozy-coffee-light">
+          <div className="flex items-center gap-1.5 bg-amber-100/80 px-3 py-1 rounded-full border border-amber-200">
+            <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark" />
             <span>{dateStr}</span>
           </div>
           {article.readingTime && (
-            <div className="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-950 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-700">
-              <Clock className="w-3.5 h-3.5 text-cozy-amber-dark dark:text-amber-400" />
+            <div className="flex items-center gap-1.5 bg-amber-100/80 px-3 py-1 rounded-full border border-amber-200">
+              <Clock className="w-3.5 h-3.5 text-cozy-amber-dark" />
               <span>{article.readingTime}</span>
             </div>
           )}
         </div>
 
-        <h1 className="font-serif font-bold text-3xl sm:text-5xl text-cozy-coffee dark:text-amber-300 leading-tight">
+        <h1 className="font-serif font-bold text-3xl sm:text-5xl text-cozy-coffee leading-tight">
           {article.title}
         </h1>
 
-        <p className="text-cozy-coffee-light dark:text-amber-100/90 font-serif italic text-lg sm:text-xl leading-relaxed">
+        <p className="text-cozy-coffee-light font-serif italic text-lg sm:text-xl leading-relaxed">
           “{article.excerpt}”
         </p>
       </div>
 
       {/* Featured Cover Image */}
       {article.coverImage && (
-        <div className="relative w-full h-[320px] sm:h-[450px] rounded-3xl overflow-hidden shadow-cozy border border-cozy-parchment-border dark:border-[#5C3119]">
+        <div className="relative w-full h-[320px] sm:h-[450px] rounded-3xl overflow-hidden shadow-cozy border border-cozy-parchment-border">
           <Image
             src={article.coverImage}
             alt={article.title}
@@ -80,25 +80,25 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       )}
 
       {/* Article Content */}
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] dark:bg-[#23120A] border border-[#E6D7BC] dark:border-[#5C3119] shadow-parchment text-cozy-coffee dark:text-amber-100">
-        <div className="prose prose-stone dark:prose-invert lg:prose-lg max-w-none font-sans leading-relaxed text-cozy-coffee dark:text-amber-100 space-y-6">
+      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-cozy-coffee">
+        <div className="prose prose-stone lg:prose-lg max-w-none font-sans leading-relaxed text-cozy-coffee space-y-6">
           {article.content.split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('### ')) {
               return (
-                <h3 key={idx} className="font-serif font-bold text-2xl text-cozy-coffee dark:text-amber-300 pt-4 border-b border-amber-200 dark:border-amber-800 pb-2">
+                <h3 key={idx} className="font-serif font-bold text-2xl text-cozy-coffee pt-4 border-b border-amber-200 pb-2">
                   {paragraph.replace('### ', '')}
                 </h3>
               );
             }
             if (paragraph.startsWith('> ')) {
               return (
-                <blockquote key={idx} className="border-l-4 border-cozy-amber pl-4 italic font-serif text-lg text-cozy-coffee-light dark:text-amber-200 bg-amber-50/50 dark:bg-amber-950/40 p-4 rounded-r-xl">
+                <blockquote key={idx} className="border-l-4 border-cozy-amber pl-4 italic font-serif text-lg text-cozy-coffee-light bg-amber-50/50 p-4 rounded-r-xl">
                   {paragraph.replace('> ', '')}
                 </blockquote>
               );
             }
             return (
-              <p key={idx} className="text-base sm:text-lg leading-relaxed text-cozy-coffee/90 dark:text-amber-100/90">
+              <p key={idx} className="text-base sm:text-lg leading-relaxed text-cozy-coffee/90">
                 {paragraph}
               </p>
             );
