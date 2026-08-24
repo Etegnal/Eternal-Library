@@ -5,7 +5,7 @@ import { authOptions } from '@/lib/auth';
 
 export async function GET() {
   const posts = await prisma.post.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { publishedAt: 'desc' },
   });
   return NextResponse.json(posts);
 }
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime } = body;
+    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt } = body;
 
     if (!title || !slug || !content || !excerpt || !type) {
       return NextResponse.json({ error: 'Gerekli alanlar eksik' }, { status: 400 });
@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
         type, // "YAZI" | "SIIR"
         coverImage: coverImage || null,
         readingTime: readingTime || '3 dk okuma',
+        publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
       },
     });
 

@@ -5,8 +5,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #FEF3C7;
+  --background: #FEF8EC;
   --foreground: #362215;
+}
+
+html.dark {
+  --background: #140803;
+  --foreground: #FEF3C7;
 }
 
 body {
@@ -14,6 +19,7 @@ body {
   color: var(--foreground);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .font-playfair {
@@ -47,6 +53,31 @@ body {
   background-color: #FEF8EC;
   background-image: radial-gradient(#E8DBBF 0.8px, transparent 0.8px);
   background-size: 20px 20px;
+  transition: all 0.3s ease;
+}
+
+html.dark .parchment-container {
+  background-color: #1F1009;
+  background-image: radial-gradient(#3B2113 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-color: #4A2B19 !important;
+  color: #FEF3C7 !important;
+}
+
+html.dark .bg-white,
+html.dark .bg-\[\#FFFDF9\],
+html.dark .bg-\[\#FEFBF3\] {
+  background-color: #26140B !important;
+  border-color: #4A2B19 !important;
+  color: #FEF3C7 !important;
+}
+
+html.dark .text-cozy-coffee {
+  color: #FEF3C7 !important;
+}
+
+html.dark .text-cozy-coffee-light {
+  color: #FCD34D/80 !important;
 }
 
 /* Ornate Gold Filigree Board Glow */

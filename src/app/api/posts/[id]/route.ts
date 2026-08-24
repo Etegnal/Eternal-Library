@@ -29,7 +29,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime } = body;
+    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt } = body;
 
     const updatedPost = await prisma.post.update({
       where: { id: params.id },
@@ -41,6 +41,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         type,
         coverImage,
         readingTime,
+        publishedAt: publishedAt ? new Date(publishedAt) : undefined,
       },
     });
 

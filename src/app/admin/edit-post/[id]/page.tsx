@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Save, Feather, BookOpen } from 'lucide-react';
+import { ArrowLeft, Save, Feather, BookOpen, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EditPostPage() {
@@ -16,6 +16,7 @@ export default function EditPostPage() {
   const [type, setType] = useState<'YAZI' | 'SIIR'>('YAZI');
   const [coverImage, setCoverImage] = useState('');
   const [readingTime, setReadingTime] = useState('3 dk okuma');
+  const [publishedAt, setPublishedAt] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
@@ -36,6 +37,9 @@ export default function EditPostPage() {
             setType(target.type || 'YAZI');
             setCoverImage(target.coverImage || '');
             setReadingTime(target.readingTime || '3 dk okuma');
+            if (target.publishedAt) {
+              setPublishedAt(new Date(target.publishedAt).toISOString().split('T')[0]);
+            }
           } else {
             setError('İçerik bulunamadı');
           }
@@ -68,6 +72,7 @@ export default function EditPostPage() {
           type,
           coverImage,
           readingTime,
+          publishedAt,
         }),
       });
 
@@ -88,7 +93,7 @@ export default function EditPostPage() {
 
   if (fetching) {
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 text-center text-cozy-coffee font-medium animate-pulse">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 text-center text-cozy-coffee dark:text-amber-100 font-medium animate-pulse">
         İçerik bilgileri yükleniyor...
       </div>
     );
@@ -106,18 +111,18 @@ export default function EditPostPage() {
         </Link>
       </div>
 
-      <div className="p-8 sm:p-10 rounded-3xl bg-[#FFFDF9] border-2 border-[#E5D5B7] shadow-fire space-y-6">
-        <h1 className="font-serif font-bold text-2xl sm:text-3xl text-cozy-coffee border-b border-cozy-parchment-border pb-4">
+      <div className="p-8 sm:p-10 rounded-3xl bg-[#FFFDF9] dark:bg-[#1E110A] border-2 border-[#E5D5B7] dark:border-amber-900/60 shadow-fire space-y-6 text-cozy-coffee dark:text-amber-100">
+        <h1 className="font-serif font-bold text-2xl sm:text-3xl border-b border-cozy-parchment-border dark:border-amber-900/40 pb-4">
           İçeriği Düzenle ({type})
         </h1>
 
         {error && (
-          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs">
+          <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 text-cozy-coffee">
+        <form onSubmit={handleSubmit} className="space-y-6">
           
           {/* Content Type Selector */}
           <div>
@@ -131,7 +136,7 @@ export default function EditPostPage() {
                 className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border transition-all ${
                   type === 'YAZI'
                     ? 'bg-cozy-amber text-cozy-wood border-cozy-amber shadow-md'
-                    : 'bg-amber-50 text-cozy-coffee border-amber-200 hover:bg-amber-100'
+                    : 'bg-amber-50 dark:bg-amber-950/40 text-cozy-coffee dark:text-amber-200 border-amber-200 dark:border-amber-800 hover:bg-amber-100'
                 }`}
               >
                 <BookOpen className="w-4 h-4" />
@@ -144,7 +149,7 @@ export default function EditPostPage() {
                 className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border transition-all ${
                   type === 'SIIR'
                     ? 'bg-cozy-amber text-cozy-wood border-cozy-amber shadow-md'
-                    : 'bg-amber-50 text-cozy-coffee border-amber-200 hover:bg-amber-100'
+                    : 'bg-amber-50 dark:bg-amber-950/40 text-cozy-coffee dark:text-amber-200 border-amber-200 dark:border-amber-800 hover:bg-amber-100'
                 }`}
               >
                 <Feather className="w-4 h-4" />
@@ -163,7 +168,7 @@ export default function EditPostPage() {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
             />
           </div>
 
@@ -177,7 +182,22 @@ export default function EditPostPage() {
               required
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm font-mono focus:outline-none focus:border-cozy-amber bg-amber-50/50"
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm font-mono focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
+            />
+          </div>
+
+          {/* Date Picker (Yayın Tarihi) */}
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-cozy-amber" />
+              <span>Yayın Tarihi</span>
+            </label>
+            <input
+              type="date"
+              required
+              value={publishedAt}
+              onChange={(e) => setPublishedAt(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
             />
           </div>
 
@@ -191,7 +211,7 @@ export default function EditPostPage() {
               rows={2}
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
             />
           </div>
 
@@ -206,7 +226,7 @@ export default function EditPostPage() {
                   type="url"
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
+                  className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
                 />
               </div>
               <div>
@@ -217,7 +237,7 @@ export default function EditPostPage() {
                   type="text"
                   value={readingTime}
                   onChange={(e) => setReadingTime(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
+                  className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
                 />
               </div>
             </div>
@@ -233,7 +253,7 @@ export default function EditPostPage() {
               rows={12}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm font-serif focus:outline-none focus:border-cozy-amber bg-amber-50/50 leading-relaxed"
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm font-serif focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30 leading-relaxed"
             />
           </div>
 
