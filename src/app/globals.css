@@ -96,7 +96,36 @@ body {
 }
 
 /* ==========================================================================
-   STRICT DARK MODE COLOR OVERRIDES (Applies ONLY when html.dark is active)
+   PRISTINE LIGHT MODE DEFAULT RULES (Strictly active when html DOES NOT have .dark)
+   ========================================================================== */
+
+html:not(.dark) body,
+html:not(.dark) main,
+html:not(.dark) .bg-\[\#FEF8EC\],
+html:not(.dark) .bg-\[\#FAF6EE\] {
+  background-color: #FEF8EC !important;
+  color: #362215 !important;
+}
+
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) h6 {
+  color: #362215 !important;
+}
+
+html:not(.dark) p,
+html:not(.dark) span,
+html:not(.dark) div,
+html:not(.dark) li,
+html:not(.dark) label {
+  color: #362215;
+}
+
+/* ==========================================================================
+   STRICT DARK MODE OVERRIDES (Applies ONLY when html HAS .dark)
    ========================================================================== */
 
 html.dark body,

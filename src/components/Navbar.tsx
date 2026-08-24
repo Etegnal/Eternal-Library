@@ -13,9 +13,9 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Check saved theme or system preference
+    // Default to Light Mode unless explicitly set to 'dark' in localStorage
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (savedTheme === 'dark') {
       setIsDark(true);
       document.documentElement.classList.add('dark');
     } else {
@@ -72,7 +72,7 @@ export default function Navbar() {
         </Link>
 
         {/* DESKTOP NAVIGATION BAR */}
-        <nav className="hidden md:flex items-center gap-1.5 bg-[#23120A]/75 backdrop-blur-md px-5 py-2 rounded-full border border-amber-700/40 shadow-2xl">
+        <nav className="hidden md:flex items-center gap-1.5 bg-[#23120A]/85 backdrop-blur-md px-5 py-2 rounded-full border border-amber-700/40 shadow-2xl">
           {navLinks.map((link) => {
             const active = isActive(link.href);
             return (
@@ -90,14 +90,14 @@ export default function Navbar() {
             );
           })}
 
-          {/* DARK MODE TOGGLE BUTTON */}
+          {/* DARK / LIGHT MODE TOGGLE BUTTON */}
           <button
             onClick={toggleTheme}
             className="ml-1 p-2 rounded-full text-amber-300 hover:bg-amber-900/60 border border-amber-600/40 transition-all"
             title={isDark ? "Gündüz Moduna Geç" : "Gece Moduna Geç (Dark Mode)"}
             aria-label="Karanlık Mod Değiştir"
           >
-            {isDark ? <Sun className="w-4 h-4 text-amber-300 animate-spin-slow" /> : <Moon className="w-4 h-4 text-amber-200" />}
+            {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-amber-200" />}
           </button>
 
           <Link
