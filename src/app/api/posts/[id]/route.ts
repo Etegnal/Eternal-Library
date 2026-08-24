@@ -29,7 +29,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt } = body;
+    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
 
     const updatedPost = await prisma.post.update({
       where: { id: params.id },
@@ -41,10 +41,30 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         type,
         coverImage,
         readingTime,
+        isFeatured,
         publishedAt: publishedAt ? new Date(publishedAt) : undefined,
       },
     });
 
+    return NextResponse.json(updatedPost);
+  } catch (error) {
+    return NextResponse.json({ error: 'Güncelleme işlemi başarısız' }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const updatedPost = await prisma.post.update({
+      where: { id: params.id },
+      data: body,
+    });
     return NextResponse.json(updatedPost);
   } catch (error) {
     return NextResponse.json({ error: 'Güncelleme işlemi başarısız' }, { status: 500 });

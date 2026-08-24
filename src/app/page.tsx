@@ -12,22 +12,42 @@ export default async function HomePage() {
 
   let latestArticles: any[] = [];
   try {
+    // Primary: fetch posts featured by Admin heart selection
     latestArticles = await prisma.post.findMany({
-      where: { type: 'YAZI' },
+      where: { type: 'YAZI', isFeatured: true },
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
+
+    // Fallback if none featured
+    if (latestArticles.length === 0) {
+      latestArticles = await prisma.post.findMany({
+        where: { type: 'YAZI' },
+        orderBy: { publishedAt: 'desc' },
+        take: 4,
+      });
+    }
   } catch (e) {
     console.error("Error fetching articles:", e);
   }
 
   let featuredPoems: any[] = [];
   try {
+    // Primary: fetch poems featured by Admin heart selection
     featuredPoems = await prisma.post.findMany({
-      where: { type: 'SIIR' },
+      where: { type: 'SIIR', isFeatured: true },
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
+
+    // Fallback if none featured
+    if (featuredPoems.length === 0) {
+      featuredPoems = await prisma.post.findMany({
+        where: { type: 'SIIR' },
+        orderBy: { publishedAt: 'desc' },
+        take: 4,
+      });
+    }
   } catch (e) {
     console.error("Error fetching poems:", e);
   }

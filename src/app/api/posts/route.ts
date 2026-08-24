@@ -3,8 +3,17 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const featuredOnly = searchParams.get('featured') === 'true';
+
+  const where: any = {};
+  if (featuredOnly) {
+    where.isFeatured = true;
+  }
+
   const posts = await prisma.post.findMany({
+    where,
     orderBy: { publishedAt: 'desc' },
   });
   return NextResponse.json(posts);
@@ -19,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt } = body;
+    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
 
     if (!title || !slug || !content || !excerpt || !type) {
       return NextResponse.json({ error: 'Gerekli alanlar eksik' }, { status: 400 });
@@ -34,6 +43,7 @@ export async function POST(req: NextRequest) {
         type, // "YAZI" | "SIIR"
         coverImage: coverImage || null,
         readingTime: readingTime || '3 dk okuma',
+        isFeatured: isFeatured ?? true,
         publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
       },
     });
