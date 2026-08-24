@@ -10,7 +10,7 @@
 }
 
 html.dark {
-  --background: #160B05;
+  --background: #140803;
   --foreground: #FEF3C7;
   color-scheme: dark;
 }
@@ -50,14 +50,14 @@ body {
 }
 
 /* ==========================================================================
-   GLOBAL DARK MODE OVERRIDES (Converts all beige areas to deep mahogany brown)
+   GLOBAL DARK MODE OVERRIDES (Strict Color Inversions)
    ========================================================================== */
 
 html.dark body,
 html.dark main,
 html.dark .bg-\[\#FEF8EC\],
 html.dark .bg-\[\#FAF6EE\] {
-  background-color: #160B05 !important;
+  background-color: #140803 !important;
   color: #FEF3C7 !important;
 }
 
@@ -70,27 +70,41 @@ html.dark .bg-\[\#FAF6EE\] {
 }
 
 html.dark .parchment-container {
-  background-color: #22130B !important;
-  background-image: radial-gradient(#452414 1px, transparent 1px) !important;
+  background-color: #1F1009 !important;
+  background-image: radial-gradient(#3B2113 1px, transparent 1px) !important;
   background-size: 20px 20px !important;
   border-color: #5C3119 !important;
   color: #FEF3C7 !important;
 }
 
-/* White and Light Cards -> Dark Mahogany Wood Cards in Dark Mode */
+/* White / Light Cards -> Dark Mahogany Wood Cards in Dark Mode */
 html.dark .bg-white,
-html.dark .bg-[#FFFDF9],
-html.dark .bg-[#FEFBF3],
+html.dark .bg-\[\#FFFDF9\],
+html.dark .bg-\[\#FEFBF3\],
 html.dark .bg-white\/70,
 html.dark .bg-white\/75,
+html.dark .bg-white\/80,
+html.dark .bg-amber-50,
 html.dark .bg-amber-50\/50,
-html.dark .bg-amber-50 {
-  background-color: #2A160C !important;
+html.dark .bg-amber-100,
+html.dark .bg-amber-100\/60,
+html.dark .bg-amber-100\/70,
+html.dark .bg-amber-100\/80 {
+  background-color: #23120A !important;
   border-color: #5C3119 !important;
   color: #FEF3C7 !important;
 }
 
-/* Typography Color Inversions for Dark Mode */
+/* Form Inputs, Textareas, Controls in Dark Mode */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1A0C06 !important;
+  border-color: #5C3119 !important;
+  color: #FEF3C7 !important;
+}
+
+/* Headings in Dark Mode */
 html.dark h1,
 html.dark h2,
 html.dark h3,
@@ -100,23 +114,16 @@ html.dark h6 {
   color: #FCD34D !important;
 }
 
-html.dark p,
-html.dark span,
-html.dark div,
-html.dark li,
-html.dark label {
-  color: #FEF3C7;
-}
-
-html.dark .text-cozy-coffee {
+/* Text Overrides for Dark Mode */
+html.dark .text-cozy-coffee,
+html.dark .text-\[\#362215\] {
   color: #FEF3C7 !important;
 }
 
-html.dark .text-cozy-coffee-light {
-  color: #E5D5B7 !important;
-}
-
-html.dark .text-[#362215] {
+html.dark .text-cozy-coffee-light,
+html.dark .text-amber-800,
+html.dark .text-amber-900,
+html.dark .text-amber-950 {
   color: #FCD34D !important;
 }
 
@@ -124,15 +131,15 @@ html.dark .border-cozy-parchment-border,
 html.dark .border-amber-200,
 html.dark .border-amber-200\/80,
 html.dark .border-amber-300,
-html.dark .border-[#E6D7BC],
-html.dark .border-[#E5D5B7],
-html.dark .border-[#E8DCC4] {
+html.dark .border-\[\#E6D7BC\],
+html.dark .border-\[\#E5D5B7\],
+html.dark .border-\[\#E8DCC4\] {
   border-color: #5C3119 !important;
 }
 
 /* Deckle Edge Transition Path in Dark Mode */
 html.dark .text-\[\#FEF8EC\] {
-  color: #160B05 !important;
+  color: #140803 !important;
 }
 
 /* Ornate Gold Filigree Board Glow */
