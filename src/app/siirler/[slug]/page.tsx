@@ -26,7 +26,7 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
   });
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       {/* Back Link */}
       <div>
         <Link

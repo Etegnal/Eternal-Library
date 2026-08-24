@@ -27,7 +27,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
   });
 
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-8">
+    <article className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       {/* Back button */}
       <div>
         <Link

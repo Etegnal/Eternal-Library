@@ -1,11 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Feather, BookOpen, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { ArrowLeft, Save, Feather, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
-export default function NewPostPage() {
+export default function EditPostPage() {
+  const params = useParams();
+  const postId = params.id as string;
+
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [excerpt, setExcerpt] = useState('');
@@ -14,26 +17,39 @@ export default function NewPostPage() {
   const [coverImage, setCoverImage] = useState('');
   const [readingTime, setReadingTime] = useState('3 dk okuma');
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setTitle(val);
-    // Auto-generate slug
-    const autoSlug = val
-      .toLowerCase()
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ş/g, 's')
-      .replace(/ı/g, 'i')
-      .replace(/ö/g, 'o')
-      .replace(/ç/g, 'c')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-    setSlug(autoSlug);
-  };
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await fetch(`/api/posts`);
+        if (res.ok) {
+          const posts = await res.json();
+          const target = posts.find((p: any) => p.id === postId);
+          if (target) {
+            setTitle(target.title || '');
+            setSlug(target.slug || '');
+            setExcerpt(target.excerpt || '');
+            setContent(target.content || '');
+            setType(target.type || 'YAZI');
+            setCoverImage(target.coverImage || '');
+            setReadingTime(target.readingTime || '3 dk okuma');
+          } else {
+            setError('İçerik bulunamadı');
+          }
+        }
+      } catch (e) {
+        console.error(e);
+        setError('İçerik yüklenirken hata oluştu');
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    if (postId) fetchPost();
+  }, [postId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,8 +57,8 @@ export default function NewPostPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/posts', {
-        method: 'POST',
+      const res = await fetch(`/api/posts/${postId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
@@ -60,7 +76,7 @@ export default function NewPostPage() {
         router.refresh();
       } else {
         const data = await res.json();
-        setError(data.error || 'İçerik kaydedilemedi');
+        setError(data.error || 'İçerik güncellenemedi');
       }
     } catch (e) {
       console.error(e);
@@ -69,6 +85,14 @@ export default function NewPostPage() {
       setLoading(false);
     }
   };
+
+  if (fetching) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 text-center text-cozy-coffee font-medium animate-pulse">
+        İçerik bilgileri yükleniyor...
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
@@ -84,7 +108,7 @@ export default function NewPostPage() {
 
       <div className="p-8 sm:p-10 rounded-3xl bg-[#FFFDF9] border-2 border-[#E5D5B7] shadow-fire space-y-6">
         <h1 className="font-serif font-bold text-2xl sm:text-3xl text-cozy-coffee border-b border-cozy-parchment-border pb-4">
-          Yeni İçerik Ekle (Yazı / Şiir)
+          İçeriği Düzenle ({type})
         </h1>
 
         {error && (
@@ -137,9 +161,8 @@ export default function NewPostPage() {
             <input
               type="text"
               required
-              placeholder="İçerik başlığı..."
               value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
             />
           </div>
@@ -166,7 +189,6 @@ export default function NewPostPage() {
             <textarea
               required
               rows={2}
-              placeholder="Ana sayfada gösterilecek kısa alıntı veya özet..."
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
@@ -178,11 +200,10 @@ export default function NewPostPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase mb-1">
-                  Kapak Görsel URL (Unsplash vb.)
+                  Kapak Görsel URL
                 </label>
                 <input
                   type="url"
-                  placeholder="https://images.unsplash.com/..."
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
@@ -194,7 +215,6 @@ export default function NewPostPage() {
                 </label>
                 <input
                   type="text"
-                  placeholder="4 dk okuma"
                   value={readingTime}
                   onChange={(e) => setReadingTime(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50"
@@ -211,11 +231,6 @@ export default function NewPostPage() {
             <textarea
               required
               rows={12}
-              placeholder={
-                type === 'SIIR'
-                  ? 'Şiir mısralarını buraya yazın...'
-                  : 'Yazı içeriğini buraya yazın (### Başlıklar, > Alıntılar kullanabilirsiniz)...'
-              }
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm font-serif focus:outline-none focus:border-cozy-amber bg-amber-50/50 leading-relaxed"
@@ -229,7 +244,7 @@ export default function NewPostPage() {
             className="w-full py-3.5 px-6 rounded-xl bg-cozy-amber hover:bg-cozy-amber-dark text-cozy-wood font-bold text-sm shadow-cozy transition-all flex items-center justify-center gap-2"
           >
             <Save className="w-4 h-4" />
-            <span>{loading ? 'Kaydediliyor...' : 'Yayınla ve Kaydet'}</span>
+            <span>{loading ? 'Güncelleniyor...' : 'Güncellemeleri Kaydet'}</span>
           </button>
         </form>
       </div>

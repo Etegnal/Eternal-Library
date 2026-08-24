@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import DeletePostButton from '@/components/DeletePostButton';
-import { Plus, Feather, BookOpen, Trash2, Edit, ShieldCheck, LogOut } from 'lucide-react';
+import { Plus, Feather, BookOpen, Edit, ShieldCheck } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -22,7 +22,7 @@ export default async function AdminDashboardPage() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-cozy-parchment-border shadow-sm">
         <div className="flex items-center gap-3">
@@ -88,7 +88,17 @@ export default async function AdminDashboardPage() {
                     <td className="px-6 py-4 text-xs text-cozy-coffee-light">
                       {new Date(post.publishedAt).toLocaleDateString('tr-TR')}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                      {/* Edit Button */}
+                      <Link
+                        href={`/admin/edit-post/${post.id}`}
+                        className="p-1.5 rounded-lg text-amber-800 hover:bg-amber-100 transition-colors"
+                        title="İçeriği Düzenle"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Link>
+
+                      {/* Delete Button */}
                       <DeletePostButton postId={post.id} title={post.title} />
                     </td>
                   </tr>
