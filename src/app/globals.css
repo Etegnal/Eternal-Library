@@ -10,8 +10,9 @@
 }
 
 html.dark {
-  --background: #140803;
+  --background: #160B05;
   --foreground: #FEF3C7;
+  color-scheme: dark;
 }
 
 body {
@@ -48,7 +49,19 @@ body {
   background: #B45309;
 }
 
-/* Vintage Parchment Card Texture */
+/* ==========================================================================
+   GLOBAL DARK MODE OVERRIDES (Converts all beige areas to deep mahogany brown)
+   ========================================================================== */
+
+html.dark body,
+html.dark main,
+html.dark .bg-\[\#FEF8EC\],
+html.dark .bg-\[\#FAF6EE\] {
+  background-color: #160B05 !important;
+  color: #FEF3C7 !important;
+}
+
+/* Parchment Sheets & Card Containers */
 .parchment-container {
   background-color: #FEF8EC;
   background-image: radial-gradient(#E8DBBF 0.8px, transparent 0.8px);
@@ -57,19 +70,42 @@ body {
 }
 
 html.dark .parchment-container {
-  background-color: #1F1009;
-  background-image: radial-gradient(#3B2113 1px, transparent 1px);
-  background-size: 20px 20px;
-  border-color: #4A2B19 !important;
+  background-color: #22130B !important;
+  background-image: radial-gradient(#452414 1px, transparent 1px) !important;
+  background-size: 20px 20px !important;
+  border-color: #5C3119 !important;
   color: #FEF3C7 !important;
 }
 
+/* White and Light Cards -> Dark Mahogany Wood Cards in Dark Mode */
 html.dark .bg-white,
-html.dark .bg-\[\#FFFDF9\],
-html.dark .bg-\[\#FEFBF3\] {
-  background-color: #26140B !important;
-  border-color: #4A2B19 !important;
+html.dark .bg-[#FFFDF9],
+html.dark .bg-[#FEFBF3],
+html.dark .bg-white\/70,
+html.dark .bg-white\/75,
+html.dark .bg-amber-50\/50,
+html.dark .bg-amber-50 {
+  background-color: #2A160C !important;
+  border-color: #5C3119 !important;
   color: #FEF3C7 !important;
+}
+
+/* Typography Color Inversions for Dark Mode */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #FCD34D !important;
+}
+
+html.dark p,
+html.dark span,
+html.dark div,
+html.dark li,
+html.dark label {
+  color: #FEF3C7;
 }
 
 html.dark .text-cozy-coffee {
@@ -77,12 +113,31 @@ html.dark .text-cozy-coffee {
 }
 
 html.dark .text-cozy-coffee-light {
-  color: #FCD34D/80 !important;
+  color: #E5D5B7 !important;
+}
+
+html.dark .text-[#362215] {
+  color: #FCD34D !important;
+}
+
+html.dark .border-cozy-parchment-border,
+html.dark .border-amber-200,
+html.dark .border-amber-200\/80,
+html.dark .border-amber-300,
+html.dark .border-[#E6D7BC],
+html.dark .border-[#E5D5B7],
+html.dark .border-[#E8DCC4] {
+  border-color: #5C3119 !important;
+}
+
+/* Deckle Edge Transition Path in Dark Mode */
+html.dark .text-\[\#FEF8EC\] {
+  color: #160B05 !important;
 }
 
 /* Ornate Gold Filigree Board Glow */
 .gold-filigree-card {
-  background: rgba(38, 20, 12, 0.75);
+  background: rgba(38, 20, 12, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 2px solid rgba(245, 158, 11, 0.5);
