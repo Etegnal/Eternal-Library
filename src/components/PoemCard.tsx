@@ -33,22 +33,23 @@ export default function PoemCard({ poem }: PoemCardProps) {
 
       <div className="relative z-10 pointer-events-none space-y-4">
         
-        {/* Top Header Row with Badge & Date + Stamps (Zero Overlap Flex Layout) */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200/60 pb-3">
+        {/* Top Header Row: Category Badge on Left, Date & Icon Badges on Right */}
+        <div className="flex items-center justify-between gap-2 border-b border-amber-200/60 pb-3">
           
           {/* Category Badge */}
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-cozy-amber-dark bg-amber-100/70 px-3 py-1 rounded-full border border-amber-200">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-cozy-amber-dark bg-amber-100/70 px-3 py-1 rounded-full border border-amber-200 shrink-0">
             <Feather className="w-3.5 h-3.5 text-cozy-amber" />
             <span>Şiir</span>
           </div>
 
-          {/* Date & Vintage Stamps Side-by-Side */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right Container: Date on left, Icons on top right corner */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             <div className="flex items-center gap-1 text-xs text-cozy-coffee-light">
               <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark" />
               <span>{dateStr}</span>
             </div>
 
+            {/* Icon Badges (Heart & Check) pinned at top right */}
             <CardBadges postId={poem.id} />
           </div>
 

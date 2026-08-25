@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { Heart, Check } from 'lucide-react';
 
 interface CardBadgesProps {
   postId: string;
@@ -45,20 +46,18 @@ export default function CardBadges({ postId }: CardBadgesProps) {
     <div className="inline-flex items-center gap-1.5 pointer-events-none select-none">
       {isLiked && (
         <span
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-100/90 text-rose-900 border border-rose-300/80 font-serif text-[11px] font-semibold tracking-tight shadow-xs"
-          title="Bu içeriği beğendiniz"
+          className="w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs shadow-xs border border-rose-300/80"
+          title="Beğenildi"
         >
-          <span className="text-rose-600 text-xs">♥</span>
-          <span>Beğenildi</span>
+          <Heart className="w-3 h-3 fill-white text-white" />
         </span>
       )}
       {isRead && (
         <span
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100/90 text-emerald-900 border border-emerald-300/80 font-serif text-[11px] font-semibold tracking-tight shadow-xs"
-          title="Bu içeriği okudunuz"
+          className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow-xs border border-emerald-300/80"
+          title="Okundu"
         >
-          <span className="text-emerald-700 text-xs font-bold">✓</span>
-          <span>Okundu</span>
+          <Check className="w-3 h-3 text-white stroke-[3]" />
         </span>
       )}
     </div>
