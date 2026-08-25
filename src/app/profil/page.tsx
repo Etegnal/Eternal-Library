@@ -4,9 +4,11 @@ import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { User, Mail, ShieldCheck, Calendar, Shield, BookOpen, LogOut } from 'lucide-react';
+import { User, Mail, ShieldCheck, Calendar } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import UserPersonalLibrary, { LikedPost } from '@/components/UserPersonalLibrary';
+import EditProfileModal from '@/components/EditProfileModal';
+import UserSubmissionsSection, { UserSubmissionItem } from '@/components/UserSubmissionsSection';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +36,7 @@ export default async function ProfilePage() {
 
   const isAdmin = user.role === 'ADMIN';
 
-  // Fetch user's liked posts & poems from LikeRecord table
+  // 1. Fetch user's liked posts & poems from LikeRecord table
   const likedRecords = await prisma.likeRecord.findMany({
     where: { userId: user.id },
     include: {
@@ -45,17 +47,68 @@ export default async function ProfilePage() {
 
   const likedPosts: LikedPost[] = likedRecords.map((r) => r.post);
 
+  // 2. Fetch user's pending / submitted works from Letter table (type = 'ESER')
+  const userLetters = await prisma.letter.findMany({
+    where: {
+      email: user.email.toLowerCase(),
+      type: 'ESER',
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  // 3. Fetch user's published works from Post table
+  const publishedPosts = await prisma.post.findMany({
+    where: {
+      OR: [
+        { author: user.name || undefined },
+        { author: user.email },
+      ],
+    },
+    orderBy: { publishedAt: 'desc' },
+  });
+
+  // Build unified user submissions list
+  const userSubmissions: UserSubmissionItem[] = [];
+
+  for (const post of publishedPosts) {
+    userSubmissions.push({
+      id: `post-${post.id}`,
+      title: post.title,
+      excerpt: post.excerpt,
+      type: post.type,
+      status: 'PUBLISHED',
+      publishedUrl: post.type === 'SIIR' ? `/siirler/${post.slug}` : `/yazilar/${post.slug}`,
+      createdAt: post.publishedAt,
+    });
+  }
+
+  for (const letter of userLetters) {
+    const existsInPublished = publishedPosts.some(
+      (p) => p.title.toLowerCase().trim() === letter.subject.toLowerCase().trim()
+    );
+    if (!existsInPublished) {
+      userSubmissions.push({
+        id: `letter-${letter.id}`,
+        title: letter.subject,
+        excerpt: letter.content.trim().slice(0, 150) + (letter.content.length > 150 ? '...' : ''),
+        type: 'ESER',
+        status: 'PENDING',
+        createdAt: letter.createdAt,
+      });
+    }
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       
       {/* 1. Main Profile Card */}
-      <div className="p-8 rounded-3xl bg-[#FFFDF9] border-2 border-[#E6D7BC] shadow-fire relative overflow-hidden space-y-8">
+      <div className="p-8 rounded-3xl bg-[#FFFDF9] border-2 border-[#E6D7BC] shadow-fire relative overflow-hidden space-y-6">
         
         {/* Background Decorative Accent */}
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 rounded-full bg-amber-500/10 blur-2xl pointer-events-none" />
 
         {/* Profile Header */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-8 border-b border-[#E6D7BC]">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-[#E6D7BC]">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-serif text-3xl font-bold shadow-fire border-2 border-amber-500/50 shrink-0">
             {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
@@ -89,44 +142,31 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        {/* Profile Info Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-1">
-            <span className="text-[11px] font-bold text-[#785438] uppercase tracking-wider">Kullanıcı ID</span>
-            <p className="font-mono text-xs text-[#362215] break-all">{user.id}</p>
-          </div>
+        {/* Profile Actions & Edit Button */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <EditProfileModal user={user} />
 
-          <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-1">
-            <span className="text-[11px] font-bold text-[#785438] uppercase tracking-wider">Hesap Durumu</span>
-            <p className="text-xs font-semibold text-emerald-700 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Aktif Üye</span>
-            </p>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#9A3412] hover:to-[#78350F] text-amber-100 font-bold text-xs shadow-cozy transition-all flex items-center justify-center gap-2 border border-amber-500/40"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-300" />
+                <span>Yönetici Paneline Git</span>
+              </Link>
+            )}
           </div>
-        </div>
-
-        {/* Actions & Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#E6D7BC]">
-          {isAdmin ? (
-            <Link
-              href="/admin"
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#9A3412] hover:to-[#78350F] text-amber-100 font-bold text-xs shadow-cozy transition-all flex items-center justify-center gap-2 border border-amber-500/40"
-            >
-              <ShieldCheck className="w-4 h-4 text-amber-300" />
-              <span>Yönetici Paneline Git</span>
-            </Link>
-          ) : (
-            <div className="text-xs text-[#5C4033]">
-              Eternal Library dijital kütüphanesine hoş geldiniz.
-            </div>
-          )}
 
           <SignOutButton />
         </div>
 
       </div>
 
-      {/* 2. PERSONAL LIBRARY / LIKED WORKS SECTION */}
+      {/* 2. BENİM KALEMİMDEN (USER SUBMISSIONS & PUBLISHED WORKS SECTION) */}
+      <UserSubmissionsSection submissions={userSubmissions} />
+
+      {/* 3. PERSONAL LIBRARY / LIKED WORKS SECTION */}
       <UserPersonalLibrary likedPosts={likedPosts} />
 
     </div>
