@@ -50,11 +50,13 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
             return (
               <div
                 key={item.id}
-                className="group relative p-6 rounded-2xl bg-[#FEFBF3] border-2 border-[#E8DCC4] shadow-parchment hover:shadow-cozy hover:border-[#9A3412]/40 transition-all duration-300 flex flex-col justify-between"
+                className="group relative p-6 rounded-2xl bg-[#FEFBF3] border-2 border-[#E8DCC4] shadow-parchment hover:shadow-cozy hover:border-[#9A3412]/40 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
-                
+                {/* Full-card overlay link */}
+                <Link href={detailUrl} className="absolute inset-0 z-0 rounded-2xl" aria-label={item.title} />
+
                 {/* TOP POET BADGE & YEAR */}
-                <div className="space-y-4">
+                <div className="relative z-10 pointer-events-none space-y-4">
                   <div className="flex items-center justify-between border-b border-amber-200/60 pb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-serif text-sm font-bold shadow-sm">
@@ -80,9 +82,7 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
                   {/* POEM TITLE */}
                   <div className="space-y-1">
                     <h4 className="font-serif font-semibold text-lg text-[#5C2E0B] group-hover:text-[#9A3412] transition-colors">
-                      <Link href={detailUrl}>
-                        {item.title}
-                      </Link>
+                      {item.title}
                     </h4>
                   </div>
 
@@ -94,18 +94,15 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
                 </div>
 
                 {/* CARD FOOTER - READ POEM LINK */}
-                <div className="pt-4 mt-4 border-t border-amber-200/60 flex items-center justify-between text-xs">
+                <div className="relative z-10 pointer-events-none pt-4 mt-4 border-t border-amber-200/60 flex items-center justify-between text-xs">
                   <span className="text-[11px] text-[#785438] font-serif italic">
                     — {item.author}
                   </span>
 
-                  <Link
-                    href={detailUrl}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#9A3412] group-hover:text-[#78350F] hover:underline transition-colors"
-                  >
+                  <div className="inline-flex items-center gap-1 text-xs font-bold text-[#9A3412] group-hover:text-[#78350F] transition-colors">
                     <span>Şiiri Oku</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </div>
                 </div>
 
               </div>
