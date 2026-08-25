@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Feather, Calendar, ArrowRight } from 'lucide-react';
+import CardBadges from '@/components/CardBadges';
 
 interface PoemCardProps {
   poem: {
@@ -21,8 +22,12 @@ export default function PoemCard({ poem }: PoemCardProps) {
 
   return (
     <div className="relative group p-6 sm:p-7 rounded-2xl bg-[#FEFBF3] border-2 border-[#E8DCC4] shadow-parchment hover:border-cozy-amber/50 hover:shadow-cozy transition-all duration-300">
+      
+      {/* Read & Like Badges in Top Right */}
+      <CardBadges postId={poem.id} />
+
       {/* Decorative Top Feather Badge */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 pr-12">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-cozy-amber-dark bg-amber-100/70 px-3 py-1 rounded-full border border-amber-200">
           <Feather className="w-3.5 h-3.5 text-cozy-amber" />
           <span>Şiir</span>

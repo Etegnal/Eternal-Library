@@ -8,14 +8,25 @@ import DeleteUserButton from '@/components/DeleteUserButton';
 import UserPasswordViewer from '@/components/UserPasswordViewer';
 import DeleteLetterButton from '@/components/DeleteLetterButton';
 import LetterDetailViewer from '@/components/LetterDetailViewer';
+import LikedUsersViewer from '@/components/LikedUsersViewer';
 import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles } from 'lucide-react';
+
+interface LikedUserItem {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt: string;
+}
 
 interface PostItem {
   id: string;
   title: string;
   type: string;
+  likes?: number;
+  views?: number;
   isFeatured: boolean;
   publishedAt: string;
+  likedUsers?: LikedUserItem[];
 }
 
 interface UserItem {
@@ -145,6 +156,7 @@ export default function AdminDashboardView({ userEmail, posts, users, letters }:
                     <th className="px-6 py-3">Tür</th>
                     <th className="px-6 py-3">Başlık</th>
                     <th className="px-6 py-3">Ana Sayfa</th>
+                    <th className="px-6 py-3">Beğenenler & Okunma</th>
                     <th className="px-6 py-3">Tarih</th>
                     <th className="px-6 py-3 text-right">İşlemler</th>
                   </tr>
@@ -167,6 +179,16 @@ export default function AdminDashboardView({ userEmail, posts, users, letters }:
                       </td>
                       <td className="px-6 py-4">
                         <ToggleFeaturedButton postId={post.id} initialFeatured={post.isFeatured} />
+                      </td>
+                      <td className="px-6 py-4 flex items-center gap-2">
+                        <LikedUsersViewer
+                          postTitle={post.title}
+                          totalLikes={post.likes || 0}
+                          likedUsers={post.likedUsers || []}
+                        />
+                        <span className="text-xs font-mono text-stone-700 bg-amber-100/70 px-2.5 py-1 rounded-full border border-amber-200">
+                          👁️ {post.views || 0}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-xs text-[#5C4033]">
                         {new Date(post.publishedAt).toLocaleDateString('tr-TR')}

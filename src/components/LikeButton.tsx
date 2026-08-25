@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,11 +12,37 @@ interface LikeButtonProps {
 }
 
 export default function LikeButton({ postId, initialLikes }: LikeButtonProps) {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(false);
   const [animating, setAnimating] = useState(false);
 
+  // Check if current logged-in user already liked this post
+  useEffect(() => {
+    if (!session?.user) return;
+    const checkLiked = async () => {
+      try {
+        const res = await fetch(`/api/posts/${postId}/like`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.liked) setLiked(true);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    checkLiked();
+  }, [postId, session]);
+
   const handleLike = async () => {
+    // If not logged in, redirect to login page!
+    if (!session) {
+      router.push('/giris');
+      return;
+    }
+
     if (liked) return;
 
     setLiked(true);
@@ -23,9 +51,12 @@ export default function LikeButton({ postId, initialLikes }: LikeButtonProps) {
     setTimeout(() => setAnimating(false), 1000);
 
     try {
-      await fetch(`/api/posts/${postId}/like`, {
+      const res = await fetch(`/api/posts/${postId}/like`, {
         method: 'POST',
       });
+      if (res.status === 401) {
+        router.push('/giris');
+      }
     } catch (e) {
       console.error('Like error:', e);
     }
@@ -37,7 +68,7 @@ export default function LikeButton({ postId, initialLikes }: LikeButtonProps) {
         onClick={handleLike}
         className={`group relative flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 border shadow-md ${
           liked
-            ? 'bg-rose-600 text-white border-rose-500 scale-105 shadow-rose-900/30'
+            ? 'bg-rose-600 text-white border-rose-500 scale-105 shadow-rose-900/30 cursor-default'
             : 'bg-[#9A3412] hover:bg-[#78350F] text-[#FFFDF9] border-[#78350F]'
         }`}
       >

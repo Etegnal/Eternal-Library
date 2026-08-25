@@ -22,6 +22,16 @@ export default async function AdminDashboardPage() {
 
   const postsRaw = await prisma.post.findMany({
     orderBy: { publishedAt: 'desc' },
+    include: {
+      likeRecords: {
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
   });
 
   const usersRaw = await prisma.user.findMany({
@@ -44,8 +54,16 @@ export default async function AdminDashboardPage() {
     id: p.id,
     title: p.title,
     type: p.type,
+    likes: p.likes,
+    views: p.views,
     isFeatured: p.isFeatured,
     publishedAt: p.publishedAt.toISOString(),
+    likedUsers: p.likeRecords.map((lr) => ({
+      id: lr.id,
+      name: lr.user.name,
+      email: lr.user.email,
+      createdAt: lr.createdAt.toISOString(),
+    })),
   }));
 
   const users = usersRaw.map((u) => ({

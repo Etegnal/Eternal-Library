@@ -18,31 +18,44 @@ enum PostType {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String?
-  email         String    @unique
-  password      String    @default("")
-  role          Role      @default(USER)
+  email         String       @unique
+  password      String       @default("")
+  role          Role         @default(USER)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  likeRecords   LikeRecord[]
 }
 
 model Post {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
-  slug        String   @unique
+  slug        String       @unique
   content     String
   excerpt     String
-  type        PostType @default(YAZI)
+  type        PostType     @default(YAZI)
   coverImage  String?
   readingTime String?
-  isFeatured  Boolean  @default(true)
-  likes       Int      @default(0)
-  views       Int      @default(0)
-  publishedAt DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isFeatured  Boolean      @default(true)
+  likes       Int          @default(0)
+  views       Int          @default(0)
+  publishedAt DateTime     @default(now())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  likeRecords LikeRecord[]
+}
+
+model LikeRecord {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
 }
 
 model Quote {

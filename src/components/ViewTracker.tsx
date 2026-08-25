@@ -11,6 +11,13 @@ export default function ViewTracker({ postId, initialViews }: ViewTrackerProps) 
   const [views, setViews] = useState(initialViews);
 
   useEffect(() => {
+    // Record read state in localStorage
+    try {
+      localStorage.setItem(`eternal_read_${postId}`, 'true');
+    } catch (e) {
+      console.error(e);
+    }
+
     const recordView = async () => {
       try {
         const res = await fetch(`/api/posts/${postId}/view`, { method: 'POST' });

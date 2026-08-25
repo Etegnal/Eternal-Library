@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, Calendar, ArrowRight, BookOpen } from 'lucide-react';
+import CardBadges from '@/components/CardBadges';
 
 interface PostCardProps {
   post: {
@@ -23,7 +24,11 @@ export default function PostCard({ post }: PostCardProps) {
   });
 
   return (
-    <article className="group flex flex-col bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] overflow-hidden shadow-parchment hover:shadow-cozy transition-all duration-300 hover:-translate-y-1">
+    <article className="relative group flex flex-col bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] overflow-hidden shadow-parchment hover:shadow-cozy transition-all duration-300 hover:-translate-y-1">
+      
+      {/* Read & Like Badges in Top Right */}
+      <CardBadges postId={post.id} />
+
       {/* Cover Image */}
       {post.coverImage && (
         <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-amber-950">
