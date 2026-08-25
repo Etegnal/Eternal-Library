@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ShieldCheck } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { Menu, X, ShieldCheck, User, LogIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
   const isHomePage = pathname === '/';
 
   const navLinks = [
@@ -114,14 +116,25 @@ export default function Navbar() {
             );
           })}
 
-          <Link
-            href="/admin"
-            className="ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1 shadow-sm"
-            title="Yönetici Girişi"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>Admin</span>
-          </Link>
+          {session ? (
+            <Link
+              href="/profil"
+              className="ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1.5 shadow-sm"
+              title="Profilim"
+            >
+              <User className="w-3.5 h-3.5 text-amber-400" />
+              <span>{session.user?.name || 'Profilim'}</span>
+            </Link>
+          ) : (
+            <Link
+              href="/giris"
+              className="ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1.5 shadow-sm"
+              title="Giriş Yap / Kayıt Ol"
+            >
+              <LogIn className="w-3.5 h-3.5 text-amber-400" />
+              <span>Giriş / Kayıt</span>
+            </Link>
+          )}
         </nav>
 
       </div>
@@ -153,16 +166,29 @@ export default function Navbar() {
               );
             })}
 
-            <Link
-              href="/admin"
-              onClick={() => setIsOpen(false)}
-              className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50"
-            >
-              Yönetici Paneli (Admin)
-            </Link>
+            {session ? (
+              <Link
+                href="/profil"
+                onClick={() => setIsOpen(false)}
+                className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
+              >
+                <User className="w-4 h-4 text-amber-400" />
+                <span>Profilim ({session.user?.name || 'Kullanıcı'})</span>
+              </Link>
+            ) : (
+              <Link
+                href="/giris"
+                onClick={() => setIsOpen(false)}
+                className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
+              >
+                <LogIn className="w-4 h-4 text-amber-400" />
+                <span>Giriş Yap / Kayıt Ol</span>
+              </Link>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
     </header>
   );
 }
+

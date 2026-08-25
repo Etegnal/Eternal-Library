@@ -16,8 +16,15 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+        const identifier = credentials.email.trim();
+
+        const user = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { email: identifier },
+              { name: identifier },
+            ],
+          },
         });
 
         if (!user) {
@@ -43,18 +50,20 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role;
+        token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = token.role;
+        (session.user as any).id = token.id;
       }
       return session;
     },
   },
   pages: {
-    signIn: '/admin/login',
+    signIn: '/giris',
   },
   session: {
     strategy: 'jwt',
