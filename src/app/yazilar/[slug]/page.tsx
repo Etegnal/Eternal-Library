@@ -48,43 +48,43 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       <div>
         <Link
           href="/yazilar"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-cozy-amber-dark dark:text-amber-400 hover:text-cozy-amber dark:hover:text-amber-300 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold text-[#78350F] bg-[#FEF9EE] hover:bg-[#FDE68A]/60 border border-[#FDE68A] shadow-sm transition-all"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 text-[#78350F]" />
           <span>Tüm Yazılara Dön</span>
         </Link>
       </div>
 
       {/* Header Info */}
       <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-cozy-coffee-light dark:text-amber-200">
-          <div className="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-950 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-700">
-            <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark dark:text-amber-400" />
+        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[#5C4033]">
+          <div className="flex items-center gap-1.5 bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A] text-[#78350F] font-semibold">
+            <Calendar className="w-3.5 h-3.5 text-[#9A3412]" />
             <span>{dateStr}</span>
           </div>
           {article.readingTime && (
-            <div className="flex items-center gap-1.5 bg-amber-100/80 dark:bg-amber-950 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-700">
-              <Clock className="w-3.5 h-3.5 text-cozy-amber-dark dark:text-amber-400" />
+            <div className="flex items-center gap-1.5 bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A] text-[#78350F] font-semibold">
+              <Clock className="w-3.5 h-3.5 text-[#9A3412]" />
               <span>{article.readingTime}</span>
             </div>
           )}
 
-          {/* View Counter with 👁️ Emoji */}
+          {/* View Counter */}
           <ViewTracker postId={article.id} initialViews={article.views} />
         </div>
 
-        <h1 className="font-serif font-bold text-3xl sm:text-5xl text-cozy-coffee dark:text-amber-300 leading-tight">
+        <h1 className="font-serif font-bold text-3xl sm:text-5xl text-[#362215] leading-tight">
           {article.title}
         </h1>
 
-        <p className="text-cozy-coffee-light dark:text-amber-100/90 font-serif italic text-lg sm:text-xl leading-relaxed">
+        <p className="text-[#5C4033] font-serif italic text-lg sm:text-xl leading-relaxed">
           “{article.excerpt}”
         </p>
       </div>
 
       {/* Featured Cover Image */}
       {article.coverImage && (
-        <div className="relative w-full h-[320px] sm:h-[450px] rounded-3xl overflow-hidden shadow-cozy border border-cozy-parchment-border dark:border-[#5C3119]">
+        <div className="relative w-full h-[320px] sm:h-[450px] rounded-3xl overflow-hidden shadow-cozy border border-[#E6D7BC]">
           <Image
             src={article.coverImage}
             alt={article.title}
@@ -95,26 +95,26 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         </div>
       )}
 
-      {/* Article Content */}
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] dark:bg-[#23120A] border border-[#E6D7BC] dark:border-[#5C3119] shadow-parchment text-cozy-coffee dark:text-amber-100 space-y-8">
-        <div className="prose prose-stone dark:prose-invert lg:prose-lg max-w-none font-sans leading-relaxed text-cozy-coffee dark:text-amber-100 space-y-6">
+      {/* Article Content - Light Parchment */}
+      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
+        <div className="prose lg:prose-lg max-w-none font-sans leading-relaxed text-[#362215] space-y-6">
           {article.content.split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('### ')) {
               return (
-                <h3 key={idx} className="font-serif font-bold text-2xl text-cozy-coffee dark:text-amber-300 pt-4 border-b border-amber-200 dark:border-amber-800 pb-2">
+                <h3 key={idx} className="font-serif font-bold text-2xl text-[#362215] pt-4 border-b border-[#E6D7BC] pb-2">
                   {paragraph.replace('### ', '')}
                 </h3>
               );
             }
             if (paragraph.startsWith('> ')) {
               return (
-                <blockquote key={idx} className="border-l-4 border-cozy-amber pl-4 italic font-serif text-lg text-cozy-coffee-light dark:text-amber-200 bg-amber-50/50 dark:bg-amber-950/40 p-4 rounded-r-xl">
+                <blockquote key={idx} className="border-l-4 border-[#9A3412] pl-4 italic font-serif text-lg text-[#5C4033] bg-[#FEF9EE] p-4 rounded-r-xl border border-r border-t border-b border-[#FDE68A]/60">
                   {paragraph.replace('> ', '')}
                 </blockquote>
               );
             }
             return (
-              <p key={idx} className="text-base sm:text-lg leading-relaxed text-cozy-coffee/90 dark:text-amber-100/90">
+              <p key={idx} className="text-base sm:text-lg leading-relaxed text-[#362215]">
                 {paragraph}
               </p>
             );
@@ -122,7 +122,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         </div>
 
         {/* LIKE HEART BUTTON AT BOTTOM OF ARTICLE */}
-        <div className="pt-8 border-t border-cozy-parchment-border dark:border-[#5C3119] text-center">
+        <div className="pt-8 border-t border-[#E6D7BC] text-center">
           <LikeButton postId={article.id} initialLikes={article.likes} />
         </div>
       </div>
@@ -130,9 +130,9 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       {/* RELATED ARTICLES RECOMMENDATION SECTION */}
       {relatedArticles.length > 0 && (
         <div className="space-y-6 pt-6">
-          <div className="flex items-center gap-2 border-b-2 border-cozy-amber/30 dark:border-amber-700/50 pb-3">
-            <BookOpen className="w-5 h-5 text-cozy-amber" />
-            <h2 className="font-serif font-bold text-2xl text-cozy-coffee dark:text-amber-300">
+          <div className="flex items-center gap-2 border-b border-[#E6D7BC] pb-3">
+            <BookOpen className="w-5 h-5 text-[#9A3412]" />
+            <h2 className="font-serif font-bold text-2xl text-[#362215]">
               Bunu da İnceleyin: Diğer Yazılar
             </h2>
           </div>

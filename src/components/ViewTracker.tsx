@@ -11,7 +11,6 @@ export default function ViewTracker({ postId, initialViews }: ViewTrackerProps) 
   const [views, setViews] = useState(initialViews);
 
   useEffect(() => {
-    // Increment view count on page visit
     const recordView = async () => {
       try {
         const res = await fetch(`/api/posts/${postId}/view`, { method: 'POST' });
@@ -28,7 +27,7 @@ export default function ViewTracker({ postId, initialViews }: ViewTrackerProps) 
   }, [postId]);
 
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-900/90 dark:text-amber-300 bg-amber-100/70 dark:bg-amber-950/80 px-3 py-1 rounded-full border border-amber-300/60 dark:border-amber-700">
+    <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#78350F] bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A]">
       <span>👁️</span>
       <span>{views}</span>
     </span>
