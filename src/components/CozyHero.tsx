@@ -88,10 +88,8 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/60 z-10" />
       </div>
 
-      <div className="h-16 sm:h-28" />
-
-      {/* HERO CONTENT: POSITIONED HIGHER & MORE TRANSPARENT ON MOBILE */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-0 sm:my-auto pt-0 pb-4 sm:py-12">
+      {/* HERO CONTENT: POSITIONED HIGHER NEAR THE TOP */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full pt-20 sm:pt-24 mb-auto pb-6">
         <div className="max-w-md space-y-4 sm:space-y-6 text-left">
           
           {/* GÜNÜN SÖZÜ CARD - TRANSPARENT GLASSMORPHISM ON MOBILE */}
