@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Flame, Heart, Coffee, BookOpen, Feather, ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
+import { Coffee, Feather, ShieldCheck } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -9,20 +10,27 @@ export default function Footer() {
         
         {/* Brand info */}
         <div className="md:col-span-5 space-y-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cozy-amber flex items-center justify-center">
-              <Flame className="w-4 h-4 text-cozy-wood fill-cozy-wood" />
+          <div className="flex items-center gap-2.5">
+            <div className="relative w-9 h-9 rounded-full overflow-hidden shadow-fire border border-amber-500/50 bg-[#1F0F07] shrink-0">
+              <Image
+                src="/assets/logo.png"
+                alt="Eternal Library Logo"
+                fill
+                className="object-cover"
+              />
             </div>
-            <span className="font-serif font-bold text-xl text-cozy-parchment">
-              Eternal Library
+            <span className="font-cinzel font-bold text-lg tracking-[0.12em] uppercase text-amber-200">
+              ETERNAL LIBRARY
             </span>
           </div>
+          
           <p className="text-sm text-cozy-parchment/70 leading-relaxed font-sans max-w-md">
-            Sıcak ahşap tonları, loş şömine ateşi ve eski kitap kokuları arasında kişisel düşünceler, edebiyat yazıları ve 365 günlük ilham sözleri platformu.
+            Her insan eninde sonunda kendi hayatı sandığı bir hikaye uydurur. O hikayelerin toplamı da kendi hayatı olur. Sonsuz bir hikaye, sonsuz bir kütüphane. Tabi yazmaya devam ettikçe...
           </p>
-          <div className="flex items-center gap-2 text-xs text-amber-400/80 font-mono">
-            <Coffee className="w-4 h-4 text-cozy-amber" />
-            <span>Sıcak çayınız ve kitabınız daima hazır olsun.</span>
+
+          <div className="flex items-center gap-2 text-xs text-amber-400/90 font-serif italic pt-1">
+            <Coffee className="w-4 h-4 text-cozy-amber shrink-0" />
+            <span>Valar Morghulis</span>
           </div>
         </div>
 
@@ -67,11 +75,11 @@ export default function Footer() {
           <div className="pt-2 border-t border-amber-950 flex items-center justify-between text-xs text-cozy-parchment/60">
             <span>Yönetim Erişimi</span>
             <Link
-              href="/admin/login"
+              href="/giris"
               className="flex items-center gap-1 text-cozy-amber hover:underline font-medium"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin Girişi</span>
+              <span>Admin / Üye Girişi</span>
             </Link>
           </div>
         </div>
@@ -80,10 +88,8 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-amber-950/80 flex flex-col sm:flex-row items-center justify-between text-xs text-cozy-parchment/60 gap-4">
         <p>© {new Date().getFullYear()} Eternal Library. Tüm hakları saklıdır.</p>
-        <p className="flex items-center gap-1">
-          <span>Lo-fi tutkusuyla</span>
-          <Heart className="w-3.5 h-3.5 text-cozy-amber fill-cozy-amber" />
-          <span>geliştirildi.</span>
+        <p className="font-serif italic text-amber-200/80">
+          Jon Snow'a saygılarla
         </p>
       </div>
     </footer>
