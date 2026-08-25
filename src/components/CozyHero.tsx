@@ -3,27 +3,32 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AmbientAudio from '@/components/AmbientAudio';
-import { Sparkles, RefreshCw, Feather, BookOpen } from 'lucide-react';
+import { Sparkles, RefreshCw, Feather, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CozyHeroProps {
   initialQuote: {
+    id?: string;
     content?: string;
     quote?: string;
     author: string;
     source?: string | null;
+    dayOfYear?: number;
   };
 }
 
 export default function CozyHero({ initialQuote }: CozyHeroProps) {
-  const [currentQuote, setCurrentQuote] = useState(initialQuote);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentQuote, setCurrentQuote] = useState({
+    ...initialQuote,
+    dayOfYear: initialQuote.dayOfYear || 1,
+  });
+  const [loading, setLoading] = useState(false);
 
   const quoteText = currentQuote.content || currentQuote.quote || '';
 
-  const refreshQuote = async () => {
-    setIsRefreshing(true);
+  const fetchQuoteByDay = async (targetDay: number) => {
+    setLoading(true);
     try {
-      const res = await fetch('/api/quotes');
+      const res = await fetch(`/api/quotes?day=${targetDay}`);
       if (res.ok) {
         const data = await res.json();
         setCurrentQuote(data);
@@ -31,8 +36,28 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
     } catch (e) {
       console.error(e);
     } finally {
-      setTimeout(() => setIsRefreshing(false), 500);
+      setLoading(false);
     }
+  };
+
+  const handlePrev = () => {
+    const prevDay = ((currentQuote.dayOfYear - 2 + 365) % 365) + 1;
+    fetchQuoteByDay(prevDay);
+  };
+
+  const handleNext = () => {
+    const nextDay = (currentQuote.dayOfYear % 365) + 1;
+    fetchQuoteByDay(nextDay);
+  };
+
+  const handleToday = () => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    const today = Math.floor(diff / oneDay);
+    const cleanToday = ((today - 1) % 365) + 1;
+    fetchQuoteByDay(cleanToday);
   };
 
   return (
@@ -65,41 +90,66 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-auto py-12">
         <div className="max-w-md space-y-6 text-left">
           
-          {/* GÜNÜN SÖZÜ CARD (LEFT SIDE) */}
+          {/* GÜNÜN SÖZÜ CARD WITH LEFT & RIGHT ARROWS */}
           <div className="gold-filigree-card relative p-6 sm:p-8 rounded-3xl text-amber-100 shadow-2xl">
             <div className="gold-filigree-inner absolute inset-2 rounded-2xl pointer-events-none" />
 
             <div className="relative z-10 space-y-5">
+              {/* TOP HEADER BAR WITH PREV / NEXT NAV ARROWS */}
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 text-xs font-cinzel font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Günün Sözü</span>
                 </span>
 
-                <button
-                  onClick={refreshQuote}
-                  disabled={isRefreshing}
-                  className="p-1.5 rounded-full text-amber-300 hover:bg-amber-900/60 transition-colors"
-                  title="Yeni Söz Getir"
-                  aria-label="Yeni Söz Getir"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                </button>
+                {/* ARROW NAVIGATION CONTROLS */}
+                <div className="flex items-center gap-1 bg-amber-950/70 p-1 rounded-full border border-amber-700/40">
+                  <button
+                    onClick={handlePrev}
+                    disabled={loading}
+                    className="p-1 rounded-full text-amber-300 hover:bg-amber-900/80 transition-colors disabled:opacity-50"
+                    title="Önceki Söz"
+                    aria-label="Önceki Söz"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={handleToday}
+                    disabled={loading}
+                    className="p-1 rounded-full text-amber-300 hover:bg-amber-900/80 transition-colors disabled:opacity-50"
+                    title="Bugünün Sözü"
+                    aria-label="Bugünün Sözü"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+                  </button>
+
+                  <button
+                    onClick={handleNext}
+                    disabled={loading}
+                    className="p-1 rounded-full text-amber-300 hover:bg-amber-900/80 transition-colors disabled:opacity-50"
+                    title="Sonraki Söz"
+                    aria-label="Sonraki Söz"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
+              {/* QUOTE TEXT */}
               <p className="font-serif italic text-lg sm:text-xl text-amber-100 leading-relaxed font-normal">
                 "{quoteText}"
               </p>
 
+              {/* FOOTER METADATA: AUTHOR & DAY NUMBER (e.g. Söz 237 / 365) */}
               <div className="pt-2 border-t border-amber-500/30 flex items-center justify-between text-xs">
                 <span className="font-serif font-bold text-amber-300 text-sm">
                   — {currentQuote.author}
                 </span>
-                {currentQuote.source && (
-                  <span className="text-amber-200/70 italic">
-                    {currentQuote.source}
-                  </span>
-                )}
+
+                <span className="font-mono text-amber-300/90 font-bold bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-700/30">
+                  Söz {currentQuote.dayOfYear || 1} / 365
+                </span>
               </div>
             </div>
           </div>

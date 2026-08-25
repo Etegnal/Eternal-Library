@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { QUOTES_365 } from '@/data/quotesData';
 
 export interface QuoteItem {
   id: string;
@@ -16,24 +17,31 @@ export async function getTodayQuote(): Promise<QuoteItem> {
   const dayOfYear = Math.floor(diff / oneDay);
   const targetDay = ((dayOfYear - 1) % 365) + 1;
 
+  return getQuoteByDay(targetDay);
+}
+
+export async function getQuoteByDay(dayNumber: number): Promise<QuoteItem> {
+  const cleanDay = ((dayNumber - 1 + 365) % 365) + 1;
+
   try {
     const quote = await prisma.quote.findUnique({
-      where: { dayOfYear: targetDay },
+      where: { dayOfYear: cleanDay },
     });
 
     if (quote) {
       return quote;
     }
   } catch (error) {
-    console.error('Error fetching today quote:', error);
+    console.error('Error fetching quote by day:', error);
   }
 
-  // Fallback quote
+  // Fallback from local dataset
+  const fallback = QUOTES_365.find((q) => q.dayOfYear === cleanDay) || QUOTES_365[0];
   return {
-    id: 'fallback-1',
-    author: 'Marcus Aurelius',
-    content: 'Sabah uyandığında yaşamaya, düşünmeye, sevmeye devam etmenin ne büyük bir ayrıcalık olduğunu düşün.',
-    source: 'Kendime Düşünceler',
-    dayOfYear: targetDay,
+    id: `quote-${fallback.dayOfYear}`,
+    author: fallback.author,
+    content: fallback.content,
+    source: fallback.source || `Söz ${fallback.dayOfYear} / 365`,
+    dayOfYear: fallback.dayOfYear,
   };
 }
