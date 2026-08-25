@@ -7,6 +7,8 @@ import LikeButton from '@/components/LikeButton';
 import ViewTracker from '@/components/ViewTracker';
 import PoemCard from '@/components/PoemCard';
 
+import { slugify } from '@/lib/slug';
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
@@ -17,11 +19,22 @@ interface PoemDetailProps {
 }
 
 export default async function PoemDetailPage({ params }: PoemDetailProps) {
-  const poem = await prisma.post.findUnique({
-    where: { slug: params.slug },
+  const rawSlug = params.slug;
+  const decodedSlug = decodeURIComponent(rawSlug);
+  const cleanSlug = slugify(decodedSlug);
+
+  const poem = await prisma.post.findFirst({
+    where: {
+      type: 'SIIR',
+      OR: [
+        { slug: rawSlug },
+        { slug: decodedSlug },
+        { slug: cleanSlug },
+      ],
+    },
   });
 
-  if (!poem || poem.type !== 'SIIR') {
+  if (!poem) {
     notFound();
   }
 

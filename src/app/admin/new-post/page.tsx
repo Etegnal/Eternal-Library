@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Feather, BookOpen, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import { slugify } from '@/lib/slug';
 
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
@@ -21,18 +22,7 @@ export default function NewPostPage() {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setTitle(val);
-    const autoSlug = val
-      .toLowerCase()
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ş/g, 's')
-      .replace(/ı/g, 'i')
-      .replace(/ö/g, 'o')
-      .replace(/ç/g, 'c')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-    setSlug(autoSlug);
+    setSlug(slugify(val));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

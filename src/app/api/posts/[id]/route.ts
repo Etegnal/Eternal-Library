@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { slugify } from '@/lib/slug';
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
@@ -31,11 +32,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const body = await req.json();
     const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
 
+    const cleanSlug = slugify(slug || title);
+
     const updatedPost = await prisma.post.update({
       where: { id: params.id },
       data: {
         title,
-        slug: slug.trim().toLowerCase().replace(/\s+/g, '-'),
+        slug: cleanSlug,
         content,
         excerpt,
         type,

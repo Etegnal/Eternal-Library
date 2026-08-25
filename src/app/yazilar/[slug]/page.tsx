@@ -8,6 +8,8 @@ import LikeButton from '@/components/LikeButton';
 import ViewTracker from '@/components/ViewTracker';
 import PostCard from '@/components/PostCard';
 
+import { slugify } from '@/lib/slug';
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
@@ -18,11 +20,22 @@ interface ArticleDetailProps {
 }
 
 export default async function ArticleDetailPage({ params }: ArticleDetailProps) {
-  const article = await prisma.post.findUnique({
-    where: { slug: params.slug },
+  const rawSlug = params.slug;
+  const decodedSlug = decodeURIComponent(rawSlug);
+  const cleanSlug = slugify(decodedSlug);
+
+  const article = await prisma.post.findFirst({
+    where: {
+      type: 'YAZI',
+      OR: [
+        { slug: rawSlug },
+        { slug: decodedSlug },
+        { slug: cleanSlug },
+      ],
+    },
   });
 
-  if (!article || article.type !== 'YAZI') {
+  if (!article) {
     notFound();
   }
 

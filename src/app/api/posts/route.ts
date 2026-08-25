@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { slugify } from '@/lib/slug';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -30,14 +31,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
 
-    if (!title || !slug || !content || !excerpt || !type) {
+    if (!title || !content || !excerpt || !type) {
       return NextResponse.json({ error: 'Gerekli alanlar eksik' }, { status: 400 });
     }
+
+    const cleanSlug = slugify(slug || title);
 
     const newPost = await prisma.post.create({
       data: {
         title,
-        slug: slug.trim().toLowerCase().replace(/\s+/g, '-'),
+        slug: cleanSlug,
         content,
         excerpt,
         type, // "YAZI" | "SIIR"
