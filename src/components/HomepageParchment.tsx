@@ -29,17 +29,8 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
   return (
     <div className="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 pb-24">
       
-      {/* AUTHENTIC VINTAGE PARCHMENT SHEET CONTAINER */}
+      {/* SADE VE ŞIK PARŞÖMEN KUTU KAPSAYICISI */}
       <div className="relative rounded-3xl bg-[#FFFDF5] border-2 border-[#D8C7A5] shadow-2xl p-6 sm:p-10 md:p-12 space-y-8 overflow-hidden">
-        
-        {/* PARCHMENT DECORATIVE FILIGREE CORNER ORNAMENTS (PERFECTLY ALIGNED) */}
-        <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-[#B89F70] pointer-events-none rounded-tl-lg" />
-        <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-[#B89F70] pointer-events-none rounded-tr-lg" />
-        <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-[#B89F70] pointer-events-none rounded-bl-lg" />
-        <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-[#B89F70] pointer-events-none rounded-br-lg" />
-
-        {/* DOUBLE INNER VINTAGE BORDER */}
-        <div className="absolute inset-3 border border-[#EADBBD] pointer-events-none rounded-2xl" />
 
         {/* 1. CATEGORY TOGGLE TABS (YAZILAR / ŞİİRLER) */}
         <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 border-b border-[#8B4513]/15 pb-6">
