@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Feather } from 'lucide-react';
 import ViewTracker from '@/components/ViewTracker';
 import PoemCard from '@/components/PoemCard';
-import BookReader from '@/components/BookReader';
+import LikeButton from '@/components/LikeButton';
 import { slugify } from '@/lib/slug';
 
 export const dynamic = 'force-dynamic';
@@ -87,13 +87,17 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
         </div>
       </div>
 
-      {/* BOOK READER FOR POEMS WITH PAGE FLIPPING & BOOKMARK PROGRESS */}
-      <BookReader
-        postId={poem.id}
-        content={poem.content}
-        initialLikes={poem.likes}
-        postType="SIIR"
-      />
+      {/* SINGLE PARCHMENT CARD FOR POEM (NO PAGINATION) */}
+      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
+        <div className="font-serif text-lg sm:text-xl leading-loose text-[#362215] italic whitespace-pre-line text-center max-w-xl mx-auto">
+          {poem.content}
+        </div>
+
+        {/* LIKE BUTTON AT BOTTOM OF POEM */}
+        <div className="pt-8 border-t border-[#E6D7BC] text-center flex justify-center">
+          <LikeButton postId={poem.id} initialLikes={poem.likes} />
+        </div>
+      </div>
 
       {/* RELATED POEMS RECOMMENDATION SECTION */}
       {relatedPoems.length > 0 && (

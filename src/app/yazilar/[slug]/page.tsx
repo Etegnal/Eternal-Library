@@ -99,6 +99,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         content={article.content}
         initialLikes={article.likes}
         postType="YAZI"
+        dateStr={dateStr}
       />
 
       {/* RELATED ARTICLES RECOMMENDATION SECTION */}

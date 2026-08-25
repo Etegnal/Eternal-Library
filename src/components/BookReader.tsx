@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Bookmark, CheckCircle2, RotateCcw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Bookmark, Calendar, RotateCcw } from 'lucide-react';
 import LikeButton from '@/components/LikeButton';
 
 interface BookReaderProps {
@@ -11,9 +11,10 @@ interface BookReaderProps {
   content: string;
   initialLikes: number;
   postType?: 'YAZI' | 'SIIR';
+  dateStr?: string;
 }
 
-export default function BookReader({ postId, content, initialLikes, postType = 'YAZI' }: BookReaderProps) {
+export default function BookReader({ postId, content, initialLikes, postType = 'YAZI', dateStr }: BookReaderProps) {
   const { data: session } = useSession();
   const userIdentifier = session?.user?.email || 'guest';
   const bookmarkKey = `eternal_bookmark_${userIdentifier}_${postId}`;
@@ -156,11 +157,11 @@ export default function BookReader({ postId, content, initialLikes, postType = '
       {/* BOOK PAGE CONTAINER */}
       <div className="relative rounded-3xl bg-[#FFFDF9] border-2 border-[#E6D7BC] shadow-fire p-6 sm:p-12 min-h-[460px] flex flex-col justify-between overflow-hidden">
         
-        {/* Book Header: Bookmark & Page Count */}
+        {/* Book Header: Date & Page Count */}
         <div className="flex items-center justify-between pb-4 border-b border-[#E6D7BC] text-xs text-[#785438]">
-          <div className="flex items-center gap-2 font-serif italic">
-            <Bookmark className="w-3.5 h-3.5 text-amber-700" />
-            <span>{postType === 'SIIR' ? 'Şiir Sayfası' : 'Kitap Sayfası'}</span>
+          <div className="flex items-center gap-1.5 text-xs text-[#785438] font-semibold">
+            <Calendar className="w-3.5 h-3.5 text-[#9A3412]" />
+            <span>{dateStr || 'Tarih'}</span>
           </div>
 
           <div className="font-mono font-bold text-[#78350F] bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A]">
@@ -210,17 +211,10 @@ export default function BookReader({ postId, content, initialLikes, postType = '
                 </div>
               )}
 
-              {/* Completion Message & Like Button on Last Page */}
+              {/* Like Button on Last Page */}
               {isLastPage && (
-                <div className="pt-8 mt-6 border-t border-dashed border-[#E6D7BC] text-center space-y-4">
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200 shadow-sm">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Son Sayfaya Ulaştınız</span>
-                  </div>
-
-                  <div className="flex justify-center py-1">
-                    <LikeButton postId={postId} initialLikes={initialLikes} />
-                  </div>
+                <div className="pt-8 mt-6 border-t border-dashed border-[#E6D7BC] flex justify-center py-1">
+                  <LikeButton postId={postId} initialLikes={initialLikes} />
                 </div>
               )}
             </motion.div>
