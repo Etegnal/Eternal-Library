@@ -36,6 +36,7 @@ model Post {
   content     String
   excerpt     String
   type        PostType     @default(YAZI)
+  author      String?
   coverImage  String?
   readingTime String?
   isFeatured  Boolean      @default(true)

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Save, Feather, BookOpen, Calendar } from 'lucide-react';
+import { ArrowLeft, Save, Feather, BookOpen, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EditPostPage() {
@@ -11,6 +11,7 @@ export default function EditPostPage() {
 
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  const [author, setAuthor] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [type, setType] = useState<'YAZI' | 'SIIR'>('YAZI');
@@ -32,6 +33,7 @@ export default function EditPostPage() {
           if (target) {
             setTitle(target.title || '');
             setSlug(target.slug || '');
+            setAuthor(target.author || '');
             setExcerpt(target.excerpt || '');
             setContent(target.content || '');
             setType(target.type || 'YAZI');
@@ -67,6 +69,7 @@ export default function EditPostPage() {
         body: JSON.stringify({
           title,
           slug,
+          author,
           excerpt,
           content,
           type,
@@ -168,6 +171,21 @@ export default function EditPostPage() {
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
+            />
+          </div>
+
+          {/* Author (Şair / Yazar) */}
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-cozy-amber" />
+              <span>Şair / Yazar (Kimden Yazıldığı)</span>
+            </label>
+            <input
+              type="text"
+              placeholder={type === 'SIIR' ? 'Şair adı (örn: Ahmet Murat, Cahit Zarifoğlu...)' : 'Yazar adı...'}
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
             />
           </div>

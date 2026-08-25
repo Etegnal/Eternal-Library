@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Feather, BookOpen, Calendar } from 'lucide-react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeft, Save, Feather, BookOpen, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
 import { slugify } from '@/lib/slug';
 
-export default function NewPostPage() {
+function NewPostForm() {
+  const searchParams = useSearchParams();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  const [author, setAuthor] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [type, setType] = useState<'YAZI' | 'SIIR'>('YAZI');
@@ -18,6 +20,24 @@ export default function NewPostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const qType = searchParams.get('type');
+    const qTitle = searchParams.get('title');
+    const qAuthor = searchParams.get('author');
+    const qContent = searchParams.get('content');
+
+    if (qType === 'SIIR' || qType === 'YAZI') setType(qType);
+    if (qTitle) {
+      setTitle(qTitle);
+      setSlug(slugify(qTitle));
+    }
+    if (qAuthor) setAuthor(qAuthor);
+    if (qContent) {
+      setContent(qContent);
+      setExcerpt(qContent.slice(0, 120) + (qContent.length > 120 ? '...' : ''));
+    }
+  }, [searchParams]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -37,6 +57,7 @@ export default function NewPostPage() {
         body: JSON.stringify({
           title,
           slug,
+          author,
           excerpt,
           content,
           type,
@@ -131,6 +152,21 @@ export default function NewPostPage() {
               placeholder="İçerik başlığı..."
               value={title}
               onChange={handleTitleChange}
+              className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
+            />
+          </div>
+
+          {/* Author (Şair / Yazar) */}
+          <div>
+            <label className="block text-xs font-bold uppercase mb-1 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-cozy-amber" />
+              <span>Şair / Yazar (Kimden Yazıldığı)</span>
+            </label>
+            <input
+              type="text"
+              placeholder={type === 'SIIR' ? 'Şair adı (örn: Ahmet Murat, Cahit Zarifoğlu...)' : 'Yazar adı...'}
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 dark:border-amber-800 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 dark:bg-amber-950/30"
             />
           </div>
@@ -240,5 +276,13 @@ export default function NewPostPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function NewPostPage() {
+  return (
+    <Suspense fallback={<div className="pt-32 text-center text-cozy-coffee font-medium">Yükleniyor...</div>}>
+      <NewPostForm />
+    </Suspense>
   );
 }

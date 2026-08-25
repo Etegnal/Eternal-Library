@@ -82,7 +82,7 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
             {poem.title}
           </h1>
           <p className="text-xs text-[#785438] font-sans font-medium">
-            {dateStr}
+            {poem.author ? `Şair: ${poem.author} • ` : ''}{dateStr}
           </p>
         </div>
       </div>
@@ -92,6 +92,15 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
         <div className="font-serif text-lg sm:text-xl leading-loose text-[#362215] italic whitespace-pre-line text-center max-w-xl mx-auto">
           {poem.content}
         </div>
+
+        {/* POET / AUTHOR NAME AT THE BOTTOM OF THE POEM */}
+        {poem.author && (
+          <div className="text-center pt-2">
+            <span className="font-serif font-bold text-base sm:text-lg text-[#8B4513] tracking-wide italic">
+              — {poem.author}
+            </span>
+          </div>
+        )}
 
         {/* LIKE BUTTON AT BOTTOM OF POEM */}
         <div className="pt-8 border-t border-[#E6D7BC] text-center flex justify-center">

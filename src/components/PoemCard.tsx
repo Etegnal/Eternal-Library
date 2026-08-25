@@ -9,6 +9,7 @@ interface PoemCardProps {
     title: string;
     slug: string;
     excerpt: string;
+    author?: string | null;
     publishedAt: Date | string;
   };
 }
@@ -52,7 +53,9 @@ export default function PoemCard({ poem }: PoemCardProps) {
 
       {/* Read Poem Footer */}
       <div className="pt-3 border-t border-dashed border-cozy-parchment-border flex items-center justify-between">
-        <span className="text-xs text-cozy-coffee-light italic">Eternal Library Şiir Seçkisi</span>
+        <span className="text-xs text-cozy-coffee-light italic">
+          {poem.author ? `— ${poem.author}` : 'Eternal Library Şiir Seçkisi'}
+        </span>
         <Link
           href={`/siirler/${poem.slug}`}
           className="inline-flex items-center gap-1.5 text-xs font-bold text-cozy-amber-dark group-hover:text-cozy-amber transition-colors"

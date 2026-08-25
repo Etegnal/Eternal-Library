@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
+    const { title, slug, content, excerpt, type, author, coverImage, readingTime, publishedAt, isFeatured } = body;
 
     if (!title || !content || !excerpt || !type) {
       return NextResponse.json({ error: 'Gerekli alanlar eksik' }, { status: 400 });
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
         content,
         excerpt,
         type, // "YAZI" | "SIIR"
+        author: author || null,
         coverImage: coverImage || null,
         readingTime: readingTime || '3 dk okuma',
         isFeatured: isFeatured ?? true,

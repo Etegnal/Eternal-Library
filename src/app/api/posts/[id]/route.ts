@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     const body = await req.json();
-    const { title, slug, content, excerpt, type, coverImage, readingTime, publishedAt, isFeatured } = body;
+    const { title, slug, content, excerpt, type, author, coverImage, readingTime, publishedAt, isFeatured } = body;
 
     const cleanSlug = slugify(slug || title);
 
@@ -42,6 +42,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         content,
         excerpt,
         type,
+        author: author !== undefined ? author : undefined,
         coverImage,
         readingTime,
         isFeatured,
