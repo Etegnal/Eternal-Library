@@ -7,39 +7,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model DailyQuote {
-  id        String   @id @default(cuid())
-  dayOfYear Int      @unique
-  quote     String
-  author    String
-  book      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostType {
+  YAZI
+  SIIR
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  password      String    @default("")
+  role          Role      @default(USER)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Post {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
   slug        String   @unique
   content     String
   excerpt     String
-  type        String   @default("YAZI") // "YAZI" | "SIIR"
+  type        PostType @default(YAZI)
   coverImage  String?
-  readingTime String?  // e.g. "4 dk"
-  isFeatured  Boolean  @default(true)  // Admin can heart/toggle featured on homepage
-  likes       Int      @default(0)     // Heart likes count
-  views       Int      @default(0)     // View counter with 👁️ emoji
+  readingTime String?
+  isFeatured  Boolean  @default(true)
+  likes       Int      @default(0)
+  views       Int      @default(0)
   publishedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String
-  role         String   @default("ADMIN") // "ADMIN" | "USER"
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+model Quote {
+  id        String   @id @default(uuid())
+  author    String
+  content   String
+  source    String?
+  dayOfYear Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Book {
+  id              String   @id @default(uuid())
+  googleBookId    String?  @unique
+  isbn10          String?
+  isbn13          String?
+  title           String
+  subtitle        String?
+  authors         String   // JSON string veya virgülle ayrılmış yazar listesi
+  publisher       String?
+  publishedDate   String?
+  description     String?  // Uzun özet metni
+  pageCount       Int?
+  categories      String   // Kategori listesi
+  averageRating   Float?   @default(0)
+  ratingsCount    Int?     @default(0)
+  thumbnailUrl    String?
+  largeCoverUrl   String?
+  previewUrl      String?
+  isFeatured      Boolean  @default(false)
+  curatedCategory String?  // "Felsefe & Düşünce", "Dünya Klasikleri", "Şiir & Edebiyat" vb.
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  affiliateClicks AffiliateClick[]
+}
+
+model AffiliateClick {
+  id        String   @id @default(uuid())
+  bookId    String
+  platform  String   // "amazon", "kitapyurdu", "dr"
+  ipAddress String?
+  createdAt DateTime @default(now())
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }

@@ -1,219 +1,380 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role, PostType } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-const LITERARY_QUOTES = [
-  { quote: "Dünyayı güzellik kurtaracak, bir insanı sevmekle başlayacak her şey.", author: "Sait Faik Abasıyanık", book: "Alemdağ'da Var Bir Yılan" },
-  { quote: "İçimde çok erken büyümüş bir çocuk, dışımda hiç büyümemiş bir adam var.", author: "Sabahattin Ali", book: "Kürk Mantolu Madonna" },
-  { quote: "Gözlerin gözlerime değince felaketim olurdu ağlardım...", author: "Attilâ İlhan", book: "Ben Sana Mecburum" },
-  { quote: "Hayat, bisiklete binmek gibidir. Dengede kalmak için hareket etmeye devam etmelisiniz.", author: "Albert Einstein", book: "Mektuplar" },
-  { quote: "Kitaplar soğuk ama sadık dostlardır.", author: "Victor Hugo", book: "Sefiller" },
-  { quote: "Sevebildiğin kadar sev, hayat kısa ve dünya yorgun.", author: "Cemal Süreya", book: "Sevda Sözleri" },
-  { quote: "Bütün muhteşem hikayeler iki şekilde başlar: Ya bir insan bir yolculuğa çıkar ya da şehre bir yabancı gelir.", author: "Lev Tolstoy", book: "İnsan Ne İle Yaşar" },
-  { quote: "Güzellik görenin gözündedir.", author: "Oscar Wilde", book: "Dorian Gray'in Portresi" },
-  { quote: "Bazen en uzun yolculuk iki insan arasındaki mesafedir.", author: "Oğuz Atay", book: "Tutunamayanlar" },
-  { quote: "Sesini değil, sözünü yükselt; yağmurlardır çiçekleri büyüten, gök gürültüleri değil.", author: "Mevlana Celaleddin-i Rumi", book: "Mesnevi" },
-  { quote: "İnsan en çok akşamüstleri yalnızdır.", author: "Ahmet Hamdi Tanpınar", book: "Huzur" },
-  { quote: "Düşünüyorum, öyleyse varım.", author: "René Descartes", book: "Metot Üzerine Konuşma" },
-  { quote: "Bir insanı unutabilirsin, bir insanın sana ne hissettirdiğini asla unutamazsın.", author: "Maya Angelou", book: "Şiirler" },
-  { quote: "Umut, uyanık insanın rüyasıdır.", author: "Aristoteles", book: "Etik" },
-  { quote: "En derin nehirler en sessiz akanlardır.", author: "Curtius Rufus", book: "Tarih" },
-  { quote: "Dünya herkese yetecek büyüklüktedir. Onun için başkasının yerini kapmaktansa, kendi yerinizi bulunuz.", author: "Charlie Chaplin", book: "Otobiyografi" },
-  { quote: "İnsanlar birbirlerine gülümsediğinde, karanlık bir oda aydınlanır.", author: "Antoine de Saint-Exupéry", book: "Küçük Prens" },
-  { quote: "Yaşamak bir ağaç gibi tek ve hür ve bir orman gibi kardeşçesine...", author: "Nazım Hikmet", book: "Davet" },
-  { quote: "Kelimeler albayım, bazı anlamlara gelmiyor.", author: "Oğuz Atay", book: "Tehlikeli Oyunlar" },
-  { quote: "İnsan kalbinin derinliklerinde fırtınalar kopar ama dışarıdan sadece bir duman görünür.", author: "Vincent van Gogh", book: "Mektuplar" },
-  { quote: "Aşk bir sudur, iç iç kudur.", author: "Anonim Lo-Fi Deyim", book: "Kütüphane Seçkileri" },
-  { quote: "Yalnızlık, kendi içindeki zenginliği keşfetme fırsatıdır.", author: "Arthur Schopenhauer", book: "Yaşam Bilgeliği Üzerine Aforizmalar" },
-  { quote: "Sessizlik, ruhun en berrak aynasıdır.", author: "Franz Kafka", book: "Milena'ya Mektuplar" },
-  { quote: "Yarın bambaşka bir insan olacağım diyorsun. Neden bugünden başlamıyorsun?", author: "Epiktetos", book: "Düşünceler" },
-  { quote: "Okumak, gidenin yerine gelmeyeni beklemek gibidir; ama kitaplar hep gelir.", author: "Cemil Meriç", book: "Bu Ülke" },
-  { quote: "Bir mum diğer bir mumu tutuşturmakla ışığından bir şey kaybetmez.", author: "Mevlana Celaleddin-i Rumi", book: "Divan-ı Kebir" },
-  { quote: "Zaman, ruhumuzun aşınmayan tek kumaşıdır.", author: "Marcel Proust", book: "Kayıp Zamanın İzinde" },
-  { quote: "Hayat gezgin bir gölgedir.", author: "William Shakespeare", book: "Macbeth" },
-  { quote: "Kalbin kendine has nedenleri vardır ki akıl bunları hiç bilmez.", author: "Blaise Pascal", book: "Düşünceler" },
-  { quote: "Ruhun şarkı söylerse, hayat seni dansa kaldırır.", author: "Sufi Atasözü", book: "Gönül Aynası" },
-];
-
 async function main() {
-  console.log('🌱 Veritabanı tohumlama (seed) işlemi başlatılıyor...');
+  console.log('Seeding Database...');
 
-  // Admin Kullanıcısı
-  const existingAdmin = await prisma.user.findUnique({
+  // 1. Seed Admin User
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  await prisma.user.upsert({
     where: { email: 'admin@eternallibrary.com' },
+    update: { password: hashedPassword },
+    create: {
+      email: 'admin@eternallibrary.com',
+      name: 'Eternal Admin',
+      password: hashedPassword,
+      role: Role.ADMIN,
+    },
   });
 
-  if (!existingAdmin) {
-    const passwordHash = await bcrypt.hash('admin123', 10);
-    await prisma.user.create({
-      data: {
-        email: 'admin@eternallibrary.com',
-        name: 'Kütüphane Yöneticisi',
-        passwordHash,
-        role: 'ADMIN',
-      },
-    });
-    console.log('✅ Admin kullanıcısı oluşturuldu (admin@eternallibrary.com / admin123)');
-  }
-
-  // 365 Günün Sözü
-  console.log('📜 365 Günlük İlham Sözleri oluşturuluyor...');
-  await prisma.dailyQuote.deleteMany({});
-  
-  const dailyQuotesData = [];
-  for (let day = 1; day <= 366; day++) {
-    const quoteTemplate = LITERARY_QUOTES[(day - 1) % LITERARY_QUOTES.length];
-    dailyQuotesData.push({
-      dayOfYear: day,
-      quote: quoteTemplate.quote,
-      author: quoteTemplate.author,
-      book: quoteTemplate.book || 'Kütüphane Arşivi',
-    });
-  }
-
-  await prisma.dailyQuote.createMany({
-    data: dailyQuotesData,
-  });
-  console.log('✅ 365 günlük sözler başarıyla yüklendi.');
-
-  // Başlangıç Yazıları ve Şiirleri
-  console.log('📚 Başlangıç yazıları ve şiirleri oluşturuluyor...');
-  await prisma.post.deleteMany({});
-
-  const postsData = [
+  // 2. Seed Initial Posts
+  const posts = [
     {
-      title: "Lo-Fi Yaşam Sanatı: Yavaşlamanın ve Sessizliğin Poetiği",
-      slug: "lo-fi-yasam-sanati-yavaslamanin-ve-sessizligin-poetigi",
-      excerpt: "Hızlı akan dünyanın ritminden çıkıp, bir fincan sıcak çay ve çıtırdayan şömine eşliğinde iç dünyamıza yaptığımız huzurlu yolculuk.",
-      content: `Günün ilk ışıkları pencerelerden süzülürken veya akşamın loş karanlığı odayı kaplarken, hayatın telaşından sıyrılmak bir lüks değil, ruhun temel bir ihtiyacıdır. 
+      title: 'Lo-Fi Yaşam Sanatı: Yavaşlamanın ve Sessizliğin Poetiği',
+      slug: 'lo-fi-yasam-sanati-yavaslamanin-ve-sessizligin-poetigi',
+      excerpt: 'Hızlı akan dünyanın ritminden çıkıp, bir fincan sıcak çay ve çıtırdayan şömine eşliğinde iç dünyamıza yaptığımız huzurlu bir edebiyat yolculuğu.',
+      content: `Günün ilk ışıkları penceremize düşerken ya da çıtırdayan bir şöminenin karşısında otururken içimizi kaplayan o derin huzur, tesadüf değildir. Modern yaşamın baş döndürücü hızı içerisinde unutmaya yüz tuttuğumuz o yavaş ritim, aslında ruhumuzun en çok ihtiyaç duyduğu dinginliktir.
 
-Lo-fi estetiği sadece bir müzik türü veya görsel tarz değildir; aynı zamanda mükemmel olmama özgürlüğü, pürüzlü seslerdeki samimiyet ve anın tadını çıkarma felsefesidir. Olduğu gibi kabul edilen detaylar — eski bir plak cızırtısı, yağmur damlalarının cama vururken çıkardığı ritim, ahşap zeminin hafif gıcırtısı — bize dinginliğin kapılarını aralar.
+### 1. Zamanı Yavaşlatmak
+Sürekli bir yerlere yetişme telayı, zihnimizi yoran bildirim sesleri ve bitmek bilmeyen sorumluluklar arasında kendi sesimizi duymakta zorlanıyoruz. Oysa bir kitabı aralamak, eski bir sayfanın kokusunu içimize çekmek ve yağmurun sesine odaklanmak zamanı yavaşlatmanın en zarif yoludur.
 
-### Yavaşlamanın Değeri
+> "Sessizlik, ruhun kendi derinlikleriyle baş başa kaldığı kutsal bir mabettir."
 
-Modern çağ bize sürekli hızlanmamızı öğütlüyor. Ancak yaratıcılık ve derin düşünce hızlı adımlarla değil, duraklamalarla beslenir. Bir kitabı acele etmeden, satırların altını çizerek okumak; kelimelerin zihnimizde bıraktığı tortuları hissetmek edebiyatın özüdür.
+### 2. Lo-Fi Estetiği ve İçsel Odaklanma
+Lo-Fi yaşam felsefesi; mükemmel olmama özgürlüğünü, sadeliği ve anın tadını çıkarmayı savunur. Eski bir pikaptan yükselen cızırtılı bir plak sesi ya da loş bir odadaki mum ışığı bize kusurların içindeki güzelliği hatırlatır.
 
-> "Sessizlik bir boşluk değil, aksine cevaplarla dolu derin bir alandır."
-
-Şöminenin çıtırtısını dinlerken yazılan her satır, zamanın akışına bırakılmış küçük birer mesajdır. Kendinize bugün birkaç dakika ayırın, bir fincan sıcak içecek alın ve sadece var olmanın tadını çıkarın.`,
-      type: "YAZI",
-      coverImage: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "4 dk okuma",
-      publishedAt: new Date(),
+Bu kütüphanede kaleme aldığımız her dize ve her cümle, işte bu yavaşlama sanatının bir meyvesidir. Kendinize zaman tanıyın, bir fincan sıcak içeceğinizi alın ve kelimelerin arasında kaybolmanın tadını çıkarın.`,
+      type: PostType.YAZI,
+      readingTime: '4 dk okuma',
+      isFeatured: true,
+      likes: 12,
+      views: 145,
+      coverImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80',
     },
     {
-      title: "Gece Yarısı Okumaları: Eski Kitap Kokusu ve Şömine Ateşi",
-      slug: "gece-yarisi-okumalari-eski-kitap-kokusu-ve-somine-atesi",
-      excerpt: "Gece yarısı saat ikiye gelirken sararmış sayfalar arasında kaybolmanın ve unutulmuş hikayeleri yeniden canlandırmanın büyüsü.",
-      content: `Gece, okurun en mahrem sığınağıdır. Herkes uykudayken dünyanın gürültüsü çekilir ve geriye sadece siz ve sayfadaki harfler kalır.
-
-Eski kitapların kokusu vanilya, ahşap ve zamanın birleşimidir. Cildin hafifçe aşınmış köşelerine dokunmak, o kitabı daha önce okuyan meçhul dostlarla görünmez bir bağ kurmamızı sağlar. 
-
-### Parşömenin Dokusu
-
-Şömine ateşinin duvara yansıttığı sıcak turuncu gölgeler altında okunan bir Klasik, gündüz vakti okunan aynı eserden çok daha derin izler bırakır. Ateşin alevi titredikçe hikayedeki karakterler de odanın içinde canlanır sanki.
-
-- **Sıcak Işık:** Loş sarı ışık gözleri dinlendirirken zihni hayal gücüne açar.
-- **Sessizliğin Ritimleri:** Yağmur tıpırtıları ile sayfa çevirme sesinin uyumu.
-
-Bu gece bir sonraki bölüme geçmeden önce durun ve pencereden dışarı bakın. Karanlıkta parıldayan yıldızlar da sizinle aynı hikayeyi izliyor olabilir.`,
-      type: "YAZI",
-      coverImage: "https://images.unsplash.com/photo-1474939557548-f84244685449?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "5 dk okuma",
-      publishedAt: new Date(Date.now() - 86400000 * 2),
+      title: 'BİLMEM',
+      slug: 'bilmem',
+      excerpt: 'Her ana düş kur derdin. Ne demek hala bilmem. En kolay yol en iyi olduğun yoldur derdin.',
+      content: `Her ana düş kur derdin.
+Ne demek hala bilmem.
+En kolay yol en iyi olduğun yoldur derdin.
+Başka yol var mıdır bilmem.
+Sen bunlar gibi olma derdin.
+Dinledim seni, onlar gibisini bilmem.
+Din,dil farketmez , iyi kal derdin.
+Tek amacım iyi kalmaktır hala.
+Her konuda, Her olayda, Her kararda.
+Aklımda tek soru hala,
+Sen olsan ne yapardın. Bilmem.`,
+      type: PostType.SIIR,
+      isFeatured: true,
+      likes: 24,
+      views: 189,
     },
     {
-      title: "Zamanın Ruhunda Bir Yağmur Sesine Sığınmak",
-      slug: "zamanin-ruhunda-bir-yagmur-sesine-siginmak",
-      excerpt: "Pencere kenarında oturup yağmur damlalarının camdaki dansını izlerken tutulan içsel notlar.",
-      content: `Yağmur gökyüzünün yeryüzüne yazdığı uzun bir mektuptur. Her damla, toprağa dokunduğunda unutulmuş bir kokuyu, beklenmedik bir hatırayı uyandırır.
+      title: 'Gece Yarısı Okumaları: Eski Kitap Kokusu ve Şömine Ateşi',
+      slug: 'gece-yarisi-okumalari-eski-kitap-kokusu-ve-somine-atesi',
+      excerpt: 'Gece yarısı saat ikiye gelirken sararmış sayfalar arasında kaybolmanın ve unutulmuş hikayeleri yeniden fısıldamanın büyüsü.',
+      content: `Gecenin zifiri karanlığı şehri örttüğünde, kütüphanedeki şöminenin alevleri sarı bir ışık hüzmesi saçar duvarlara. Eski ciltli kitapların arasında dolaşmak, geçmiş zamanın bilginleriyle sessiz bir sohbet etmektir.
 
-Rüzgarın ahşap kepenkleri hafifçe salladığı anlarda, sıcak bir battaniyeye sarılıp çayınızı yudumlamak hayatın sunduğu en sade ve en güzel armağanlardan biridir. Edebiyat da tıpkı bu yağmur gibi ruhumuzun kurak yanlarını sular.`,
-      type: "YAZI",
-      coverImage: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "3 dk okuma",
-      publishedAt: new Date(Date.now() - 86400000 * 5),
+Gece yarısı okumaları, zihnin savunma mekanizmalarını bıraktığı ve ruhun en derin duyarlılığına ulaştığı saatlerdir.`,
+      type: PostType.YAZI,
+      readingTime: '5 dk okuma',
+      isFeatured: true,
+      likes: 8,
+      views: 98,
+      coverImage: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80',
     },
     {
-      title: "Sessiz Odada Mum Işığı",
-      slug: "sessiz-odada-mum-isigi",
-      excerpt: "Ahşap masanın üzerinde süzülen hafif bir alev ve geceye bırakılan mısralar.",
-      content: `Bir mum yanar masanın kenarında,
-Gölgesi dans eder ahşap duvarda.
-Zaman durur, gece derinleşir,
-Kelimeler dökülür sessizce kağıda.
-
-Dışarıda rüzgar fısıldar eski bir masalı,
-İçeride sıcak bir çay, biraz da hüzün.
-Geçip giden yılların izi var sayfada,
-Gözlerin aradığı o sakin yüzün.
-
-Alev titrer, hatıralar uyanır tek tek,
-Yalnızlık burada bir yük değil, ipekten bir örtü.
-Ruhum hafifler bu loş akşamda,
-Sevgiyle sarar beni gecenin bürüsü.`,
-      type: "SIIR",
-      coverImage: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "2 dk okuma",
-      publishedAt: new Date(),
+      title: 'Sessiz Odada Mum Işığı',
+      slug: 'sessiz-odada-mum-isigi',
+      excerpt: 'Ahşap masanın üzerinde süzülen hafif bir alev ve geceye bırakılan mısralar.',
+      content: `Ahşap masanın üzerinde süzülen hafif bir alev,
+Gecenin sessizliğinde dans eder mısralar.
+Pencereden süzülen rüzgarın fısıltısı,
+Kalemin ucundan dökülür eski hatıralar.`,
+      type: PostType.SIIR,
+      isFeatured: false,
+      likes: 15,
+      views: 112,
     },
     {
-      title: "Sonbaharın Yaprak Fısıltıları",
-      slug: "sonbaharin-yaprak-fisiltilari",
-      excerpt: "Sarı yaprakların rüzgardaki şarkısı ve kalbe dokunan serinlik.",
-      content: `Dökülen her yaprak bir hatıra gibi,
-Rüzgarın kollarında süzülür yere.
-Toprak kokar nemli ve dingin,
-Kuşlar veda eder eski şehre.
-
-Şöminede odunlar çıtırdayarak yanar,
-Ateşin turuncusu ısıtır ellerimi.
-Bir dize takılır aklıma gecenin ortasında,
-Unuturum dünyanın bütün kederini.
-
-Güz, ruhun kendi içine çekilişidir,
-Yapraklar gibi dökmek dertleri bir bir.
-Bir fincan sıcak kahve ve sararmış kağıt,
-Yeniden başlar içimizdeki o en güzel şiir.`,
-      type: "SIIR",
-      coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "2 dk okuma",
-      publishedAt: new Date(Date.now() - 86400000 * 3),
+      title: 'Sonbaharın Yaprak Fısıltıları',
+      slug: 'sonbaharin-yaprak-fisiltilari',
+      excerpt: 'Sarı yaprakların rüzgardaki şarkısı ve kalbe dokunan serinlik.',
+      content: `Sarı yaprakların rüzgardaki şarkısı,
+Kalbe dokunan tatlı bir serinlik.
+Toprağa düşen her yaprak bir masal anlatır,
+Zamanın koynunda saklanan sonsuz bir derinlik.`,
+      type: PostType.SIIR,
+      isFeatured: false,
+      likes: 9,
+      views: 76,
     },
     {
-      title: "Geceye Yazan Mürekkep",
-      slug: "geceye-yazan-murekkep",
-      excerpt: "Dolma kalemin ucundan dökülen koyu mavi mürekkebin yolculuğu.",
-      content: `Mürekkep koyu, kağıt krem rengi,
-Gece yarısı bulunur kalbin dengi.
-Hiç söylenmemiş sözler gizlidir satırlarda,
-Sessizliğin müziği çalar arka planda.
+      title: 'Zamanın Ruhunda Bir Yağmur Sesine Sığınmak',
+      slug: 'zamanin-ruhunda-bir-yagmur-sesine-siginmak',
+      excerpt: 'Pencere kenarında oturup yağmur damlalarının camdaki dansını izlerken tutulan içsel notlar.',
+      content: `Dışarıda sicim gibi yağan yağmur, camları tıkırdatırken elinizdeki sıcak bardağın buğusu ruhunuzu ısıtır. Yağmur sesi, doğanın en dinlendirici senfonisidir.
 
-Adım adım yürürüz lo-fi ritminde,
-Bir masal saklıdır her bir kelimede.
-Işıklar sönerken şehirde tek tek,
-Bizim dünyamızda bir alev parlayacak.`,
-      type: "SIIR",
-      coverImage: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80",
-      readingTime: "1 dk okuma",
-      publishedAt: new Date(Date.now() - 86400000 * 7),
+Bu denemede, yağmurlu günlerin getirdiği o derin tefekkür halini ele alıyoruz.`,
+      type: PostType.YAZI,
+      readingTime: '6 dk okuma',
+      isFeatured: true,
+      likes: 19,
+      views: 204,
+      coverImage: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1200&q=80',
     },
   ];
 
-  for (const post of postsData) {
-    await prisma.post.create({
-      data: post,
+  for (const post of posts) {
+    await prisma.post.upsert({
+      where: { slug: post.slug },
+      update: post,
+      create: post,
     });
   }
 
-  console.log('✅ Başlangıç yazıları ve şiirleri başarıyla yüklendi.');
-  console.log('🎉 Veritabanı seed işlemi başarıyla tamamlandı!');
+  // 3. Seed 365 Daily Quotes
+  const baseQuotes = [
+    { author: 'Marcus Aurelius', content: 'Sabah uyandığında yaşamaya, düşünmeye, sevmeye devam etmenin ne büyük bir ayrıcalık olduğunu düşün.', source: 'Kendime Düşünceler' },
+    { author: 'Montaigne', content: 'Dünyanın en büyük şeyi, insanın kendi kendisi olmayı bilmesidir.', source: 'Denemeler' },
+    { author: 'Fyodor Dostoyevski', content: 'İnsan ruhunun öyle derinlikleri vardır ki, oraya ancak acı ve sevgi ulaşabilir.', source: 'Suç ve Ceza' },
+    { author: 'Sabahattin Ali', content: 'Dünyada sırf kendisi için yaşayan tek bir insan bile yoktur. Herkes bir başkası için var olur.', source: 'Kürk Mantolu Madonna' },
+    { author: 'Cemal Süreya', content: 'Hayat kısa, kuşlar uçuyor.', source: 'Sevda Sözleri' },
+    { author: 'Friedrich Nietzsche', content: 'Uçurumları sevenlerin kanatları olmalı.', source: 'Böyle Buyurdu Zerdüşt' },
+    { author: 'Franz Kafka', content: 'Günün birinde kendini anlaşılmış hissetmek, dünyadaki tüm yalnızlıkları siler.', source: 'Milena\'ya Mektuplar' },
+    { author: 'Antoine de Saint-Exupéry', content: 'İnsan ancak yüreğiyle baktığı zaman doğruyu görebilir. Gerçeğin mayası gözle görülmez.', source: 'Küçük Prens' },
+  ];
+
+  for (let day = 1; day <= 365; day++) {
+    const template = baseQuotes[(day - 1) % baseQuotes.length];
+    await prisma.quote.upsert({
+      where: { dayOfYear: day },
+      update: {
+        author: template.author,
+        content: template.content,
+        source: template.source,
+      },
+      create: {
+        author: template.author,
+        content: template.content,
+        source: template.source,
+        dayOfYear: day,
+      },
+    });
+  }
+
+  // 4. Seed Curated Books (12 World Classics & Philosophy Books)
+  const books = [
+    {
+      googleBookId: 'kurk-mantolu-madonna',
+      isbn10: '9753638027',
+      isbn13: '9789753638029',
+      title: 'Kürk Mantolu Madonna',
+      subtitle: 'Yapı Kredi Yayınları',
+      authors: 'Sabahattin Ali',
+      publisher: 'Yapı Kredi Yayınları',
+      publishedDate: '1943',
+      description: 'Kürk Mantolu Madonna, Sabahattin Ali\'nin 1943 yılında yayımladığı romanıdır. Romanda Raif Efendi\'nin gençlik yıllarında Berlin\'de tanıştığı Maria Puder ile yaşadığı unutulmaz ve hüzünlü aşk anlatılır.',
+      pageCount: 160,
+      categories: 'Dünya Klasikleri, Türk Edebiyatı',
+      averageRating: 4.8,
+      ratingsCount: 1250,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789753638029-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789753638029-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: 'bolye-buyurdu-zerdust',
+      isbn10: '9750719387',
+      isbn13: '9789750719387',
+      title: 'Böyle Buyurdu Zerdüşt',
+      subtitle: 'Herkes İçin ve Hiç Kimse İçin Bir Kitap',
+      authors: 'Friedrich Nietzsche',
+      publisher: 'Can Yayınları',
+      publishedDate: '1883',
+      description: 'Nietzsche\'nin başyapıtı kabul edilen eser; Üstinsan, Güç İstenci ve Ebedi Dönüş kavramlarını Zerdüşt karakterinin kehanet dolu diliyle aktarır.',
+      pageCount: 384,
+      categories: 'Felsefe & Düşünce',
+      averageRating: 4.7,
+      ratingsCount: 890,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750719387-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750719387-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Felsefe & Düşünce',
+    },
+    {
+      googleBookId: 'suc-ve-ceza',
+      isbn10: '9750738600',
+      isbn13: '9789750738609',
+      title: 'Suç ve Ceza',
+      subtitle: 'Hasan Âli Yücel Klasikler Dizisi',
+      authors: 'Fyodor Dostoyevski',
+      publisher: 'İş Bankası Kültür Yayınları',
+      publishedDate: '1866',
+      description: 'Yoksul öğrenci Raskolnikov\'un vicdan azabı, ahlaki sorgulamaları ve Saint Petersburg gecelerindeki içsel hesaplaşmasını konu alan psikolojik edebiyat abidesi.',
+      pageCount: 688,
+      categories: 'Dünya Klasikleri',
+      averageRating: 4.9,
+      ratingsCount: 3400,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750738609-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750738609-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: 'seker-portakali',
+      isbn10: '9750738617',
+      isbn13: '9789750738616',
+      title: 'Şeker Portakalı',
+      subtitle: 'Günün Birinde Acıyı Keşfeden Küçük Bir Çocuğun Öyküsü',
+      authors: 'José Mauro de Vasconcelos',
+      publisher: 'Can Yayınları',
+      publishedDate: '1968',
+      description: 'Günün birinde acıyı keşfeden küçük Zeze\'nin dokunaklı, sevgi dolu ve unutulmaz çocukluk hikayesi.',
+      pageCount: 182,
+      categories: 'Dünya Klasikleri',
+      averageRating: 4.9,
+      ratingsCount: 2900,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750738616-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750738616-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: '1984-george-orwell',
+      isbn10: '9750718534',
+      isbn13: '9789750718533',
+      title: '1984',
+      subtitle: 'Bin Dokuz Yüz Seksen Dört',
+      authors: 'George Orwell',
+      publisher: 'Can Yayınları',
+      publishedDate: '1949',
+      description: 'Büyük Birader\'in gözetiminde gerçeğin yeniden yazıldığı, düşünce suçunun yasaklandığı kült distopik roman.',
+      pageCount: 352,
+      categories: 'Distopya & Edebiyat',
+      averageRating: 4.8,
+      ratingsCount: 4100,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750718533-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750718533-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: 'kucuk-prens',
+      isbn10: '9750724330',
+      isbn13: '9789750724336',
+      title: 'Küçük Prens',
+      subtitle: 'Le Petit Prince',
+      authors: 'Antoine de Saint-Exupéry',
+      publisher: 'Can Yayınları',
+      publishedDate: '1943',
+      description: 'Bir çocuk kitabı görünümünde yetişkinlere sevgi, dostluk, sadakat ve hayatın anlamı üzerine yazılmış zamansız bir başyapıt.',
+      pageCount: 112,
+      categories: 'Şiir & Edebiyat',
+      averageRating: 4.9,
+      ratingsCount: 5200,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750724336-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750724336-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Şiir & Edebiyat',
+    },
+    {
+      googleBookId: 'denemeler-montaigne',
+      isbn10: '9754580928',
+      isbn13: '9789754580921',
+      title: 'Denemeler',
+      subtitle: 'Seçmeler',
+      authors: 'Michel de Montaigne',
+      publisher: 'İş Bankası Kültür Yayınları',
+      publishedDate: '1580',
+      description: 'Montaigne\'in insan doğası, dostluk, yalnızlık ve ölüm üzerine yüzyıllardır eskimeyen özgür düşünce denemeleri.',
+      pageCount: 310,
+      categories: 'Felsefe & Düşünce',
+      averageRating: 4.7,
+      ratingsCount: 780,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789754580921-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789754580921-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Felsefe & Düşünce',
+    },
+    {
+      googleBookId: 'donusum-kafka',
+      isbn10: '9750734001',
+      isbn13: '9789750734007',
+      title: 'Dönüşüm',
+      subtitle: 'Die Verwandlung',
+      authors: 'Franz Kafka',
+      publisher: 'Can Yayınları',
+      publishedDate: '1915',
+      description: 'Gregor Samsa bir sabah bunaltıcı düşlerden uyandığında, kendisini yatağında dev bir böceğe dönüşmüş olarak bulur.',
+      pageCount: 104,
+      categories: 'Dünya Klasikleri',
+      averageRating: 4.6,
+      ratingsCount: 1850,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789750734007-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789750734007-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: 'insan-ne-ile-yasar',
+      isbn10: '9754586985',
+      isbn13: '9789754586985',
+      title: 'İnsan Ne İle Yaşar?',
+      subtitle: 'Hasan Âli Yücel Klasikler Dizisi',
+      authors: 'Lev Tolstoy',
+      publisher: 'İş Bankası Kültür Yayınları',
+      publishedDate: '1885',
+      description: 'Tolstoy\'un sevgi, açgözlülük, alçakgönüllülük ve insan doğası üzerine kaleme aldığı ders niteliğindeki eşsiz hikayeler.',
+      pageCount: 96,
+      categories: 'Dünya Klasikleri',
+      averageRating: 4.8,
+      ratingsCount: 2100,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789754586985-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789754586985-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Dünya Klasikleri',
+    },
+    {
+      googleBookId: 'kendime-dusunceler-marcus-aurelius',
+      isbn10: '9754589216',
+      isbn13: '9789754589214',
+      title: 'Kendime Düşünceler',
+      subtitle: 'Stoacı Felsefe Günlüğü',
+      authors: 'Marcus Aurelius',
+      publisher: 'İş Bankası Kültür Yayınları',
+      publishedDate: '180',
+      description: 'Roma İmparatoru Marcus Aurelius\'un cephelerde kendisi için tuttuğu, Stoacı felsefenin en derin rehber kitabı.',
+      pageCount: 168,
+      categories: 'Felsefe & Düşünce',
+      averageRating: 4.8,
+      ratingsCount: 1450,
+      thumbnailUrl: 'https://covers.openlibrary.org/b/isbn/9789754589214-L.jpg',
+      largeCoverUrl: 'https://covers.openlibrary.org/b/isbn/9789754589214-L.jpg',
+      previewUrl: 'https://books.google.com.tr',
+      isFeatured: true,
+      curatedCategory: 'Felsefe & Düşünce',
+    },
+  ];
+
+  for (const book of books) {
+    await prisma.book.upsert({
+      where: { googleBookId: book.googleBookId },
+      update: book,
+      create: book,
+    });
+  }
+
+  console.log('Database Seeding Completed Successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Seed işleminde hata oluştu:', e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

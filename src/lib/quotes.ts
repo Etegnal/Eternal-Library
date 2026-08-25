@@ -1,43 +1,39 @@
-import { prisma } from './prisma';
+import { prisma } from '@/lib/prisma';
 
-export function getDayOfYear(date: Date = new Date()): number {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const diff =
-    date.getTime() -
-    start.getTime() +
-    (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
-  const oneDay = 1000 * 60 * 60 * 24;
-  const day = Math.floor(diff / oneDay);
-  return Math.min(Math.max(day, 1), 366);
+export interface QuoteItem {
+  id: string;
+  author: string;
+  content: string;
+  source?: string | null;
+  dayOfYear: number;
 }
 
-export async function getTodayQuote(dayOverride?: number) {
-  const targetDay = dayOverride || getDayOfYear();
-  
+export async function getTodayQuote(): Promise<QuoteItem> {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime();
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  const targetDay = ((dayOfYear - 1) % 365) + 1;
+
   try {
-    const quote = await prisma.dailyQuote.findUnique({
+    const quote = await prisma.quote.findUnique({
       where: { dayOfYear: targetDay },
     });
 
-    if (quote) return quote;
-
-    // Fallback if not found
-    const firstQuote = await prisma.dailyQuote.findFirst();
-    return firstQuote || {
-      id: 'fallback',
-      dayOfYear: targetDay,
-      quote: "Dünyayı güzellik kurtaracak, bir insanı sevmekle başlayacak her şey.",
-      author: "Sait Faik Abasıyanık",
-      book: "Alemdağ'da Var Bir Yılan"
-    };
+    if (quote) {
+      return quote;
+    }
   } catch (error) {
-    console.error("Error fetching daily quote:", error);
-    return {
-      id: 'fallback-error',
-      dayOfYear: targetDay,
-      quote: "İçimde çok erken büyümüş bir çocuk, dışımda hiç büyümemiş bir adam var.",
-      author: "Sabahattin Ali",
-      book: "Kürk Mantolu Madonna"
-    };
+    console.error('Error fetching today quote:', error);
   }
+
+  // Fallback quote
+  return {
+    id: 'fallback-1',
+    author: 'Marcus Aurelius',
+    content: 'Sabah uyandığında yaşamaya, düşünmeye, sevmeye devam etmenin ne büyük bir ayrıcalık olduğunu düşün.',
+    source: 'Kendime Düşünceler',
+    dayOfYear: targetDay,
+  };
 }

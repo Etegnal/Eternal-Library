@@ -14,7 +14,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '/', label: 'ANASAYFA' },
-    { href: '/hakkimda', label: 'HAKKIMDA' },
+    { href: '/kitaplar', label: 'KİTAPLAR' },
     { href: '/yazilar', label: 'YAZILAR' },
     { href: '/siirler', label: 'ŞİİRLER' },
     { href: '/gunun-sozu', label: 'GÜNÜN SÖZÜ' },
