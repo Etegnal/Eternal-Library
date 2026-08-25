@@ -12,6 +12,7 @@ interface PostItem {
   excerpt: string;
   content: string;
   type: string;
+  author?: string | null;
   coverImage?: string | null;
   readingTime?: string | null;
   publishedAt: Date | string;
@@ -140,7 +141,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                         </div>
 
                         <div className="flex items-center justify-between text-[11px] text-[#8B4513] font-mono mt-2 pt-2 border-t border-amber-200/60">
-                          <span>{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
+                          <span>{article.author ? `${article.author} • ` : ''}{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
                           <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-0.5">
                             <span>Oku</span>
                             <ArrowRight className="w-3 h-3" />

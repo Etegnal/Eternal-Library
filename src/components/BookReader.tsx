@@ -11,10 +11,11 @@ interface BookReaderProps {
   content: string;
   initialLikes: number;
   postType?: 'YAZI' | 'SIIR';
+  author?: string | null;
   dateStr?: string;
 }
 
-export default function BookReader({ postId, content, initialLikes, postType = 'YAZI', dateStr }: BookReaderProps) {
+export default function BookReader({ postId, content, initialLikes, postType = 'YAZI', author, dateStr }: BookReaderProps) {
   const { data: session } = useSession();
   const userIdentifier = session?.user?.email || 'guest';
   const bookmarkKey = `eternal_bookmark_${userIdentifier}_${postId}`;
@@ -211,10 +212,19 @@ export default function BookReader({ postId, content, initialLikes, postType = '
                 </div>
               )}
 
-              {/* Like Button on Last Page */}
+              {/* Author & Like Button on Last Page */}
               {isLastPage && (
-                <div className="pt-8 mt-6 border-t border-dashed border-[#E6D7BC] flex justify-center py-1">
-                  <LikeButton postId={postId} initialLikes={initialLikes} />
+                <div className="pt-8 mt-6 border-t border-dashed border-[#E6D7BC] space-y-6">
+                  {author && (
+                    <div className="text-right pr-2">
+                      <span className="font-serif font-bold text-base sm:text-lg text-[#8B4513] italic">
+                        — Yazar: {author}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-center py-1">
+                    <LikeButton postId={postId} initialLikes={initialLikes} />
+                  </div>
                 </div>
               )}
             </motion.div>

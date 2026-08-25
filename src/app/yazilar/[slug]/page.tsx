@@ -2,7 +2,7 @@ import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowLeft, BookOpen } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, BookOpen, User } from 'lucide-react';
 import ViewTracker from '@/components/ViewTracker';
 import PostCard from '@/components/PostCard';
 import BookReader from '@/components/BookReader';
@@ -69,6 +69,13 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
       {/* Header Info */}
       <div className="space-y-4 text-center max-w-3xl mx-auto">
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[#5C4033]">
+          {article.author && (
+            <div className="flex items-center gap-1.5 bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A] text-[#78350F] font-semibold">
+              <User className="w-3.5 h-3.5 text-[#9A3412]" />
+              <span>Yazar: {article.author}</span>
+            </div>
+          )}
+
           <div className="flex items-center gap-1.5 bg-[#FEF3C7] px-3 py-1 rounded-full border border-[#FDE68A] text-[#78350F] font-semibold">
             <Calendar className="w-3.5 h-3.5 text-[#9A3412]" />
             <span>{dateStr}</span>
@@ -99,6 +106,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         content={article.content}
         initialLikes={article.likes}
         postType="YAZI"
+        author={article.author}
         dateStr={dateStr}
       />
 

@@ -10,6 +10,7 @@ interface PostCardProps {
     title: string;
     slug: string;
     excerpt: string;
+    author?: string | null;
     coverImage?: string | null;
     readingTime?: string | null;
     publishedAt: Date | string;
@@ -79,6 +80,9 @@ export default function PostCard({ post }: PostCardProps) {
 
         {/* Read More Footer Link */}
         <div className="pt-4 border-t border-cozy-parchment-border flex items-center justify-between">
+          <span className="text-xs text-cozy-coffee-light italic">
+            {post.author ? `— ${post.author}` : ''}
+          </span>
           <Link
             href={`/yazilar/${post.slug}`}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-cozy-amber-dark group-hover:text-cozy-amber transition-colors"
