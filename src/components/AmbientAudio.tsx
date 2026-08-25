@@ -5,7 +5,7 @@ import { Volume2, VolumeX, Flame } from 'lucide-react';
 
 export default function AmbientAudio() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.4);
+  const [volume, setVolume] = useState(0.85);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);

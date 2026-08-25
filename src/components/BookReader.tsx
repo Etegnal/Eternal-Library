@@ -209,23 +209,23 @@ export default function BookReader({ postId, content, initialLikes, postType = '
                   })}
                 </div>
               )}
+
+              {/* Completion Message & Like Button on Last Page */}
+              {isLastPage && (
+                <div className="pt-8 mt-6 border-t border-dashed border-[#E6D7BC] text-center space-y-4">
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200 shadow-sm">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Son Sayfaya Ulaştınız</span>
+                  </div>
+
+                  <div className="flex justify-center py-1">
+                    <LikeButton postId={postId} initialLikes={initialLikes} />
+                  </div>
+                </div>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
-
-        {/* Completion Message & Like Button on Last Page */}
-        {isLastPage && (
-          <div className="pt-6 border-t border-[#E6D7BC] text-center space-y-4">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Son Sayfaya Ulaştınız</span>
-            </div>
-
-            <div>
-              <LikeButton postId={postId} initialLikes={initialLikes} />
-            </div>
-          </div>
-        )}
 
         {/* BOOK READER NAVIGATION FOOTER */}
         <div className="pt-6 border-t border-[#E6D7BC] flex items-center justify-between gap-4">
