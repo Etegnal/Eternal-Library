@@ -44,8 +44,8 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
       {masterPoets.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {masterPoets.map((item) => {
-            const itemSlug = item.slug && item.slug.trim().length > 0 ? item.slug : slugify(item.title);
-            const detailUrl = `/siirler/${itemSlug}`;
+            const rawSlug = item.slug && item.slug.trim().length > 0 ? item.slug : slugify(item.title);
+            const detailUrl = `/siirler/${encodeURIComponent(rawSlug)}`;
 
             return (
               <div

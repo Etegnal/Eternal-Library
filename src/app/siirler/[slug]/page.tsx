@@ -22,7 +22,8 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
   const decodedSlug = decodeURIComponent(rawSlug);
   const cleanSlug = slugify(decodedSlug);
 
-  const poem = await prisma.post.findFirst({
+  // 1. Search in Post table (type: SIIR)
+  const postPoem = await prisma.post.findFirst({
     where: {
       type: 'SIIR',
       OR: [
@@ -33,11 +34,62 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
     },
   });
 
+  // 2. Search in MasterPoet table if not found in Post table
+  let masterPoem = null;
+  if (!postPoem) {
+    masterPoem = await prisma.masterPoet.findFirst({
+      where: {
+        OR: [
+          { slug: rawSlug },
+          { slug: decodedSlug },
+          { slug: cleanSlug },
+          { id: rawSlug },
+        ],
+      },
+    });
+
+    // If still not found, check by title slug matching
+    if (!masterPoem) {
+      const allMasterPoets = await prisma.masterPoet.findMany();
+      masterPoem = allMasterPoets.find(
+        (mp) =>
+          slugify(mp.title) === cleanSlug ||
+          slugify(mp.title) === rawSlug ||
+          mp.slug === cleanSlug
+      ) || null;
+    }
+  }
+
+  // Unified poem object
+  const poem = postPoem
+    ? {
+        id: postPoem.id,
+        title: postPoem.title,
+        author: postPoem.author,
+        content: postPoem.content,
+        views: postPoem.views,
+        likes: postPoem.likes,
+        publishedAt: postPoem.publishedAt,
+        isPost: true,
+      }
+    : masterPoem
+    ? {
+        id: masterPoem.id,
+        title: masterPoem.title,
+        author: masterPoem.author,
+        content: masterPoem.content && masterPoem.content.trim().length > 0 ? masterPoem.content : masterPoem.excerpt,
+        views: 1,
+        likes: 0,
+        publishedAt: masterPoem.createdAt,
+        isPost: false,
+      }
+    : null;
+
   if (!poem) {
     notFound();
   }
 
-  // Fetch 3 related poems
+  // Fetch related poems
   const relatedPoems = await prisma.post.findMany({
     where: {
       type: 'SIIR',
@@ -74,7 +126,11 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
             <span>Şiir</span>
           </div>
 
-          <ViewTracker postId={poem.id} initialViews={poem.views} />
+          {poem.isPost ? (
+            <ViewTracker postId={poem.id} initialViews={poem.views} />
+          ) : (
+            <div className="text-xs text-[#785438] font-mono">Üstat Kalemler</div>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -87,7 +143,7 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
         </div>
       </div>
 
-      {/* SINGLE PARCHMENT CARD FOR POEM (NO PAGINATION) */}
+      {/* SINGLE PARCHMENT CARD FOR POEM */}
       <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
         <div className="font-serif text-lg sm:text-xl leading-loose text-[#362215] italic whitespace-pre-line text-center max-w-xl mx-auto">
           {poem.content}
@@ -103,9 +159,11 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
         )}
 
         {/* LIKE BUTTON AT BOTTOM OF POEM */}
-        <div className="pt-8 border-t border-[#E6D7BC] text-center flex justify-center">
-          <LikeButton postId={poem.id} initialLikes={poem.likes} />
-        </div>
+        {poem.isPost && (
+          <div className="pt-8 border-t border-[#E6D7BC] text-center flex justify-center">
+            <LikeButton postId={poem.id} initialLikes={poem.likes} />
+          </div>
+        )}
       </div>
 
       {/* RELATED POEMS RECOMMENDATION SECTION */}
