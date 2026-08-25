@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Coffee, Feather, ShieldCheck } from 'lucide-react';
+import { Coffee, Feather } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -63,8 +63,8 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Lo-fi Quote & Admin Panel Access */}
-        <div className="md:col-span-4 space-y-3 p-5 rounded-xl bg-cozy-wood/60 border border-cozy-amber/20">
+        {/* Lo-fi Quote */}
+        <div className="md:col-span-4 space-y-3 p-5 rounded-xl bg-cozy-wood/60 border border-cozy-amber/20 flex flex-col justify-center">
           <div className="flex items-center gap-2 text-xs font-semibold text-cozy-amber uppercase tracking-wider">
             <Feather className="w-4 h-4" />
             <span>Kütüphane Notu</span>
@@ -72,16 +72,6 @@ export default function Footer() {
           <p className="font-serif italic text-xs text-cozy-parchment/90 leading-relaxed">
             "Okumak, gidenin yerine gelmeyeni beklemek gibidir; ama kitaplar hep gelir."
           </p>
-          <div className="pt-2 border-t border-amber-950 flex items-center justify-between text-xs text-cozy-parchment/60">
-            <span>Yönetim Erişimi</span>
-            <Link
-              href="/giris"
-              className="flex items-center gap-1 text-cozy-amber hover:underline font-medium"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Admin / Üye Girişi</span>
-            </Link>
-          </div>
         </div>
 
       </div>
