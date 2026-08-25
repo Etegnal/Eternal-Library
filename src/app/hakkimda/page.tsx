@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { User, BookOpen, Flame, Coffee } from 'lucide-react';
+import { User, BookOpen } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -17,19 +17,20 @@ export default function AboutPage() {
         <h1 className="font-serif font-bold text-4xl text-[#362215]">
           Hakkımda ve Kütüphane Notları
         </h1>
-        <p className="text-[#5C4033] text-base leading-relaxed">
-          Eski sayfaların kokusunda, sıcak şömine karşısında ve lo-fi melodiler eşliğinde hayat bulan bir edebiyat alanı.
+        <p className="text-[#5C4033] text-base leading-relaxed font-serif italic">
+          Sıcak bir şömine karşısında okuyabileceğiniz kocaman bir kütüphane. Tabi zamanla...
         </p>
       </div>
 
       {/* Profile Card */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center p-8 sm:p-10 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment">
-        <div className="md:col-span-4 relative aspect-square rounded-2xl overflow-hidden shadow-fire border-2 border-cozy-amber/40">
+        <div className="md:col-span-4 relative aspect-square rounded-2xl overflow-hidden shadow-fire border-2 border-cozy-amber/40 bg-[#1F0F07]">
           <Image
-            src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+            src="/assets/author.jpg"
             alt="Yazar Profil"
             fill
             className="object-cover"
+            priority
           />
         </div>
 
@@ -37,33 +38,15 @@ export default function AboutPage() {
           <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#362215]">
             Merhaba, Ben Kütüphane Yazarınız
           </h2>
-          <p className="text-base leading-relaxed text-[#362215]/90 font-sans">
-            Eternal Library (Kütüphane-i Ahsen), kelimelerin gücüne ve sessiz anların büyüsüne inanan bir edebiyat alanı olarak kuruldu. Burası; hızlı akan dünyanın telaşından uzakta, sıcak bir fincan çay veya kahve eşliğinde sığınılacak güvenli bir limandır.
+          <p className="text-base sm:text-lg leading-relaxed text-[#362215]/90 font-sans">
+            Eternal Library (Kütüphane-i Ahsen), kendi kişisel yazılarımı, kafam dolu olduğu anlarda karaladıklarımı ve hislerimin dışavurumlarını topladığım bir sanal kütüphane. Sizin yazılarınızı ve edebi ürünlerinizi de paylaşmak istiyorum tabi ki gerçek bir kütüphane olması gerekir. Yayınlamak isterseniz benimle iletişime geçebilirsiniz.
           </p>
-          <p className="text-sm leading-relaxed text-[#5C4033] font-sans">
-            Denemelerimde zamanın yavaşlamasını, lo-fi yaşam felsefesini ve okuma kültürünü ele alırken; şiirlerimde iç dünyamızın sessiz ve derin yankılarına yer veriyorum.
-          </p>
-
-          <div className="pt-2 flex flex-wrap gap-3">
-            <span className="flex items-center gap-1.5 text-xs bg-amber-100 text-cozy-amber-dark px-3 py-1.5 rounded-lg border border-amber-200 font-medium">
-              <Coffee className="w-3.5 h-3.5" />
-              <span>Lo-Fi Hayranı</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-xs bg-amber-100 text-cozy-amber-dark px-3 py-1.5 rounded-lg border border-amber-200 font-medium">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Kitap Tutkunu</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-xs bg-amber-100 text-cozy-amber-dark px-3 py-1.5 rounded-lg border border-amber-200 font-medium">
-              <Flame className="w-3.5 h-3.5" />
-              <span>Gece Yazarı</span>
-            </span>
-          </div>
         </div>
       </div>
 
       {/* Bookshelf Favorite Books */}
       <div className="space-y-6">
-        <div className="border-b border-cozy-parchment-border pb-3">
+        <div className="border-b border-[#E6D7BC] pb-3">
           <h3 className="font-serif font-bold text-2xl text-[#362215] flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-cozy-amber" />
             <span>Başucu Kitaplığımdan Seçmeler</span>
@@ -71,20 +54,22 @@ export default function AboutPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-white border border-cozy-parchment-border shadow-sm space-y-2">
-            <span className="text-xs font-bold text-cozy-amber-dark uppercase">Roman</span>
-            <h4 className="font-serif font-bold text-lg text-[#362215]">Kürk Mantolu Madonna</h4>
-            <p className="text-xs text-[#5C4033]">Sabahattin Ali</p>
+          <div className="p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-2">
+            <span className="text-xs font-bold text-cozy-amber-dark uppercase tracking-wider">Roman</span>
+            <h4 className="font-serif font-bold text-lg text-[#362215]">Seçilmiş</h4>
+            <p className="text-xs text-[#5C4033] font-medium">Gökhan Biçer</p>
           </div>
-          <div className="p-6 rounded-2xl bg-white border border-cozy-parchment-border shadow-sm space-y-2">
-            <span className="text-xs font-bold text-cozy-amber-dark uppercase">Felsefe / Deneme</span>
-            <h4 className="font-serif font-bold text-lg text-[#362215]">Denemeler</h4>
-            <p className="text-xs text-[#5C4033]">Michel de Montaigne</p>
+
+          <div className="p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-2">
+            <span className="text-xs font-bold text-cozy-amber-dark uppercase tracking-wider">Felsefe</span>
+            <h4 className="font-serif font-bold text-lg text-[#362215]">Varlık ve Hiçlik</h4>
+            <p className="text-xs text-[#5C4033] font-medium">Jean-Paul Sartre</p>
           </div>
-          <div className="p-6 rounded-2xl bg-white border border-cozy-parchment-border shadow-sm space-y-2">
-            <span className="text-xs font-bold text-cozy-amber-dark uppercase">Şiir</span>
-            <h4 className="font-serif font-bold text-lg text-[#362215]">Sevda Sözleri</h4>
-            <p className="text-xs text-[#5C4033]">Cemal Süreya</p>
+
+          <div className="p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-2">
+            <span className="text-xs font-bold text-cozy-amber-dark uppercase tracking-wider">Şiir</span>
+            <h4 className="font-serif font-bold text-lg text-[#362215]">Yerçekimli Karanfil</h4>
+            <p className="text-xs text-[#5C4033] font-medium">Edip Cansever</p>
           </div>
         </div>
       </div>
