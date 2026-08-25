@@ -56,10 +56,7 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
         />
 
         {/* DARK CINEMATIC OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/60 z-10" />
-
-        {/* TIGHT BOTTOM-ONLY LIGHT TRANSITION (MAX 80px) */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-t from-[#FEF8EC] to-transparent z-15 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/60 z-10" />
       </div>
 
       <div className="h-24 sm:h-28" />
