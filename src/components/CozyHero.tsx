@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AmbientAudio from '@/components/AmbientAudio';
-import { Sparkles, Feather, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Feather, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getDateStringForDay } from '@/lib/quotes';
 
 interface CozyHeroProps {
@@ -88,19 +88,18 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/60 z-10" />
       </div>
 
-      {/* HERO CONTENT: POSITIONED AT BALANCED MIDPOINT */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full pt-28 sm:pt-36 mb-auto pb-6 sm:pb-12">
+      {/* HERO CONTENT: POSITIONED SLIGHTLY LOWER WITH INCREASED TRANSPARENCY */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full pt-36 sm:pt-44 mb-auto pb-6 sm:pb-12">
         <div className="max-w-md space-y-4 sm:space-y-6 text-left">
           
           {/* GÜNÜN SÖZÜ CARD - TRANSPARENT GLASSMORPHISM ON MOBILE */}
-          <div className="gold-filigree-card relative p-4 sm:p-8 rounded-3xl text-amber-100 shadow-2xl bg-[#1A0B05]/50 sm:bg-[#26140C]/85 backdrop-blur-md border border-amber-500/40">
+          <div className="gold-filigree-card relative p-4 sm:p-8 rounded-3xl text-amber-100 shadow-2xl bg-[#1A0B05]/25 sm:bg-[#26140C]/50 backdrop-blur-md border border-amber-500/40">
             <div className="gold-filigree-inner absolute inset-2 rounded-2xl pointer-events-none" />
 
             <div className="relative z-10 space-y-3.5 sm:space-y-5">
               {/* TOP HEADER BAR */}
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 text-xs font-cinzel font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span className="inline-flex items-center text-xs font-cinzel font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
                   <span>Günün Sözü</span>
                 </span>
 
