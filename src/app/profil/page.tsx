@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { User, Mail, ShieldCheck, Calendar, Shield, BookOpen, LogOut } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
+import UserPersonalLibrary, { LikedPost } from '@/components/UserPersonalLibrary';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,10 +34,21 @@ export default async function ProfilePage() {
 
   const isAdmin = user.role === 'ADMIN';
 
+  // Fetch user's liked posts & poems from LikeRecord table
+  const likedRecords = await prisma.likeRecord.findMany({
+    where: { userId: user.id },
+    include: {
+      post: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const likedPosts: LikedPost[] = likedRecords.map((r) => r.post);
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       
-      {/* Main Profile Card */}
+      {/* 1. Main Profile Card */}
       <div className="p-8 rounded-3xl bg-[#FFFDF9] border-2 border-[#E6D7BC] shadow-fire relative overflow-hidden space-y-8">
         
         {/* Background Decorative Accent */}
@@ -113,6 +125,10 @@ export default async function ProfilePage() {
         </div>
 
       </div>
+
+      {/* 2. PERSONAL LIBRARY / LIKED WORKS SECTION */}
+      <UserPersonalLibrary likedPosts={likedPosts} />
+
     </div>
   );
 }
