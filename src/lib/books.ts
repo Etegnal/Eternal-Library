@@ -14,6 +14,7 @@ export interface GoogleBookVolumeInfo {
   categories?: string[];
   averageRating?: number;
   ratingsCount?: number;
+  language?: string;
   imageLinks?: {
     thumbnail?: string;
     smallThumbnail?: string;
@@ -22,6 +23,7 @@ export interface GoogleBookVolumeInfo {
     extraLarge?: string;
   };
   previewLink?: string;
+  infoLink?: string;
 }
 
 export interface GoogleBookItem {
@@ -38,11 +40,14 @@ export function stripHtml(html?: string): string {
 }
 
 /**
- * Ensures image URLs use HTTPS protocol
+ * Ensures image URLs use HTTPS protocol and fixes Google Books image URL parameters
  */
 export function ensureHttps(url?: string): string | null {
   if (!url) return null;
-  return url.replace(/^http:/, 'https:');
+  let cleanUrl = url.replace(/^http:/, 'https:');
+  // Remove edge=curl which can cause broken image renders in Google Books
+  cleanUrl = cleanUrl.replace('&edge=curl', '');
+  return cleanUrl;
 }
 
 /**
@@ -56,43 +61,9 @@ export function getOpenLibraryCoverUrl(isbn13?: string | null, isbn10?: string |
 }
 
 /**
- * Generates store search/affiliate redirect links for Amazon, Kitapyurdu, and D&R
+ * Fetches and formats books from Google Books API with rich metadata
  */
-export function generateAffiliateLinks(book: {
-  title: string;
-  authors?: string | null;
-  isbn13?: string | null;
-  isbn10?: string | null;
-}) {
-  const searchQuery = book.isbn13 || book.isbn10 || `${book.title} ${book.authors || ''}`.trim();
-  const encodedQuery = encodeURIComponent(searchQuery);
-
-  return [
-    {
-      platform: 'amazon',
-      name: 'Amazon.com.tr',
-      url: `https://www.amazon.com.tr/s?k=${encodedQuery}`,
-      color: 'bg-amber-500 hover:bg-amber-600 text-white',
-    },
-    {
-      platform: 'kitapyurdu',
-      name: 'Kitapyurdu',
-      url: `https://www.kitapyurdu.com/index.php?route=product/search&filter_name=${encodedQuery}`,
-      color: 'bg-emerald-600 hover:bg-emerald-700 text-white',
-    },
-    {
-      platform: 'dr',
-      name: 'D&R',
-      url: `https://www.dr.com.tr/search?q=${encodedQuery}`,
-      color: 'bg-rose-600 hover:bg-rose-700 text-white',
-    },
-  ];
-}
-
-/**
- * Fetches and formats books from Google Books API
- */
-export async function fetchGoogleBooks(query: string, maxResults: number = 10) {
+export async function fetchGoogleBooks(query: string, maxResults: number = 12) {
   try {
     const encodedQuery = encodeURIComponent(query);
     const res = await fetch(
@@ -138,7 +109,7 @@ export async function fetchGoogleBooks(query: string, maxResults: number = 10) {
         ratingsCount: info.ratingsCount || 0,
         thumbnailUrl: thumbnailUrl || fallbackCoverUrl,
         largeCoverUrl: fallbackCoverUrl || thumbnailUrl,
-        previewUrl: info.previewLink ? ensureHttps(info.previewLink) : null,
+        previewUrl: info.previewLink ? ensureHttps(info.previewLink) : info.infoLink ? ensureHttps(info.infoLink) : null,
       };
     });
   } catch (error) {
