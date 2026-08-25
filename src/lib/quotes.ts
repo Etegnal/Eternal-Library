@@ -7,6 +7,13 @@ export interface QuoteItem {
   content: string;
   source?: string | null;
   dayOfYear: number;
+  dateStr?: string;
+}
+
+export function getDateStringForDay(dayOfYear: number): string {
+  const year = new Date().getFullYear();
+  const date = new Date(year, 0, dayOfYear);
+  return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
 }
 
 export async function getTodayQuote(): Promise<QuoteItem> {
@@ -22,6 +29,7 @@ export async function getTodayQuote(): Promise<QuoteItem> {
 
 export async function getQuoteByDay(dayNumber: number): Promise<QuoteItem> {
   const cleanDay = ((dayNumber - 1 + 365) % 365) + 1;
+  const dateStr = getDateStringForDay(cleanDay);
 
   try {
     const quote = await prisma.quote.findUnique({
@@ -29,7 +37,10 @@ export async function getQuoteByDay(dayNumber: number): Promise<QuoteItem> {
     });
 
     if (quote) {
-      return quote;
+      return {
+        ...quote,
+        dateStr,
+      };
     }
   } catch (error) {
     console.error('Error fetching quote by day:', error);
@@ -43,5 +54,6 @@ export async function getQuoteByDay(dayNumber: number): Promise<QuoteItem> {
     content: fallback.content,
     source: fallback.source || `Söz ${fallback.dayOfYear} / 365`,
     dayOfYear: fallback.dayOfYear,
+    dateStr,
   };
 }
