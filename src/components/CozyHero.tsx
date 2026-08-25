@@ -78,25 +78,25 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/60 z-10" />
       </div>
 
-      <div className="h-24 sm:h-28" />
+      <div className="h-20 sm:h-28" />
 
-      {/* HERO CONTENT: POSITIONED ON THE LEFT SIDE */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-auto py-12">
-        <div className="max-w-md space-y-6 text-left">
+      {/* HERO CONTENT: POSITIONED HIGHER ON MOBILE TO REVEAL FIREPLACE */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-0 sm:my-auto pt-2 pb-6 sm:py-12">
+        <div className="max-w-md space-y-4 sm:space-y-6 text-left">
           
-          {/* GÜNÜN SÖZÜ CARD WITH ENLARGED ARROWS (NO REFRESH BUTTON) */}
-          <div className="gold-filigree-card relative p-6 sm:p-8 rounded-3xl text-amber-100 shadow-2xl">
+          {/* GÜNÜN SÖZÜ CARD */}
+          <div className="gold-filigree-card relative p-5 sm:p-8 rounded-3xl text-amber-100 shadow-2xl">
             <div className="gold-filigree-inner absolute inset-2 rounded-2xl pointer-events-none" />
 
-            <div className="relative z-10 space-y-5">
-              {/* TOP HEADER BAR WITH PREV / NEXT ARROWS ONLY */}
+            <div className="relative z-10 space-y-4 sm:space-y-5">
+              {/* TOP HEADER BAR */}
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 text-xs font-cinzel font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                   <span>Günün Sözü</span>
                 </span>
 
-                {/* ENLARGED ARROW NAVIGATION CONTROLS */}
+                {/* ARROW NAVIGATION CONTROLS */}
                 <div className="flex items-center gap-1.5 bg-amber-950/80 px-2 py-1 rounded-full border border-amber-600/50 shadow-md">
                   <button
                     onClick={handlePrev}
@@ -123,18 +123,17 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
               </div>
 
               {/* QUOTE TEXT */}
-              <p className="font-serif italic text-lg sm:text-xl text-amber-100 leading-relaxed font-normal">
+              <p className="font-serif italic text-base sm:text-xl text-amber-100 leading-relaxed font-normal">
                 "{quoteText}"
               </p>
 
-              {/* FOOTER METADATA: AUTHOR & DATE + DAY NUMBER IN SAME BADGE BLOCK */}
+              {/* FOOTER METADATA */}
               <div className="pt-2 border-t border-amber-500/30 flex items-center justify-between text-xs">
-                <span className="font-serif font-bold text-amber-300 text-sm">
+                <span className="font-serif font-bold text-amber-300 text-xs sm:text-sm">
                   — {currentQuote.author}
                 </span>
 
-                {/* SAME BADGE BLOCK: DATE & DAY NUMBER */}
-                <span className="font-mono text-xs font-bold text-amber-200 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-700/50 flex items-center gap-1.5 shadow-sm">
+                <span className="font-mono text-[11px] sm:text-xs font-bold text-amber-200 bg-amber-950/80 px-2.5 sm:px-3 py-1 rounded-full border border-amber-700/50 flex items-center gap-1.5 shadow-sm">
                   <span>{currentQuote.dateStr || getDateStringForDay(currentQuote.dayOfYear)}</span>
                   <span className="text-amber-500">•</span>
                   <span>Söz {currentQuote.dayOfYear} / 365</span>
@@ -143,21 +142,21 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
             </div>
           </div>
 
-          {/* HERO CTA BUTTONS ALIGNED ON THE LEFT */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          {/* HERO CTA BUTTONS: SIDE BY SIDE ON MOBILE */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-1 sm:pt-2 w-full max-w-md">
             <Link
               href="/yazilar"
-              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-amber-100 font-bold text-xs tracking-widest uppercase shadow-2xl border border-amber-400/40 transition-all transform hover:scale-105 flex items-center gap-2"
+              className="px-2.5 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-amber-100 font-bold text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase shadow-2xl border border-amber-400/40 transition-all transform hover:scale-105 flex items-center justify-center gap-1.5 text-center"
             >
-              <BookOpen className="w-4 h-4" />
+              <BookOpen className="w-3.5 h-3.5 shrink-0" />
               <span>Yazıları Keşfet</span>
             </Link>
 
             <Link
               href="/siirler"
-              className="px-5 py-2.5 rounded-full bg-[#23120A]/90 hover:bg-[#331B0F] text-amber-200 font-bold text-xs tracking-widest uppercase shadow-xl border border-amber-700/50 transition-all transform hover:scale-105 flex items-center gap-2"
+              className="px-2.5 sm:px-5 py-2.5 rounded-full bg-[#23120A]/90 hover:bg-[#331B0F] text-amber-200 font-bold text-[11px] sm:text-xs tracking-wider sm:tracking-widest uppercase shadow-xl border border-amber-700/50 transition-all transform hover:scale-105 flex items-center justify-center gap-1.5 text-center"
             >
-              <Feather className="w-4 h-4 text-amber-400" />
+              <Feather className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <span>Şiir Antolojisi</span>
             </Link>
           </div>
@@ -166,7 +165,7 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
       </div>
 
       {/* AMBIENT AUDIO WIDGET AT BOTTOM RIGHT */}
-      <div className="relative z-30 pb-6 pr-4 sm:pr-8 flex justify-end">
+      <div className="relative z-30 pb-4 sm:pb-6 pr-4 sm:pr-8 flex justify-end">
         <AmbientAudio />
       </div>
     </section>

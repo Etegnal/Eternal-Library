@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Volume2, VolumeX, Flame } from 'lucide-react';
 
 export default function AmbientAudio() {
@@ -87,14 +87,27 @@ export default function AmbientAudio() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
       <audio ref={audioRef} loop preload="auto">
         <source src="/assets/fireplace.webm" type="audio/webm" />
         <source src="/assets/fireplace.mp3" type="audio/mpeg" />
       </audio>
 
-      <div className="flex items-center gap-3 bg-[#23120A]/90 backdrop-blur-md text-amber-100 p-2.5 px-4 rounded-full border border-amber-600/40 shadow-2xl">
+      {/* MOBILE COMPACT CIRCULAR ICON BUTTON (sm:hidden) */}
+      <button
+        type="button"
+        onClick={toggleSound}
+        className="sm:hidden w-12 h-12 rounded-full bg-[#23120A]/95 backdrop-blur-md border-2 border-amber-500/60 shadow-fire flex items-center justify-center text-amber-100 active:scale-95 transition-transform"
+        title={isPlaying ? "Şömine Sesini Kapat" : "Şömine Sesini Aç"}
+        aria-label={isPlaying ? "Şömine Sesini Kapat" : "Şömine Sesini Aç"}
+      >
+        <Flame className={`w-6 h-6 ${isPlaying ? "text-amber-400 animate-pulse" : "text-amber-200/40"}`} />
+      </button>
+
+      {/* DESKTOP FULL CONTROLS WIDGET (hidden sm:flex) */}
+      <div className="hidden sm:flex items-center gap-3 bg-[#23120A]/90 backdrop-blur-md text-amber-100 p-2.5 px-4 rounded-full border border-amber-600/40 shadow-2xl">
         <button
+          type="button"
           onClick={toggleSound}
           className="flex items-center gap-2 text-xs font-bold tracking-wide hover:text-amber-300 transition-colors"
           title={isPlaying ? "Şömine Sesini Kapat" : "Şömine Sesini Aç"}

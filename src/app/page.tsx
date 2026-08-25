@@ -51,13 +51,13 @@ export default async function HomePage() {
   return (
     <div className="relative min-h-screen bg-[#FEF8EC] overflow-x-hidden">
       
-      {/* 1. LIVING VIDEO HERO SECTION WITH FULL-WIDTH CABIN & ETERNAL LIBRARY BRANDING */}
+      {/* 1. FULL PAGE LIVING CABIN HERO SECTION */}
       <CozyHero initialQuote={todayQuote} />
 
-      {/* 2. SMOOTH SEAMLESS GRADIENT BLUR TRANSITION (REPLACES JAGGED SVG) */}
-      <div className="relative w-full h-16 sm:h-24 -mt-16 sm:-mt-20 z-20 pointer-events-none bg-gradient-to-b from-transparent via-[#FEF8EC]/70 to-[#FEF8EC]" />
+      {/* 2. SMOOTH GRADIENT TRANSITION TO PARCHMENT SECTION BELOW HERO */}
+      <div className="relative w-full h-12 sm:h-16 z-20 pointer-events-none bg-gradient-to-b from-[#1F0F07] via-[#FEF8EC]/60 to-[#FEF8EC]" />
 
-      {/* 3. AUTHENTIC VINTAGE PARCHMENT SECTION WITH YAZILAR / ŞİİRLER TOGGLE */}
+      {/* 3. VINTAGE PARCHMENT SECTION WITH YAZILAR / ŞİİRLER TOGGLE */}
       <HomepageParchment
         latestArticles={latestArticles}
         featuredPoems={featuredPoems}
