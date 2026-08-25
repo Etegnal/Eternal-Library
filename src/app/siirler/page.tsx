@@ -11,7 +11,7 @@ export const revalidate = 0;
 
 export default async function PoemsPage() {
   const session = await getServerSession(authOptions);
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = (session?.user as any)?.role === 'ADMIN';
 
   const poems = await prisma.post.findMany({
     where: { type: 'SIIR' },
