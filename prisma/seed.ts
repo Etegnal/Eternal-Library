@@ -1,5 +1,6 @@
 import { PrismaClient, Role, PostType } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { QUOTES_365 } from '../src/data/quotesData';
 
 const prisma = new PrismaClient();
 
@@ -24,7 +25,7 @@ async function main() {
     {
       title: 'Lo-Fi Yaşam Sanatı: Yavaşlamanın ve Sessizliğin Poetiği',
       slug: 'lo-fi-yasam-sanati-yavaslamanin-ve-sessizligin-poetigi',
-      excerpt: 'Hızlı akan dünyanın ritminden çıkıp, bir fincan sıcak çay ve çıtırdayan şömine eşliğinde iç dünyamıza yaptığımız huzurlu bir edebiyat yolculuğu.',
+      excerpt: 'Hızlı akan dünyamızın ritminden çıkıp, bir fincan sıcak çay ve çıtırdayan şömine eşliğinde iç dünyamıza yaptığımız huzurlu bir edebiyat yolculuğu.',
       content: `Günün ilk ışıkları penceremize düşerken ya da çıtırdayan bir şöminenin karşısında otururken içimizi kaplayan o derin huzur, tesadüf değildir. Modern yaşamın baş döndürücü hızı içerisinde unutmaya yüz tuttuğumuz o yavaş ritim, aslında ruhumuzun en çok ihtiyaç duyduğu dinginliktir.
 
 ### 1. Zamanı Yavaşlatmak
@@ -127,37 +128,26 @@ Bu denemede, yağmurlu günlerin getirdiği o derin tefekkür halini ele alıyor
     });
   }
 
-  // 3. Seed 365 Daily Quotes
-  const baseQuotes = [
-    { author: 'Marcus Aurelius', content: 'Sabah uyandığında yaşamaya, düşünmeye, sevmeye devam etmenin ne büyük bir ayrıcalık olduğunu düşün.', source: 'Kendime Düşünceler' },
-    { author: 'Montaigne', content: 'Dünyanın en büyük şeyi, insanın kendi kendisi olmayı bilmesidir.', source: 'Denemeler' },
-    { author: 'Fyodor Dostoyevski', content: 'İnsan ruhunun öyle derinlikleri vardır ki, oraya ancak acı ve sevgi ulaşabilir.', source: 'Suç ve Ceza' },
-    { author: 'Sabahattin Ali', content: 'Dünyada sırf kendisi için yaşayan tek bir insan bile yoktur. Herkes bir başkası için var olur.', source: 'Kürk Mantolu Madonna' },
-    { author: 'Cemal Süreya', content: 'Hayat kısa, kuşlar uçuyor.', source: 'Sevda Sözleri' },
-    { author: 'Friedrich Nietzsche', content: 'Uçurumları sevenlerin kanatları olmalı.', source: 'Böyle Buyurdu Zerdüşt' },
-    { author: 'Franz Kafka', content: 'Günün birinde kendini anlaşılmış hissetmek, dünyadaki tüm yalnızlıkları siler.', source: 'Milena\'ya Mektuplar' },
-    { author: 'Antoine de Saint-Exupéry', content: 'İnsan ancak yüreğiyle baktığı zaman doğruyu görebilir. Gerçeğin mayası gözle görülmez.', source: 'Küçük Prens' },
-  ];
-
-  for (let day = 1; day <= 365; day++) {
-    const template = baseQuotes[(day - 1) % baseQuotes.length];
+  // 3. Seed ALL 365 Unique Daily Quotes
+  console.log(`Seeding ${QUOTES_365.length} unique daily quotes...`);
+  for (const quote of QUOTES_365) {
     await prisma.quote.upsert({
-      where: { dayOfYear: day },
+      where: { dayOfYear: quote.dayOfYear },
       update: {
-        author: template.author,
-        content: template.content,
-        source: template.source,
+        author: quote.author,
+        content: quote.content,
+        source: quote.source || 'Eternal Library Seçkisi',
       },
       create: {
-        author: template.author,
-        content: template.content,
-        source: template.source,
-        dayOfYear: day,
+        author: quote.author,
+        content: quote.content,
+        source: quote.source || 'Eternal Library Seçkisi',
+        dayOfYear: quote.dayOfYear,
       },
     });
   }
 
-  // 4. Seed Curated Books (12 World Classics & Philosophy Books)
+  // 4. Seed Curated Books (10 World Classics & Philosophy Books)
   const books = [
     {
       googleBookId: 'kurk-mantolu-madonna',
@@ -369,7 +359,7 @@ Bu denemede, yağmurlu günlerin getirdiği o derin tefekkür halini ele alıyor
     });
   }
 
-  console.log('Database Seeding Completed Successfully!');
+  console.log('Database Seeding Completed Successfully with 365 Unique Quotes!');
 }
 
 main()
