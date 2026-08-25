@@ -43,15 +43,15 @@ export default function ToggleFeaturedButton({ postId, initialFeatured }: Toggle
     <button
       onClick={handleToggle}
       disabled={loading}
-      className={`p-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 ${
+      className={`p-2 rounded-xl transition-all duration-200 flex items-center gap-1.5 border font-semibold text-xs ${
         featured
-          ? 'bg-rose-100 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800 shadow-sm'
-          : 'bg-amber-50 dark:bg-amber-950/40 text-amber-400 dark:text-amber-600 hover:text-rose-500 border border-amber-200 dark:border-amber-900'
+          ? 'bg-rose-100 text-rose-800 border-rose-300 shadow-sm'
+          : 'bg-amber-50 text-[#5C4033] hover:text-rose-600 border-amber-200'
       }`}
       title={featured ? 'Ana Sayfada Gösteriliyor (Tıkla ve Gizle)' : 'Ana Sayfaya Ekle (Tıkla ve Göster)'}
       aria-label="Ana Sayfa Kalp Toggle"
     >
-      <Heart className={`w-4 h-4 transition-transform ${featured ? 'fill-rose-500 text-rose-500 scale-110' : ''}`} />
+      <Heart className={`w-4 h-4 transition-transform ${featured ? 'fill-rose-600 text-rose-600 scale-110' : 'text-[#8B4513]'}`} />
       <span className="text-[11px] font-bold hidden sm:inline">
         {featured ? 'Ana Sayfada' : 'Gizli'}
       </span>

@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   const navLinks = [
     { href: '/', label: 'ANASAYFA' },
@@ -41,7 +42,11 @@ export default function Navbar() {
               priority
             />
           </div>
-          <span className="font-cinzel font-bold text-sm sm:text-base text-amber-200 tracking-[0.15em] uppercase drop-shadow-md group-hover:text-amber-400 transition-colors">
+          <span className={`font-cinzel font-bold text-sm sm:text-base tracking-[0.15em] uppercase transition-colors ${
+            isHomePage
+              ? 'text-amber-200 drop-shadow-md group-hover:text-amber-400'
+              : 'text-[#362215] group-hover:text-amber-900'
+          }`}>
             ETERNAL LIBRARY
           </span>
         </Link>

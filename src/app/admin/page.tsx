@@ -25,16 +25,16 @@ export default async function AdminDashboardPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
       {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-[#23120A] border border-cozy-parchment-border dark:border-[#5C3119] shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-cozy-amber flex items-center justify-center text-cozy-wood">
             <ShieldCheck className="w-5 h-5 text-cozy-wood" />
           </div>
           <div>
-            <h1 className="font-serif font-bold text-xl text-cozy-coffee dark:text-amber-300">
+            <h1 className="font-serif font-bold text-xl text-[#362215]">
               Yönetici Paneli
             </h1>
-            <p className="text-xs text-cozy-coffee-light dark:text-amber-200/80">
+            <p className="text-xs text-[#5C4033]">
               Hoş geldiniz, {session.user?.email}
             </p>
           </div>
@@ -52,20 +52,20 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Posts Table */}
-      <div className="bg-[#FFFDF9] dark:bg-[#23120A] rounded-2xl border border-[#E6D7BC] dark:border-[#5C3119] shadow-parchment overflow-hidden">
-        <div className="p-6 border-b border-cozy-parchment-border dark:border-[#5C3119] flex items-center justify-between">
-          <h2 className="font-serif font-bold text-lg text-cozy-coffee dark:text-amber-300">
+      <div className="bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] shadow-parchment overflow-hidden">
+        <div className="p-6 border-b border-[#E6D7BC] flex items-center justify-between">
+          <h2 className="font-serif font-bold text-lg text-[#362215]">
             Yayınlanmış Tüm İçerikler ({posts.length})
           </h2>
-          <span className="text-xs text-cozy-coffee-light dark:text-amber-200/80">
+          <span className="text-xs text-[#5C4033]">
             ❤️ Kalp simgesiyle ana sayfada görünecekleri seçebilirsiniz
           </span>
         </div>
 
         {posts.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-cozy-coffee dark:text-amber-100">
-              <thead className="bg-amber-100/60 dark:bg-amber-950/80 text-xs font-bold uppercase text-cozy-amber-dark dark:text-amber-300 border-b border-amber-200 dark:border-amber-800">
+            <table className="w-full text-left text-sm text-[#362215]">
+              <thead className="bg-amber-100/70 text-xs font-bold uppercase text-amber-900 border-b border-amber-200">
                 <tr>
                   <th className="px-6 py-3">Tür</th>
                   <th className="px-6 py-3">Başlık</th>
@@ -74,34 +74,34 @@ export default async function AdminDashboardPage() {
                   <th className="px-6 py-3 text-right">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-amber-100 dark:divide-amber-900/40">
+              <tbody className="divide-y divide-amber-100">
                 {posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-amber-50/50 dark:hover:bg-amber-950/40 transition-colors">
+                  <tr key={post.id} className="hover:bg-amber-50/60 transition-colors">
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold ${
                         post.type === 'YAZI' 
-                          ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
-                          : 'bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300 border border-rose-300 dark:border-rose-800'
+                          ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                          : 'bg-rose-100 text-rose-900 border border-rose-300'
                       }`}>
                         {post.type === 'YAZI' ? <BookOpen className="w-3 h-3" /> : <Feather className="w-3 h-3" />}
                         <span>{post.type}</span>
                       </span>
                     </td>
-                    <td className="px-6 py-4 font-serif font-semibold text-cozy-coffee dark:text-amber-100">
+                    <td className="px-6 py-4 font-serif font-semibold text-[#362215]">
                       {post.title}
                     </td>
                     <td className="px-6 py-4">
                       {/* Heart Toggle Button */}
                       <ToggleFeaturedButton postId={post.id} initialFeatured={post.isFeatured} />
                     </td>
-                    <td className="px-6 py-4 text-xs text-cozy-coffee-light dark:text-amber-200/80">
+                    <td className="px-6 py-4 text-xs text-[#5C4033]">
                       {new Date(post.publishedAt).toLocaleDateString('tr-TR')}
                     </td>
                     <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
                       {/* Edit Button */}
                       <Link
                         href={`/admin/edit-post/${post.id}`}
-                        className="p-2 rounded-xl text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900 transition-colors"
+                        className="p-2 rounded-xl text-amber-800 hover:bg-amber-100 transition-colors"
                         title="İçeriği Düzenle"
                       >
                         <Edit className="w-4 h-4" />
@@ -116,7 +116,7 @@ export default async function AdminDashboardPage() {
             </table>
           </div>
         ) : (
-          <div className="p-8 text-center text-cozy-coffee-light dark:text-amber-200">
+          <div className="p-8 text-center text-[#5C4033]">
             Henüz içerik bulunmuyor.
           </div>
         )}
