@@ -56,8 +56,10 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
 
   return (
     <section className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#1F0F07]">
-      {/* BACKGROUND VIDEO & FALLBACK IMAGE */}
+      
+      {/* BACKGROUND LIVING VIDEOS (DESKTOP & MOBILE) */}
       <div className="absolute inset-0 z-0">
+        {/* DESKTOP LIVING VIDEO */}
         <video
           autoPlay
           loop
@@ -69,26 +71,34 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
           <source src="/assets/fireplace.mp4" type="video/mp4" />
         </video>
 
-        <div
-          className="sm:hidden absolute inset-0 bg-cover bg-center filter brightness-[0.85]"
-          style={{ backgroundImage: "url('/assets/fireplace-mobile.png')" }}
-        />
+        {/* MOBILE LIVING VIDEO (FIREPLACE MOBIL.MP4) */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/assets/fireplace-mobile.png"
+          className="sm:hidden absolute inset-0 w-full h-full object-cover filter brightness-[0.85] contrast-[1.05]"
+        >
+          <source src="/assets/fireplace-mobile.mp4" type="video/mp4" />
+          <source src="/assets/fireplace mobil.mp4" type="video/mp4" />
+        </video>
 
         {/* DARK CINEMATIC OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/60 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/60 z-10" />
       </div>
 
-      <div className="h-20 sm:h-28" />
+      <div className="h-16 sm:h-28" />
 
-      {/* HERO CONTENT: POSITIONED HIGHER ON MOBILE TO REVEAL FIREPLACE */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-0 sm:my-auto pt-2 pb-6 sm:py-12">
+      {/* HERO CONTENT: POSITIONED HIGHER & MORE TRANSPARENT ON MOBILE */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-0 sm:my-auto pt-0 pb-4 sm:py-12">
         <div className="max-w-md space-y-4 sm:space-y-6 text-left">
           
-          {/* GÜNÜN SÖZÜ CARD */}
-          <div className="gold-filigree-card relative p-5 sm:p-8 rounded-3xl text-amber-100 shadow-2xl">
+          {/* GÜNÜN SÖZÜ CARD - TRANSPARENT GLASSMORPHISM ON MOBILE */}
+          <div className="gold-filigree-card relative p-4 sm:p-8 rounded-3xl text-amber-100 shadow-2xl bg-[#1A0B05]/50 sm:bg-[#26140C]/85 backdrop-blur-md border border-amber-500/40">
             <div className="gold-filigree-inner absolute inset-2 rounded-2xl pointer-events-none" />
 
-            <div className="relative z-10 space-y-4 sm:space-y-5">
+            <div className="relative z-10 space-y-3.5 sm:space-y-5">
               {/* TOP HEADER BAR */}
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 text-xs font-cinzel font-bold text-amber-300 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
