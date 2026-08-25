@@ -105,6 +105,22 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
     year: 'numeric',
   });
 
+  // Find year from MasterPoet table if available
+  let displayYear = masterPoem?.year;
+  if (!displayYear && postPoem) {
+    const mp = await prisma.masterPoet.findFirst({
+      where: {
+        OR: [
+          { slug: postPoem.slug },
+          { title: postPoem.title },
+        ],
+      },
+    });
+    if (mp?.year) {
+      displayYear = mp.year;
+    }
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-10">
       {/* Back Link Button */}
@@ -138,7 +154,8 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
             {poem.title}
           </h1>
           <p className="text-xs text-[#785438] font-sans font-medium">
-            {poem.author ? `Şair: ${poem.author} • ` : ''}{dateStr}
+            {poem.author ? `Şair: ${poem.author}` : ''}
+            {displayYear ? ` • ${displayYear}` : ` • ${dateStr}`}
           </p>
         </div>
       </div>
