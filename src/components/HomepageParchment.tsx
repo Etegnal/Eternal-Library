@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { BookOpen, Feather, ArrowRight, Sparkles, Search } from 'lucide-react';
+import Image from 'next/image';
+import { BookOpen, Feather, ArrowRight, Sparkles } from 'lucide-react';
 
 interface PostItem {
   id: string;
@@ -24,183 +25,278 @@ interface HomepageParchmentProps {
 
 export default function HomepageParchment({ latestArticles, featuredPoems }: HomepageParchmentProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'articles' | 'poems'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // All combined items
-  const allItems = useMemo(() => {
-    const combined = [...latestArticles, ...featuredPoems];
-    return combined.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  }, [latestArticles, featuredPoems]);
-
-  // Filtered items based on tab & search query
-  const displayedItems = useMemo(() => {
-    return allItems.filter((item) => {
-      // Tab filter
-      if (activeTab === 'articles' && item.type !== 'YAZI') return false;
-      if (activeTab === 'poems' && item.type !== 'SIIR') return false;
-
-      // Search filter
-      if (searchQuery.trim() !== '') {
-        const query = searchQuery.toLowerCase();
-        const matchesTitle = item.title.toLowerCase().includes(query);
-        const matchesExcerpt = item.excerpt.toLowerCase().includes(query);
-        const matchesAuthor = item.author ? item.author.toLowerCase().includes(query) : false;
-        return matchesTitle || matchesExcerpt || matchesAuthor;
-      }
-
-      return true;
-    });
-  }, [allItems, activeTab, searchQuery]);
 
   return (
-    <div className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-8 overflow-x-hidden">
+    <div className="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 pb-24">
       
-      {/* ARAMA VE FİLTRELEME BÖLÜMÜ */}
-      <div className="space-y-4">
+      {/* AUTHENTIC VINTAGE PARCHMENT SHEET CONTAINER */}
+      <div className="relative rounded-3xl bg-[#FFFDF5] border-2 border-[#D8C7A5] shadow-2xl p-6 sm:p-10 md:p-12 space-y-8 overflow-hidden">
         
-        {/* SADE ARAMA ÇUBUĞU */}
-        <div className="w-full max-w-2xl mx-auto mb-6 relative flex items-center">
-          <Search className="w-4 h-4 absolute left-4 text-stone-400 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Yazı başlığı, şair veya içerik ara..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-11 pr-4 py-2.5 bg-black/30 border border-white/10 rounded-xl text-stone-200 placeholder:text-stone-500 focus:border-amber-500/40 focus:outline-none w-full text-sm transition-colors shadow-inner"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 text-xs text-stone-400 hover:text-stone-200 bg-white/5 px-2 py-1 rounded-lg"
-            >
-              Temizle
-            </button>
-          )}
+        {/* PARCHMENT DECORATIVE FILIGREE CORNER ORNAMENTS (PERFECTLY ALIGNED) */}
+        <div className="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-[#B89F70] pointer-events-none rounded-tl-lg" />
+        <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-[#B89F70] pointer-events-none rounded-tr-lg" />
+        <div className="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-[#B89F70] pointer-events-none rounded-bl-lg" />
+        <div className="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-[#B89F70] pointer-events-none rounded-br-lg" />
+
+        {/* DOUBLE INNER VINTAGE BORDER */}
+        <div className="absolute inset-3 border border-[#EADBBD] pointer-events-none rounded-2xl" />
+
+        {/* 1. CATEGORY TOGGLE TABS (YAZILAR / ŞİİRLER) */}
+        <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 border-b border-[#8B4513]/15 pb-6">
+          
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
+              activeTab === 'all'
+                ? 'bg-[#8B4513] text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
+                : 'bg-amber-100/70 text-[#362215] border-amber-300/80 hover:bg-amber-200/80'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>Tüm Seçkiler</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('articles')}
+            className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
+              activeTab === 'articles'
+                ? 'bg-[#8B4513] text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
+                : 'bg-amber-100/70 text-[#362215] border-amber-300/80 hover:bg-amber-200/80'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-amber-700" />
+            <span>Yazılar</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('poems')}
+            className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
+              activeTab === 'poems'
+                ? 'bg-[#8B4513] text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
+                : 'bg-amber-100/70 text-[#362215] border-amber-300/80 hover:bg-amber-200/80'
+            }`}
+          >
+            <Feather className="w-4 h-4 text-amber-700" />
+            <span>Şiirler</span>
+          </button>
+
         </div>
 
-        {/* KATEGORİ HAPLARI (FİLTRELER) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none sm:flex-wrap sm:justify-center">
-          <button
-            type="button"
-            onClick={() => setActiveTab('all')}
-            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
-              activeTab === 'all'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'bg-transparent text-stone-400 hover:text-stone-200 border border-white/5'
-            }`}
-          >
-            ✨ Tüm Seçkiler ({allItems.length})
-          </button>
+        {/* 2. PARCHMENT CONTENT SECTION */}
+        <div className="relative z-10">
+          
+          {/* VIEW MODE: ALL (SIDE-BY-SIDE 2-COLUMN GRID WITH BALANCED CARD HEIGHTS) */}
+          {activeTab === 'all' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              
+              {/* COLUMN 1: YAZILAR */}
+              <div className="space-y-5">
+                <div className="flex items-center justify-between border-b-2 border-[#8B4513]/25 pb-3">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-[#8B4513]" />
+                    <h2 className="font-serif font-bold text-lg sm:text-xl text-[#362215] uppercase tracking-wider">
+                      YAZILAR
+                    </h2>
+                  </div>
+                  <Link
+                    href="/yazilar"
+                    className="text-xs font-bold text-[#8B4513] hover:underline flex items-center gap-1"
+                  >
+                    <span>Tümünü Gör</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('articles')}
-            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
-              activeTab === 'articles'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'bg-transparent text-stone-400 hover:text-stone-200 border border-white/5'
-            }`}
-          >
-            📖 Yazılar ({latestArticles.length})
-          </button>
+                <div className="space-y-4">
+                  {latestArticles.map((article, idx) => (
+                    <article
+                      key={article.id}
+                      className="group flex gap-4 p-4 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all duration-200"
+                    >
+                      {article.coverImage ? (
+                        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 shadow-inner">
+                          <Image
+                            src={article.coverImage}
+                            alt={article.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-amber-100/80 flex items-center justify-center shrink-0 border border-amber-200">
+                          <BookOpen className="w-8 h-8 text-amber-700" />
+                        </div>
+                      )}
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('poems')}
-            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
-              activeTab === 'poems'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                : 'bg-transparent text-stone-400 hover:text-stone-200 border border-white/5'
-            }`}
-          >
-            ✒️ Şiirler ({featuredPoems.length})
-          </button>
+                      <div className="flex-1 flex flex-col justify-between py-0.5">
+                        <div>
+                          <h3 className="font-serif font-bold text-base text-[#362215] group-hover:text-amber-800 transition-colors line-clamp-1">
+                            <Link href={`/yazilar/${article.slug}`}>
+                              {idx + 1}. {article.title}
+                            </Link>
+                          </h3>
+                          <p className="text-xs text-[#5C4033] line-clamp-2 mt-1.5 font-sans leading-relaxed">
+                            {article.excerpt}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] text-[#8B4513] font-mono mt-2 pt-2 border-t border-amber-200/60">
+                          <span>{article.author ? `${article.author} • ` : ''}{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
+                          <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-0.5">
+                            <span>Oku</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              {/* COLUMN 2: ŞİİRLER */}
+              <div className="space-y-5">
+                <div className="flex items-center justify-between border-b-2 border-[#8B4513]/25 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Feather className="w-5 h-5 text-[#8B4513]" />
+                    <h2 className="font-serif font-bold text-lg sm:text-xl text-[#362215] uppercase tracking-wider">
+                      ŞİİRLER
+                    </h2>
+                  </div>
+                  <Link
+                    href="/siirler"
+                    className="text-xs font-bold text-[#8B4513] hover:underline flex items-center gap-1"
+                  >
+                    <span>Tümünü Gör</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                <div className="space-y-4">
+                  {featuredPoems.map((poem, idx) => (
+                    <div
+                      key={poem.id}
+                      className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all duration-200 min-h-[128px]"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-serif font-bold text-base text-[#362215] group-hover:text-amber-800 transition-colors">
+                            <Link href={`/siirler/${poem.slug}`}>
+                              {idx + 1}. {poem.title}
+                            </Link>
+                          </h3>
+                          <span className="text-[11px] text-[#8B4513] font-mono">
+                            {new Date(poem.publishedAt).toLocaleDateString('tr-TR')}
+                          </span>
+                        </div>
+
+                        <p className="font-serif italic text-xs text-[#5C4033] line-clamp-2 pl-3 border-l-2 border-amber-600/40 leading-relaxed">
+                          "{poem.excerpt}"
+                        </p>
+                      </div>
+
+                      <div className="text-right pt-2 mt-2 border-t border-amber-200/60">
+                        <Link
+                          href={`/siirler/${poem.slug}`}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#8B4513] hover:underline"
+                        >
+                          <span>Şiiri Oku</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* VIEW MODE: ARTICLES ONLY */}
+          {activeTab === 'articles' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b-2 border-[#8B4513]/25 pb-3">
+                <h2 className="font-serif font-bold text-xl text-[#362215] uppercase tracking-wider flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-[#8B4513]" />
+                  <span>Yazılar ve Denemeler</span>
+                </h2>
+                <Link href="/yazilar" className="text-xs font-bold text-[#8B4513] hover:underline flex items-center gap-1">
+                  <span>Tüm Yazılar Kataloğu</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {latestArticles.map((article, idx) => (
+                  <article key={article.id} className="group p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all space-y-3">
+                    {article.coverImage && (
+                      <div className="relative w-full h-40 rounded-xl overflow-hidden bg-amber-950">
+                        <Image src={article.coverImage} alt={article.title} fill className="object-cover group-hover:scale-105 transition-transform" />
+                      </div>
+                    )}
+                    <h3 className="font-serif font-bold text-lg text-[#362215] group-hover:text-amber-800 transition-colors">
+                      <Link href={`/yazilar/${article.slug}`}>{idx + 1}. {article.title}</Link>
+                    </h3>
+                    <p className="text-xs text-[#5C4033] line-clamp-3 font-sans leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between pt-2 text-xs font-mono text-[#8B4513] border-t border-amber-200/60">
+                      <span>{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
+                      <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-1">
+                        <span>Devamını Oku</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* VIEW MODE: POEMS ONLY */}
+          {activeTab === 'poems' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b-2 border-[#8B4513]/25 pb-3">
+                <h2 className="font-serif font-bold text-xl text-[#362215] uppercase tracking-wider flex items-center gap-2">
+                  <Feather className="w-5 h-5 text-[#8B4513]" />
+                  <span>Şiir Antolojisi</span>
+                </h2>
+                <Link href="/siirler" className="text-xs font-bold text-[#8B4513] hover:underline flex items-center gap-1">
+                  <span>Tüm Şiirler Kataloğu</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {featuredPoems.map((poem, idx) => (
+                  <div key={poem.id} className="group p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-serif font-bold text-xl text-[#362215] group-hover:text-amber-800 transition-colors">
+                        <Link href={`/siirler/${poem.slug}`}>{idx + 1}. {poem.title}</Link>
+                      </h3>
+                      <span className="text-xs text-[#8B4513] font-mono">
+                        {new Date(poem.publishedAt).toLocaleDateString('tr-TR')}
+                      </span>
+                    </div>
+
+                    <div className="pl-4 border-l-2 border-amber-600/40 font-serif italic text-sm text-[#5C4033] whitespace-pre-line leading-relaxed">
+                      "{poem.content.length > 180 ? poem.content.slice(0, 180) + '...' : poem.content}"
+                    </div>
+
+                    <div className="text-right pt-2 border-t border-amber-200/60">
+                      <Link href={`/siirler/${poem.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-[#8B4513] hover:underline">
+                        <span>Şiirin Tamamını Oku</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
 
       </div>
-
-      {/* 1. KART GRID VE EŞİT YÜKSEKLİK MİMARİSİ (auto-rows-fr items-stretch) */}
-      {displayedItems.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr items-stretch">
-          {displayedItems.map((item) => {
-            const isPoem = item.type === 'SIIR';
-            const detailUrl = isPoem ? `/siirler/${item.slug}` : `/yazilar/${item.slug}`;
-            const dateStr = new Date(item.publishedAt).toLocaleDateString('tr-TR', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            });
-
-            return (
-              <article
-                key={item.id}
-                className="group flex flex-col justify-between h-full bg-[#130f0c]/90 hover:bg-[#18130f] border border-amber-900/20 hover:border-amber-500/40 rounded-2xl p-6 transition-all duration-300 shadow-lg relative"
-              >
-                {/* ÜST KISIM */}
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-4">
-                    <span className="text-amber-400/90 font-medium tracking-wide uppercase">
-                      {isPoem ? 'Şiir' : 'Deneme & Yazı'}
-                    </span>
-                    <span className="text-stone-400 text-[11px] flex items-center gap-1">
-                      ⏱ {item.readingTime || (isPoem ? '2 dk okuma' : '4 dk okuma')}
-                    </span>
-                  </div>
-
-                  <h3 className="text-lg font-serif font-medium text-stone-100 group-hover:text-amber-300 transition-colors line-clamp-2 min-h-[3.25rem] mb-2">
-                    <Link href={detailUrl}>
-                      {item.title}
-                    </Link>
-                  </h3>
-
-                  <div className="flex items-center gap-2 text-xs text-stone-400 mb-3">
-                    {item.author && <span>{item.author}</span>}
-                    {item.author && <span>•</span>}
-                    <span>{dateStr}</span>
-                  </div>
-
-                  <p className="text-sm text-stone-300/80 leading-relaxed line-clamp-3 font-sans">
-                    {item.excerpt}
-                  </p>
-                </div>
-
-                {/* ALT KISIM (En alta mıhlanmış) */}
-                <div className="mt-6 pt-4 border-t border-white/5">
-                  {/* Etiketler */}
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-white/[0.03] text-stone-400 border border-white/5">
-                      #{isPoem ? 'Şiir' : 'Edebiyat'}
-                    </span>
-                    <span className="text-[11px] px-2 py-0.5 rounded-md bg-white/[0.03] text-stone-400 border border-white/5">
-                      #EternalLibrary
-                    </span>
-                    {item.author && (
-                      <span className="text-[11px] px-2 py-0.5 rounded-md bg-white/[0.03] text-stone-400 border border-white/5">
-                        #{item.author.replace(/\s+/g, '')}
-                      </span>
-                    )}
-                  </div>
-
-                  <Link
-                    href={detailUrl}
-                    className="flex items-center justify-between text-sm font-medium text-amber-400 group-hover:text-amber-300"
-                  >
-                    <span>{isPoem ? 'Şiiri Oku' : 'Yazıyı Oku'}</span>
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                  </Link>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        /* EMPTY SEARCH STATE */
-        <div className="p-12 text-center bg-[#130f0c]/90 rounded-2xl border border-amber-900/20 space-y-3">
-          <BookOpen className="w-8 h-8 text-amber-500/60 mx-auto" />
-          <p className="text-stone-200 font-serif text-lg">Aramanızla eşleşen bir eser bulunamadı.</p>
-          <p className="text-xs text-stone-400">Lütfen arama terimlerinizi veya filtre sekmelerini değiştirip tekrar deneyin.</p>
-        </div>
-      )}
 
     </div>
   );
