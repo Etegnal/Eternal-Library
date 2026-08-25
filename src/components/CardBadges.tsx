@@ -42,21 +42,23 @@ export default function CardBadges({ postId }: CardBadgesProps) {
   if (!isRead && !isLiked) return null;
 
   return (
-    <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 pointer-events-none">
+    <div className="inline-flex items-center gap-1.5 pointer-events-none select-none">
       {isLiked && (
         <span
-          className="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs shadow-md border border-rose-300 animate-pulse"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-100/90 text-rose-900 border border-rose-300/80 font-serif text-[11px] font-semibold tracking-tight shadow-xs"
           title="Bu içeriği beğendiniz"
         >
-          ❤️
+          <span className="text-rose-600 text-xs">♥</span>
+          <span>Beğenildi</span>
         </span>
       )}
       {isRead && (
         <span
-          className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow-md border border-emerald-300"
-          title="Okudunuz"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100/90 text-emerald-900 border border-emerald-300/80 font-serif text-[11px] font-semibold tracking-tight shadow-xs"
+          title="Bu içeriği okudunuz"
         >
-          ✓
+          <span className="text-emerald-700 text-xs font-bold">✓</span>
+          <span>Okundu</span>
         </span>
       )}
     </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -27,9 +29,6 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <article className="relative group flex flex-col bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] overflow-hidden shadow-parchment hover:shadow-cozy transition-all duration-300 hover:-translate-y-1">
       
-      {/* Read & Like Badges in Top Right */}
-      <CardBadges postId={post.id} />
-
       {/* Cover Image */}
       {post.coverImage && (
         <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-amber-950">
@@ -45,24 +44,33 @@ export default function PostCard({ post }: PostCardProps) {
             <BookOpen className="w-3 h-3 text-cozy-amber" />
             <span>Deneme & Yazı</span>
           </div>
+
+          {/* Stamp Badges positioned top right over cover */}
+          <div className="absolute top-3 right-3 z-10">
+            <CardBadges postId={post.id} />
+          </div>
         </div>
       )}
 
       {/* Card Content */}
       <div className="p-6 flex-1 flex flex-col justify-between">
         <div>
-          {/* Metadata */}
-          <div className="flex items-center gap-4 text-xs text-cozy-coffee-light mb-3">
-            <div className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark" />
-              <span>{dateStr}</span>
-            </div>
-            {post.readingTime && (
+          {/* Metadata Row */}
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-200/60 pb-3 mb-3 text-xs text-cozy-coffee-light">
+            <div className="flex items-center gap-3">
               <div className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-cozy-amber-dark" />
-                <span>{post.readingTime}</span>
+                <Calendar className="w-3.5 h-3.5 text-cozy-amber-dark" />
+                <span>{dateStr}</span>
               </div>
-            )}
+              {post.readingTime && (
+                <div className="flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-cozy-amber-dark" />
+                  <span>{post.readingTime}</span>
+                </div>
+              )}
+            </div>
+
+            {!post.coverImage && <CardBadges postId={post.id} />}
           </div>
 
           {/* Title */}
