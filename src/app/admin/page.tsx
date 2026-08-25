@@ -36,6 +36,10 @@ export default async function AdminDashboardPage() {
     },
   });
 
+  const lettersRaw = await prisma.letter.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
   const posts = postsRaw.map((p) => ({
     id: p.id,
     title: p.title,
@@ -53,11 +57,23 @@ export default async function AdminDashboardPage() {
     createdAt: u.createdAt.toISOString(),
   }));
 
+  const letters = lettersRaw.map((l) => ({
+    id: l.id,
+    name: l.name,
+    email: l.email,
+    subject: l.subject,
+    content: l.content,
+    type: l.type,
+    isRead: l.isRead,
+    createdAt: l.createdAt.toISOString(),
+  }));
+
   return (
     <AdminDashboardView
       userEmail={session.user?.email || ''}
       posts={posts}
       users={users}
+      letters={letters}
     />
   );
 }

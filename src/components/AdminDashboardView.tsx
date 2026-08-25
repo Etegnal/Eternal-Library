@@ -6,7 +6,9 @@ import DeletePostButton from '@/components/DeletePostButton';
 import ToggleFeaturedButton from '@/components/ToggleFeaturedButton';
 import DeleteUserButton from '@/components/DeleteUserButton';
 import UserPasswordViewer from '@/components/UserPasswordViewer';
-import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Shield } from 'lucide-react';
+import DeleteLetterButton from '@/components/DeleteLetterButton';
+import LetterDetailViewer from '@/components/LetterDetailViewer';
+import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles } from 'lucide-react';
 
 interface PostItem {
   id: string;
@@ -25,14 +27,28 @@ interface UserItem {
   createdAt: string;
 }
 
+interface LetterItem {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  content: string;
+  type: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
 interface AdminDashboardViewProps {
   userEmail: string;
   posts: PostItem[];
   users: UserItem[];
+  letters: LetterItem[];
 }
 
-export default function AdminDashboardView({ userEmail, posts, users }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'users'>('posts');
+export default function AdminDashboardView({ userEmail, posts, users, letters }: AdminDashboardViewProps) {
+  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters'>('posts');
+
+  const unreadCount = letters.filter(l => !l.isRead).length;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-8">
@@ -54,7 +70,7 @@ export default function AdminDashboardView({ userEmail, posts, users }: AdminDas
         </div>
 
         {/* Tab Selection Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setActiveTab('posts')}
@@ -79,6 +95,22 @@ export default function AdminDashboardView({ userEmail, posts, users }: AdminDas
           >
             <Users className="w-4 h-4" />
             <span>Kullanıcılar ({users.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('letters')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border relative ${
+              activeTab === 'letters'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <Mail className="w-4 h-4" />
+            <span>Mektuplar & Eserler ({letters.length})</span>
+            {unreadCount > 0 && (
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse absolute -top-1 -right-1" />
+            )}
           </button>
         </div>
       </div>
@@ -226,6 +258,72 @@ export default function AdminDashboardView({ userEmail, posts, users }: AdminDas
           ) : (
             <div className="p-8 text-center text-[#5C4033]">
               Henüz sistemde kullanıcı bulunmuyor.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 3: LETTERS & ESERLER MANAGEMENT */}
+      {activeTab === 'letters' && (
+        <div className="bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] shadow-parchment overflow-hidden space-y-4">
+          <div className="p-6 border-b border-[#E6D7BC] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="font-serif font-bold text-lg text-[#362215]">
+                Gelen Mektuplar ve Edebi Eserler ({letters.length})
+              </h2>
+              <p className="text-xs text-[#5C4033] mt-0.5">
+                Kullanıcıların bıraktığı mektupları ve gönderdiği edebi eserleri (şiir, deneme, öykü) okuyabilir ve inceleyebilirsiniz.
+              </p>
+            </div>
+          </div>
+
+          {letters.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-[#362215]">
+                <thead className="bg-amber-100/70 text-xs font-bold uppercase text-amber-900 border-b border-amber-200">
+                  <tr>
+                    <th className="px-6 py-3">Tür</th>
+                    <th className="px-6 py-3">Gönderen</th>
+                    <th className="px-6 py-3">Konu / Başlık</th>
+                    <th className="px-6 py-3">Tarih</th>
+                    <th className="px-6 py-3 text-right">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-amber-100">
+                  {letters.map((letter) => (
+                    <tr key={letter.id} className={`hover:bg-amber-50/60 transition-colors ${!letter.isRead ? 'bg-amber-50/40 font-semibold' : ''}`}>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full font-bold uppercase ${
+                          letter.type === 'ESER'
+                            ? 'bg-rose-100 text-rose-900 border border-rose-300'
+                            : 'bg-amber-100 text-amber-900 border border-amber-300'
+                        }`}>
+                          {letter.type === 'ESER' ? <Feather className="w-3 h-3 text-rose-700" /> : <Mail className="w-3 h-3 text-amber-700" />}
+                          <span>{letter.type}</span>
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-[#362215]">{letter.name}</div>
+                        <div className="text-xs font-mono text-stone-600">{letter.email}</div>
+                      </td>
+                      <td className="px-6 py-4 font-serif text-[#362215]">
+                        {letter.subject}
+                      </td>
+                      <td className="px-6 py-4 text-xs text-[#5C4033]">
+                        {new Date(letter.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </td>
+                      <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                        <LetterDetailViewer letter={letter} />
+                        <DeleteLetterButton letterId={letter.id} subject={letter.subject} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="p-8 text-center text-[#5C4033]">
+              Henüz gelen bir mektup veya eser bulunmuyor.
             </div>
           )}
         </div>

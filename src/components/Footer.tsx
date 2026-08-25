@@ -63,15 +63,25 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Lo-fi Quote */}
-        <div className="md:col-span-4 space-y-3 p-5 rounded-xl bg-cozy-wood/60 border border-cozy-amber/20 flex flex-col justify-center">
-          <div className="flex items-center gap-2 text-xs font-semibold text-cozy-amber uppercase tracking-wider">
-            <Feather className="w-4 h-4" />
-            <span>Kütüphane Notu</span>
+        {/* Lo-fi Quote & Submission Button */}
+        <div className="md:col-span-4 space-y-3 p-5 rounded-xl bg-cozy-wood/60 border border-cozy-amber/20 flex flex-col justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold text-cozy-amber uppercase tracking-wider">
+              <Feather className="w-4 h-4" />
+              <span>Kütüphane Notu</span>
+            </div>
+            <p className="font-serif italic text-xs text-cozy-parchment/90 leading-relaxed">
+              "Okumak, gidenin yerine gelmeyeni beklemek gibidir; ama kitaplar hep gelir."
+            </p>
           </div>
-          <p className="font-serif italic text-xs text-cozy-parchment/90 leading-relaxed">
-            "Okumak, gidenin yerine gelmeyeni beklemek gibidir; ama kitaplar hep gelir."
-          </p>
+
+          <Link
+            href="/iletisim"
+            className="pt-2.5 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-amber-100 bg-[#9A3412] hover:bg-[#78350F] border border-amber-500/50 shadow-md transition-all text-center"
+          >
+            <Feather className="w-3.5 h-3.5 text-amber-300" />
+            <span>Edebi Eserinizi Bizimle Paylaşın</span>
+          </Link>
         </div>
 
       </div>

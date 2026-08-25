@@ -89,3 +89,15 @@ model AffiliateClick {
   createdAt DateTime @default(now())
   book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
+
+model Letter {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  content   String
+  type      String   @default("MEKTUP")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
