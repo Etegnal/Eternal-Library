@@ -117,14 +117,27 @@ export default function Navbar() {
           })}
 
           {session ? (
-            <Link
-              href="/profil"
-              className="ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1.5 shadow-sm"
-              title="Profilim"
-            >
-              <User className="w-3.5 h-3.5 text-amber-400" />
-              <span>{session.user?.name || 'Profilim'}</span>
-            </Link>
+            <div className="flex items-center gap-1.5 ml-2">
+              <Link
+                href="/profil"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1.5 shadow-sm"
+                title="Profilim"
+              >
+                <User className="w-3.5 h-3.5 text-amber-400" />
+                <span>{session.user?.name || 'Profilim'}</span>
+              </Link>
+
+              {(session.user as any)?.role === 'ADMIN' && (
+                <Link
+                  href="/admin"
+                  className="px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-200 bg-gradient-to-r from-[#9A3412] to-[#78350F] hover:from-[#78350F] hover:to-[#9A3412] border border-amber-500/60 transition-all flex items-center gap-1 shadow-md scale-105"
+                  title="Yönetici Paneli"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Admin</span>
+                </Link>
+              )}
+            </div>
           ) : (
             <Link
               href="/giris"
@@ -167,14 +180,27 @@ export default function Navbar() {
             })}
 
             {session ? (
-              <Link
-                href="/profil"
-                onClick={() => setIsOpen(false)}
-                className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
-              >
-                <User className="w-4 h-4 text-amber-400" />
-                <span>Profilim ({session.user?.name || 'Kullanıcı'})</span>
-              </Link>
+              <div className="space-y-2 pt-1 border-t border-amber-900/40">
+                <Link
+                  href="/profil"
+                  onClick={() => setIsOpen(false)}
+                  className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
+                >
+                  <User className="w-4 h-4 text-amber-400" />
+                  <span>Profilim ({session.user?.name || 'Kullanıcı'})</span>
+                </Link>
+
+                {(session.user as any)?.role === 'ADMIN' && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-200 bg-gradient-to-r from-[#9A3412] to-[#78350F] border border-amber-500/60 flex items-center justify-center gap-1.5"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                    <span>Yönetici Paneli (Admin)</span>
+                  </Link>
+                )}
+              </div>
             ) : (
               <Link
                 href="/giris"
