@@ -29,27 +29,29 @@ export default function Navbar() {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50 py-4 px-4 sm:px-8">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative">
         
-        {/* BRAND LOGO AND NAME SIDE-BY-SIDE IN FLEX ROW */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden shadow-fire border-2 border-amber-500/50 group-hover:scale-105 transition-transform bg-[#1F0F07] shrink-0">
-            <Image
-              src="/assets/logo.png"
-              alt="Eternal Library Logo"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-          <span className={`font-cinzel font-bold text-sm sm:text-base tracking-[0.15em] uppercase transition-colors ${
-            isHomePage
-              ? 'text-amber-200 drop-shadow-md group-hover:text-amber-400'
-              : 'text-[#362215] group-hover:text-amber-900'
-          }`}>
-            ETERNAL LIBRARY
-          </span>
-        </Link>
+        {/* BRAND LOGO AND NAME SIDE-BY-SIDE: CENTERED ON MOBILE, LEFT-ALIGNED ON DESKTOP */}
+        <div className="flex-1 md:flex-initial flex justify-center md:justify-start">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+            <div className="relative w-10 h-10 sm:w-14 sm:h-14 rounded-full overflow-hidden shadow-fire border-2 border-amber-500/50 group-hover:scale-105 transition-transform bg-[#1F0F07] shrink-0">
+              <Image
+                src="/assets/logo.png"
+                alt="Eternal Library Logo"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            <span className={`font-cinzel font-bold text-xs sm:text-base tracking-[0.12em] sm:tracking-[0.15em] uppercase transition-colors ${
+              isHomePage
+                ? 'text-amber-200 drop-shadow-md group-hover:text-amber-400'
+                : 'text-[#362215] group-hover:text-amber-900'
+            }`}>
+              ETERNAL LIBRARY
+            </span>
+          </Link>
+        </div>
 
         {/* DESKTOP NAVIGATION BAR */}
         <nav className="hidden md:flex items-center gap-1.5 bg-[#23120A]/85 backdrop-blur-md px-5 py-2 rounded-full border border-amber-700/40 shadow-2xl">
@@ -80,8 +82,8 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* MOBILE MENU BUTTON */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* MOBILE MENU BUTTON (ABSOLUTE RIGHT ALIGNED SO LOGO CAN BE PERFECTLY CENTERED) */}
+        <div className="flex md:hidden items-center absolute right-0 top-1/2 -translate-y-1/2">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none"
