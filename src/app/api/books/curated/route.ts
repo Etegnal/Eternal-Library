@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { fetchGoogleBooks } from '@/lib/books';
+import { searchBooks } from '@/lib/books';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -11,23 +11,40 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' },
     });
 
-    // If database has no books yet, fetch from Google Books API and populate DB
+    // If database has no books yet, fetch from Open Library API and populate DB
     if (books.length === 0) {
-      const defaultQueries = ['Dünya Klasikleri', 'Felsefe', 'Türk Edebiyatı'];
+      const defaultQueries = ['Dünya Klasikleri', 'Felsefe'];
 
       for (const query of defaultQueries) {
-        const fetched = await fetchGoogleBooks(query, 5);
+        const fetched = await searchBooks(query);
         for (const item of fetched) {
-          if (item.googleBookId) {
+          const bookId = item.googleBookId || item.workKey.replace('/works/', '');
+          try {
             await prisma.book.upsert({
-              where: { googleBookId: item.googleBookId },
+              where: { googleBookId: bookId },
               update: {},
               create: {
-                ...item,
+                googleBookId: bookId,
+                isbn10: item.isbn10,
+                isbn13: item.isbn13,
+                title: item.title,
+                authors: item.authors,
+                publisher: item.publisher,
+                publishedDate: item.publishedDate,
+                description: item.description || 'Bu eser için özet kütüphane arşivine henüz eklenmemiştir.',
+                pageCount: item.pageCount,
+                categories: item.categories,
+                averageRating: item.averageRating || 4.5,
+                ratingsCount: item.ratingsCount || 10,
+                thumbnailUrl: item.thumbnailUrl,
+                largeCoverUrl: item.largeCoverUrl,
+                previewUrl: item.previewUrl,
                 isFeatured: true,
                 curatedCategory: query,
               },
             });
+          } catch (e) {
+            console.error('Error upserting curated book:', e);
           }
         }
       }
