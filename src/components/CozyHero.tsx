@@ -45,22 +45,26 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
           muted
           playsInline
           poster="/assets/fireplace-mobile.png"
-          className="hidden sm:block absolute inset-0 w-full h-full object-cover filter brightness-[0.75] contrast-[1.05]"
+          className="hidden sm:block absolute inset-0 w-full h-full object-cover filter brightness-[0.85] contrast-[1.05]"
         >
           <source src="/assets/fireplace.mp4" type="video/mp4" />
         </video>
 
         <div
-          className="sm:hidden absolute inset-0 bg-cover bg-center filter brightness-[0.75]"
+          className="sm:hidden absolute inset-0 bg-cover bg-center filter brightness-[0.85]"
           style={{ backgroundImage: "url('/assets/fireplace-mobile.png')" }}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FEF8EC] via-black/40 to-black/70 z-10" />
+        {/* DARK CINEMATIC OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/60 z-10" />
+
+        {/* TIGHT BOTTOM-ONLY LIGHT TRANSITION (MAX 80px) */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-t from-[#FEF8EC] to-transparent z-15 pointer-events-none" />
       </div>
 
       <div className="h-24 sm:h-28" />
 
-      {/* HERO CONTENT: POSITIONED ON THE LEFT SIDE TO KEEP THE FIREPLACE & READER VISIBLE */}
+      {/* HERO CONTENT: POSITIONED ON THE LEFT SIDE */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full my-auto py-12">
         <div className="max-w-md space-y-6 text-left">
           
