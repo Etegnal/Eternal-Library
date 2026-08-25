@@ -6,8 +6,16 @@ import AmbientAudio from '@/components/AmbientAudio';
 import Providers from '@/components/Providers';
 
 export const metadata: Metadata = {
-  title: 'Eternal Library | Sıcak Lo-Fi Edebiyat & Blog Platformu',
+  title: 'Eternal Library | Sıcak bir kütüphane',
   description: 'Sıcak ahşap tonları, loş şömine ateşi ve eski kitap kokuları eşliğinde kişisel blog, denemeler, şiirler ve 365 günlük ilham sözleri.',
+  icons: {
+    icon: [
+      { url: '/assets/logo.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/assets/logo.png',
+    apple: '/assets/logo.png',
+  },
 };
 
 export default function RootLayout({
