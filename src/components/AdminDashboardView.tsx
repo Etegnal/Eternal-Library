@@ -11,6 +11,8 @@ import LetterDetailViewer from '@/components/LetterDetailViewer';
 import LikedUsersViewer from '@/components/LikedUsersViewer';
 import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles } from 'lucide-react';
 
+import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
+
 interface LikedUserItem {
   id: string;
   name: string | null;
@@ -54,10 +56,11 @@ interface AdminDashboardViewProps {
   posts: PostItem[];
   users: UserItem[];
   letters: LetterItem[];
+  masterPoets?: MasterPoetItem[];
 }
 
-export default function AdminDashboardView({ userEmail, posts, users, letters }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters'>('posts');
+export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [] }: AdminDashboardViewProps) {
+  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters' | 'masterPoets'>('posts');
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -93,6 +96,19 @@ export default function AdminDashboardView({ userEmail, posts, users, letters }:
           >
             <FileText className="w-4 h-4" />
             <span>İçerikler ({posts.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('masterPoets')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'masterPoets'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>Üstat Kalemler ({masterPoets.length})</span>
           </button>
 
           <button
@@ -349,6 +365,11 @@ export default function AdminDashboardView({ userEmail, posts, users, letters }:
             </div>
           )}
         </div>
+      )}
+
+      {/* TAB 4: MASTER POETS MANAGEMENT */}
+      {activeTab === 'masterPoets' && (
+        <AdminMasterPoetsManager initialMasterPoets={masterPoets} />
       )}
 
     </div>

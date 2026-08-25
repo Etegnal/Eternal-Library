@@ -50,6 +50,10 @@ export default async function AdminDashboardPage() {
     orderBy: { createdAt: 'desc' },
   });
 
+  const masterPoetsRaw = await prisma.masterPoet.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
   const posts = postsRaw.map((p) => ({
     id: p.id,
     title: p.title,
@@ -86,12 +90,22 @@ export default async function AdminDashboardPage() {
     createdAt: l.createdAt.toISOString(),
   }));
 
+  const masterPoets = masterPoetsRaw.map((mp) => ({
+    id: mp.id,
+    author: mp.author,
+    title: mp.title,
+    excerpt: mp.excerpt,
+    year: mp.year,
+    createdAt: mp.createdAt.toISOString(),
+  }));
+
   return (
     <AdminDashboardView
       userEmail={session.user?.email || ''}
       posts={posts}
       users={users}
       letters={letters}
+      masterPoets={masterPoets}
     />
   );
 }

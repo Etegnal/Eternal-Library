@@ -1,28 +1,26 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import PoemCard from '@/components/PoemCard';
-import MasterPoetsSection, { MasterPoemItem } from '@/components/MasterPoetsSection';
+import MasterPoetsSection from '@/components/MasterPoetsSection';
 import { Feather } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function PoemsPage() {
+  const session = await getServerSession(authOptions);
+  const isAdmin = session?.user?.role === 'ADMIN';
+
   const poems = await prisma.post.findMany({
     where: { type: 'SIIR' },
     orderBy: { publishedAt: 'desc' },
   });
 
-  const dbMasterPoems: MasterPoemItem[] = poems
-    .filter((p) => p.author && p.author.trim().length > 0)
-    .map((p) => ({
-      id: p.id,
-      title: p.title,
-      author: p.author!,
-      excerpt: p.excerpt,
-      slug: p.slug,
-      year: new Date(p.publishedAt).getFullYear().toString(),
-    }));
+  const masterPoets = await prisma.masterPoet.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 space-y-16">
@@ -57,7 +55,7 @@ export default async function PoemsPage() {
       </div>
 
       {/* ÜSTAT KALEMLER SECTION AT THE BOTTOM */}
-      <MasterPoetsSection customMasterPoems={dbMasterPoems} />
+      <MasterPoetsSection masterPoets={masterPoets} isAdmin={isAdmin} />
 
     </div>
   );
