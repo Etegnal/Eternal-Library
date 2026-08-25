@@ -88,7 +88,10 @@ export default function AmbientAudio() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <audio ref={audioRef} src="/assets/fireplace.mp3" loop />
+      <audio ref={audioRef} loop preload="auto">
+        <source src="/assets/fireplace.webm" type="audio/webm" />
+        <source src="/assets/fireplace.mp3" type="audio/mpeg" />
+      </audio>
 
       <div className="flex items-center gap-3 bg-[#23120A]/90 backdrop-blur-md text-amber-100 p-2.5 px-4 rounded-full border border-amber-600/40 shadow-2xl">
         <button
