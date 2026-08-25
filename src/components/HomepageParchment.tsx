@@ -38,20 +38,20 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
         <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-[#B89F70] dark:border-[#A36D3B] pointer-events-none rounded-br-xl" />
 
         {/* DOUBLE INNER VINTAGE BORDER */}
-        <div className="absolute inset-2.5 border border-[#EADBBD]/80 dark:border-[#3D1E0F] pointer-events-none rounded-2xl" />
+        <div className="absolute inset-2.5 border border-[#EADBBD] dark:border-[#3D1E0F] pointer-events-none rounded-2xl" />
 
         {/* 1. SEAMLESS TWO-WAY CATEGORY TOGGLE (YAZILAR / ŞİİRLER) */}
-        <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 border-b border-amber-900/15 dark:border-amber-900/40 pb-6">
+        <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 border-b border-[#8B4513]/20 dark:border-amber-900/40 pb-6">
           
           <button
             onClick={() => setActiveTab('all')}
             className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
               activeTab === 'all'
                 ? 'bg-[#8B4513] dark:bg-amber-600 text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
-                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300/60 dark:border-amber-700 hover:bg-amber-200/60'
+                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300 dark:border-amber-700 hover:bg-amber-200/80'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>Tüm Seçkiler</span>
           </button>
 
@@ -60,10 +60,10 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
             className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
               activeTab === 'articles'
                 ? 'bg-[#8B4513] dark:bg-amber-600 text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
-                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300/60 dark:border-amber-700 hover:bg-amber-200/60'
+                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300 dark:border-amber-700 hover:bg-amber-200/80'
             }`}
           >
-            <BookOpen className="w-4 h-4 text-amber-500" />
+            <BookOpen className="w-4 h-4 text-amber-700 dark:text-amber-400" />
             <span>Yazılar</span>
           </button>
 
@@ -72,10 +72,10 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
             className={`px-6 py-2.5 rounded-full font-serif font-bold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-2 border ${
               activeTab === 'poems'
                 ? 'bg-[#8B4513] dark:bg-amber-600 text-[#FEF3C7] border-[#5C2E0B] shadow-md scale-105'
-                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300/60 dark:border-amber-700 hover:bg-amber-200/60'
+                : 'bg-amber-100/70 dark:bg-amber-950/80 text-[#362215] dark:text-amber-200 border-amber-300 dark:border-amber-700 hover:bg-amber-200/80'
             }`}
           >
-            <Feather className="w-4 h-4 text-amber-500" />
+            <Feather className="w-4 h-4 text-amber-700 dark:text-amber-400" />
             <span>Şiirler</span>
           </button>
 
@@ -136,7 +136,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] text-amber-900/80 dark:text-amber-300/80 font-mono mt-2 pt-2 border-t border-amber-100 dark:border-amber-900/40">
+                        <div className="flex items-center justify-between text-[11px] text-[#8B4513] dark:text-amber-300/80 font-mono mt-2 pt-2 border-t border-amber-200/60 dark:border-amber-900/40">
                           <span>{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
                           <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] dark:text-amber-400 hover:underline flex items-center gap-0.5">
                             <span>Oku</span>
@@ -176,7 +176,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                             {idx + 1}. {poem.title}
                           </Link>
                         </h3>
-                        <span className="text-[11px] text-amber-900/80 dark:text-amber-300/80 font-mono">
+                        <span className="text-[11px] text-[#8B4513] dark:text-amber-300/80 font-mono">
                           {new Date(poem.publishedAt).toLocaleDateString('tr-TR')}
                         </span>
                       </div>
@@ -185,7 +185,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                         "{poem.excerpt}"
                       </p>
 
-                      <div className="text-right pt-2 border-t border-amber-100 dark:border-amber-900/40">
+                      <div className="text-right pt-2 border-t border-amber-200/60 dark:border-amber-900/40">
                         <Link
                           href={`/siirler/${poem.slug}`}
                           className="inline-flex items-center gap-1 text-[11px] font-bold text-[#8B4513] dark:text-amber-400 hover:underline"
@@ -230,7 +230,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                     <p className="text-xs text-[#5C4033] dark:text-amber-100 line-clamp-3 font-sans leading-relaxed">
                       {article.excerpt}
                     </p>
-                    <div className="flex items-center justify-between pt-2 text-xs font-mono text-amber-900/80 dark:text-amber-300/80 border-t border-amber-100 dark:border-amber-900/40">
+                    <div className="flex items-center justify-between pt-2 text-xs font-mono text-[#8B4513] dark:text-amber-300/80 border-t border-amber-200/60 dark:border-amber-900/40">
                       <span>{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
                       <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] dark:text-amber-400 hover:underline flex items-center gap-1">
                         <span>Devamını Oku</span>
@@ -264,7 +264,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                       <h3 className="font-serif font-bold text-xl text-[#362215] dark:text-amber-300 group-hover:text-amber-800 transition-colors">
                         <Link href={`/siirler/${poem.slug}`}>{idx + 1}. {poem.title}</Link>
                       </h3>
-                      <span className="text-xs text-amber-900/80 dark:text-amber-300/80 font-mono">
+                      <span className="text-xs text-[#8B4513] dark:text-amber-300/80 font-mono">
                         {new Date(poem.publishedAt).toLocaleDateString('tr-TR')}
                       </span>
                     </div>
@@ -273,7 +273,7 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                       "{poem.content.length > 180 ? poem.content.slice(0, 180) + '...' : poem.content}"
                     </div>
 
-                    <div className="text-right pt-2 border-t border-amber-100 dark:border-amber-900/40">
+                    <div className="text-right pt-2 border-t border-amber-200/60 dark:border-amber-900/40">
                       <Link href={`/siirler/${poem.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-[#8B4513] dark:text-amber-400 hover:underline">
                         <span>Şiirin Tamamını Oku</span>
                         <ArrowRight className="w-3.5 h-3.5" />

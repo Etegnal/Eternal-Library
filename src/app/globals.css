@@ -54,7 +54,11 @@ body {
   background-color: #FEF8EC;
   background-image: radial-gradient(#E8DBBF 0.8px, transparent 0.8px);
   background-size: 20px 20px;
-  transition: all 0.3s ease;
+}
+
+html.dark .parchment-container {
+  background-color: #1F1009;
+  background-image: radial-gradient(#3B2113 1px, transparent 1px);
 }
 
 /* Ornate Gold Filigree Board Glow */
@@ -93,128 +97,4 @@ body {
 
 .animate-candle-glow {
   animation: candleGlow 2.2s ease-in-out infinite alternate;
-}
-
-/* ==========================================================================
-   PRISTINE LIGHT MODE DEFAULT RULES (Strictly active when html DOES NOT have .dark)
-   ========================================================================== */
-
-html:not(.dark) body,
-html:not(.dark) main,
-html:not(.dark) .bg-\[\#FEF8EC\],
-html:not(.dark) .bg-\[\#FAF6EE\] {
-  background-color: #FEF8EC !important;
-  color: #362215 !important;
-}
-
-html:not(.dark) h1,
-html:not(.dark) h2,
-html:not(.dark) h3,
-html:not(.dark) h4,
-html:not(.dark) h5,
-html:not(.dark) h6 {
-  color: #362215 !important;
-}
-
-html:not(.dark) p,
-html:not(.dark) span,
-html:not(.dark) div,
-html:not(.dark) li,
-html:not(.dark) label {
-  color: #362215;
-}
-
-/* ==========================================================================
-   STRICT DARK MODE OVERRIDES (Applies ONLY when html HAS .dark)
-   ========================================================================== */
-
-html.dark body,
-html.dark main,
-html.dark .bg-\[\#FEF8EC\],
-html.dark .bg-\[\#FAF6EE\] {
-  background-color: #140803 !important;
-  color: #FFF8E7 !important;
-}
-
-html.dark .parchment-container {
-  background-color: #1F1009 !important;
-  background-image: radial-gradient(#3B2113 1px, transparent 1px) !important;
-  border-color: #5C3119 !important;
-  color: #FFF8E7 !important;
-}
-
-/* All Cards in Dark Mode */
-html.dark .bg-white,
-html.dark .bg-\[\#FFFDF9\],
-html.dark .bg-\[\#FFFDF9\]\/90,
-html.dark .bg-\[\#FEFBF3\],
-html.dark .bg-\[\#FFFDF7\],
-html.dark .bg-white\/70,
-html.dark .bg-white\/75,
-html.dark .bg-white\/80,
-html.dark .bg-amber-50,
-html.dark .bg-amber-50\/50,
-html.dark .bg-amber-100,
-html.dark .bg-amber-100\/60,
-html.dark .bg-amber-100\/70,
-html.dark .bg-amber-100\/80 {
-  background-color: #23120A !important;
-  border-color: #5C3119 !important;
-  color: #FFF8E7 !important;
-}
-
-/* Headings in Dark Mode */
-html.dark h1,
-html.dark h2,
-html.dark h3,
-html.dark h4,
-html.dark h5,
-html.dark h6 {
-  color: #FCD34D !important;
-}
-
-/* Paragraphs & Text Elements in Dark Mode */
-html.dark p,
-html.dark span,
-html.dark div,
-html.dark li,
-html.dark label,
-html.dark article,
-html.dark blockquote {
-  color: #FFF8E7;
-}
-
-/* Force Light Coffee / Dark Text colors to Bright Amber-Cream in Dark Mode */
-html.dark .text-cozy-coffee,
-html.dark .text-\[\#362215\],
-html.dark .text-\[\#5C4033\] {
-  color: #FFF8E7 !important;
-}
-
-html.dark .text-cozy-coffee-light,
-html.dark .text-amber-800,
-html.dark .text-amber-900,
-html.dark .text-amber-950,
-html.dark .text-cozy-coffee\/80,
-html.dark .text-cozy-coffee\/90 {
-  color: #FDE68A !important;
-}
-
-/* Card Borders in Dark Mode */
-html.dark .border-cozy-parchment-border,
-html.dark .border-amber-200,
-html.dark .border-amber-200\/80,
-html.dark .border-amber-300,
-html.dark .border-\[\#E6D7BC\],
-html.dark .border-\[\#E5D5B7\],
-html.dark .border-\[\#E8DCC4\],
-html.dark .border-\[\#D8C7A5\],
-html.dark .border-\[\#EADBBD\],
-html.dark .border-\[\#EADBBD\]\/70 {
-  border-color: #5C3119 !important;
-}
-
-/* Deckle Edge Transition SVG Path in Dark Mode */
-html.dark .text-\[\#FEF8EC\] {
-  color: #140803 !important;
 }
