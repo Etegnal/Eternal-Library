@@ -1,40 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ShieldCheck, Moon, Sun } from 'lucide-react';
+import { Menu, X, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    // Default to Light Mode unless explicitly set to 'dark' in localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDark(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      setIsDark(true);
-    }
-  };
 
   const navLinks = [
     { href: '/', label: 'ANASAYFA' },
@@ -90,19 +65,9 @@ export default function Navbar() {
             );
           })}
 
-          {/* DARK / LIGHT MODE TOGGLE BUTTON */}
-          <button
-            onClick={toggleTheme}
-            className="ml-1 p-2 rounded-full text-amber-300 hover:bg-amber-900/60 border border-amber-600/40 transition-all"
-            title={isDark ? "Gündüz Moduna Geç" : "Gece Moduna Geç (Dark Mode)"}
-            aria-label="Karanlık Mod Değiştir"
-          >
-            {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-amber-200" />}
-          </button>
-
           <Link
             href="/admin"
-            className="ml-1 px-3 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1 shadow-sm"
+            className="ml-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300 bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 transition-colors flex items-center gap-1 shadow-sm"
             title="Yönetici Girişi"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
@@ -110,16 +75,8 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* MOBILE MENU BUTTON AND DARK TOGGLE */}
+        {/* MOBILE MENU BUTTON */}
         <div className="flex md:hidden items-center gap-2">
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-xl bg-[#23120A]/85 text-amber-300 border border-amber-700/40 focus:outline-none"
-            aria-label="Karanlık Mod Değiştir"
-          >
-            {isDark ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-amber-200" />}
-          </button>
-
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none"

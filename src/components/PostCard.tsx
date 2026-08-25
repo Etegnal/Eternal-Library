@@ -67,7 +67,7 @@ export default function PostCard({ post }: PostCardProps) {
           </h3>
 
           {/* Excerpt */}
-          <p className="text-cozy-coffee/80 text-sm leading-relaxed line-clamp-3 mb-4 font-sans">
+          <p className="text-[#5C4033] text-sm leading-relaxed line-clamp-3 mb-4 font-sans">
             {post.excerpt}
           </p>
         </div>

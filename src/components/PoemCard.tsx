@@ -41,7 +41,7 @@ export default function PoemCard({ poem }: PoemCardProps) {
       </h3>
 
       {/* Stanza Excerpt */}
-      <div className="relative pl-4 border-l-2 border-cozy-amber/40 mb-5 font-serif italic text-cozy-coffee/90 leading-relaxed text-sm sm:text-base whitespace-pre-line">
+      <div className="relative pl-4 border-l-2 border-cozy-amber/40 mb-5 font-serif italic text-[#5C4033] leading-relaxed text-sm sm:text-base whitespace-pre-line">
         {poem.excerpt}
       </div>
 

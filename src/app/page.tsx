@@ -12,14 +12,12 @@ export default async function HomePage() {
 
   let latestArticles: any[] = [];
   try {
-    // Primary: fetch posts featured by Admin heart selection
     latestArticles = await prisma.post.findMany({
       where: { type: 'YAZI', isFeatured: true },
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
 
-    // Fallback if none featured
     if (latestArticles.length === 0) {
       latestArticles = await prisma.post.findMany({
         where: { type: 'YAZI' },
@@ -33,14 +31,12 @@ export default async function HomePage() {
 
   let featuredPoems: any[] = [];
   try {
-    // Primary: fetch poems featured by Admin heart selection
     featuredPoems = await prisma.post.findMany({
       where: { type: 'SIIR', isFeatured: true },
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
 
-    // Fallback if none featured
     if (featuredPoems.length === 0) {
       featuredPoems = await prisma.post.findMany({
         where: { type: 'SIIR' },
@@ -53,14 +49,14 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#FEF8EC] dark:bg-[#140803]">
+    <div className="relative min-h-screen bg-[#FEF8EC]">
       
       {/* 1. LIVING VIDEO HERO SECTION WITH FULL-WIDTH CABIN & ETERNAL LIBRARY BRANDING */}
       <CozyHero initialQuote={todayQuote} />
 
       {/* TORN PAPER DECKLE EDGE TRANSITION */}
       <div className="relative w-full -mt-8 sm:-mt-12 z-30 pointer-events-none">
-        <svg viewBox="0 0 1440 80" className="w-full h-12 sm:h-20 text-[#FEF8EC] dark:text-[#140803] fill-current">
+        <svg viewBox="0 0 1440 80" className="w-full h-12 sm:h-20 text-[#FEF8EC] fill-current">
           <path d="M0,32 L48,42.7 C96,53,192,75,288,74.7 C384,75,480,53,576,42.7 C672,32,768,32,864,42.7 C960,53,1056,75,1152,69.3 C1248,64,1344,32,1392,16 L1440,0 L1440,80 L1392,80 C1344,80,1248,80,1152,80 C1056,80,960,80,864,80 C480,80,384,80,288,80 C192,80,96,80,48,80 L0,80 Z"></path>
         </svg>
       </div>
