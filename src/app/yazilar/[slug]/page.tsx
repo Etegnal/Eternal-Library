@@ -1,13 +1,11 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowLeft, BookOpen } from 'lucide-react';
-import LikeButton from '@/components/LikeButton';
 import ViewTracker from '@/components/ViewTracker';
 import PostCard from '@/components/PostCard';
-
+import BookReader from '@/components/BookReader';
 import { slugify } from '@/lib/slug';
 
 export const dynamic = 'force-dynamic';
@@ -56,7 +54,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
   });
 
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-12">
+    <article className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-10">
       {/* Back button */}
       <div>
         <Link
@@ -95,50 +93,13 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
         </p>
       </div>
 
-      {/* Featured Cover Image */}
-      {article.coverImage && (
-        <div className="relative w-full h-[320px] sm:h-[450px] rounded-3xl overflow-hidden shadow-cozy border border-[#E6D7BC]">
-          <Image
-            src={article.coverImage}
-            alt={article.title}
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-      )}
-
-      {/* Article Content - Light Parchment */}
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
-        <div className="prose lg:prose-lg max-w-none font-sans leading-relaxed text-[#362215] space-y-6">
-          {article.content.split('\n\n').map((paragraph, idx) => {
-            if (paragraph.startsWith('### ')) {
-              return (
-                <h3 key={idx} className="font-serif font-bold text-2xl text-[#362215] pt-4 border-b border-[#E6D7BC] pb-2">
-                  {paragraph.replace('### ', '')}
-                </h3>
-              );
-            }
-            if (paragraph.startsWith('> ')) {
-              return (
-                <blockquote key={idx} className="border-l-4 border-[#9A3412] pl-4 italic font-serif text-lg text-[#5C4033] bg-[#FEF9EE] p-4 rounded-r-xl border border-r border-t border-b border-[#FDE68A]/60">
-                  {paragraph.replace('> ', '')}
-                </blockquote>
-              );
-            }
-            return (
-              <p key={idx} className="text-base sm:text-lg leading-relaxed text-[#362215]">
-                {paragraph}
-              </p>
-            );
-          })}
-        </div>
-
-        {/* LIKE HEART BUTTON AT BOTTOM OF ARTICLE */}
-        <div className="pt-8 border-t border-[#E6D7BC] text-center">
-          <LikeButton postId={article.id} initialLikes={article.likes} />
-        </div>
-      </div>
+      {/* BOOK READER WITH PAGE FLIPPING & BOOKMARK PROGRESS */}
+      <BookReader
+        postId={article.id}
+        content={article.content}
+        initialLikes={article.likes}
+        postType="YAZI"
+      />
 
       {/* RELATED ARTICLES RECOMMENDATION SECTION */}
       {relatedArticles.length > 0 && (
