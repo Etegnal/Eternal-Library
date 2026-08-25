@@ -120,7 +120,9 @@ model MasterPoet {
   id        String   @id @default(uuid())
   author    String
   title     String
+  slug      String   @default("")
   excerpt   String
+  content   String   @default("")
   year      String?
   order     Int      @default(0)
   createdAt DateTime @default(now())

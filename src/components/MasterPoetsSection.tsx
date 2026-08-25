@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Feather, Sparkles, Quote, ChevronDown, ChevronUp, PlusCircle } from 'lucide-react';
+import { Feather, Sparkles, Quote, ArrowRight, PlusCircle } from 'lucide-react';
+import { slugify } from '@/lib/slug';
 
 export interface MasterPoetData {
   id: string;
   author: string;
   title: string;
+  slug?: string | null;
   excerpt: string;
+  content?: string | null;
   year?: string | null;
 }
 
@@ -18,12 +21,6 @@ interface MasterPoetsSectionProps {
 }
 
 export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }: MasterPoetsSectionProps) {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  const toggleExpand = (id: string) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  };
-
   return (
     <section className="pt-8 border-t-2 border-[#E6D7BC] space-y-8">
       
@@ -47,7 +44,9 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
       {masterPoets.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {masterPoets.map((item) => {
-            const isExpanded = expandedId === item.id;
+            const itemSlug = item.slug && item.slug.trim().length > 0 ? item.slug : slugify(item.title);
+            const detailUrl = `/siirler/${itemSlug}`;
+
             return (
               <div
                 key={item.id}
@@ -80,34 +79,33 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
 
                   {/* POEM TITLE */}
                   <div className="space-y-1">
-                    <h4 className="font-serif font-semibold text-lg text-[#5C2E0B]">
-                      {item.title}
+                    <h4 className="font-serif font-semibold text-lg text-[#5C2E0B] group-hover:text-[#9A3412] transition-colors">
+                      <Link href={detailUrl}>
+                        {item.title}
+                      </Link>
                     </h4>
                   </div>
 
                   {/* STANZA QUOTE BLOCK */}
                   <div className="relative pl-4 border-l-2 border-[#9A3412]/50 font-serif italic text-xs sm:text-sm text-[#5C4033] leading-relaxed whitespace-pre-line bg-amber-50/40 p-3.5 rounded-r-xl border-y border-r border-amber-200/40">
                     <Quote className="w-4 h-4 text-amber-600/30 absolute top-2 right-2 pointer-events-none" />
-                    "{isExpanded ? item.excerpt : item.excerpt.slice(0, 140) + (item.excerpt.length > 140 ? '...' : '')}"
+                    "{item.excerpt}"
                   </div>
                 </div>
 
-                {/* CARD FOOTER */}
+                {/* CARD FOOTER - READ POEM LINK */}
                 <div className="pt-4 mt-4 border-t border-amber-200/60 flex items-center justify-between text-xs">
                   <span className="text-[11px] text-[#785438] font-serif italic">
                     — {item.author}
                   </span>
 
-                  {item.excerpt.length > 140 && (
-                    <button
-                      type="button"
-                      onClick={() => toggleExpand(item.id)}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#9A3412] hover:underline"
-                    >
-                      <span>{isExpanded ? 'Kısalt' : 'Devamını Gör'}</span>
-                      {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                    </button>
-                  )}
+                  <Link
+                    href={detailUrl}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#9A3412] group-hover:text-[#78350F] hover:underline transition-colors"
+                  >
+                    <span>Şiiri Oku</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
 
               </div>

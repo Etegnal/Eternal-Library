@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { slugify } from '@/lib/slug';
 
 // GET all master poets
 export async function GET() {
@@ -26,18 +27,44 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { author, title, excerpt, year } = body;
+    const { author, title, excerpt, content, year } = body;
 
     if (!author || !title || !excerpt) {
-      return NextResponse.json({ error: 'Lütfen şair adı, başlık ve şiir mısralarını doldurun.' }, { status: 400 });
+      return NextResponse.json({ error: 'Lütfen şair adı, başlık ve mısraları doldurun.' }, { status: 400 });
     }
 
+    const fullContent = content && content.trim().length > 0 ? content.trim() : excerpt.trim();
+    const baseSlug = slugify(title);
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (await prisma.post.findUnique({ where: { slug } })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+
+    // 1. Create MasterPoet entry
     const newPoet = await prisma.masterPoet.create({
       data: {
         author: author.trim(),
         title: title.trim(),
+        slug,
         excerpt: excerpt.trim(),
+        content: fullContent,
         year: year ? year.trim() : null,
+      },
+    });
+
+    // 2. Create corresponding Post entry so it can be opened at /siirler/[slug]
+    await prisma.post.create({
+      data: {
+        title: title.trim(),
+        slug,
+        content: fullContent,
+        excerpt: excerpt.trim(),
+        type: 'SIIR',
+        author: author.trim(),
+        isFeatured: true,
       },
     });
 
