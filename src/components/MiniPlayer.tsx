@@ -91,6 +91,25 @@ export default function MiniPlayer() {
     }
   }, [volume, isMuted, youtubeId]);
 
+  // Listen for YouTube video ENDED signal to auto-advance to next track
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        if (data && (data.info === 0 || (data.event === 'onStateChange' && data.info === 0))) {
+          nextTrack();
+        }
+      } catch (e) {
+        // Ignore non-JSON window messages
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [currentIndex, playlist]);
+
   const playAudioEngine = () => {
     if (isHomepage || !currentTrack) return;
 
