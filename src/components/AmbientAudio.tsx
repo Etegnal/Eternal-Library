@@ -1,14 +1,31 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Volume2, VolumeX, Flame } from 'lucide-react';
 
 export default function AmbientAudio() {
+  const pathname = usePathname();
+  const isHomepage = pathname === '/';
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.85);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
+
+  // Pause fireplace audio when navigating away from homepage
+  useEffect(() => {
+    if (!isHomepage && isPlaying) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      if (audioCtxRef.current) {
+        audioCtxRef.current.suspend();
+      }
+      setIsPlaying(false);
+    }
+  }, [pathname, isHomepage, isPlaying]);
 
   const toggleSound = () => {
     if (isPlaying) {

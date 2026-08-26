@@ -128,3 +128,15 @@ model MasterPoet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Track {
+  id         String   @id @default(uuid())
+  title      String
+  artist     String
+  src        String
+  cover      String?
+  spotifyUrl String   @default("https://open.spotify.com")
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

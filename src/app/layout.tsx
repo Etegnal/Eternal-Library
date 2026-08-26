@@ -3,6 +3,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AmbientAudio from '@/components/AmbientAudio';
+import MiniPlayer from '@/components/MiniPlayer';
 import Providers from '@/components/Providers';
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <AmbientAudio />
+          <MiniPlayer />
         </Providers>
       </body>
     </html>

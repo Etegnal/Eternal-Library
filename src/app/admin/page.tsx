@@ -54,6 +54,10 @@ export default async function AdminDashboardPage() {
     orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
   });
 
+  const tracksRaw = await prisma.track.findMany({
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+  });
+
   const posts = postsRaw.map((p) => ({
     id: p.id,
     title: p.title,
@@ -96,7 +100,18 @@ export default async function AdminDashboardPage() {
     title: mp.title,
     excerpt: mp.excerpt,
     year: mp.year,
+    order: mp.order,
     createdAt: mp.createdAt.toISOString(),
+  }));
+
+  const tracks = tracksRaw.map((t) => ({
+    id: t.id,
+    title: t.title,
+    artist: t.artist,
+    src: t.src,
+    cover: t.cover,
+    spotifyUrl: t.spotifyUrl,
+    order: t.order,
   }));
 
   return (
@@ -106,6 +121,7 @@ export default async function AdminDashboardPage() {
       users={users}
       letters={letters}
       masterPoets={masterPoets}
+      tracks={tracks}
     />
   );
 }

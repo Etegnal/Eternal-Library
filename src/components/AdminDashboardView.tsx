@@ -12,6 +12,8 @@ import LikedUsersViewer from '@/components/LikedUsersViewer';
 import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles } from 'lucide-react';
 
 import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
+import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
+import { Music } from 'lucide-react';
 
 interface LikedUserItem {
   id: string;
@@ -57,10 +59,11 @@ interface AdminDashboardViewProps {
   users: UserItem[];
   letters: LetterItem[];
   masterPoets?: MasterPoetItem[];
+  tracks?: TrackItem[];
 }
 
-export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [] }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters' | 'masterPoets'>('posts');
+export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
+  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -109,6 +112,19 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
           >
             <Feather className="w-4 h-4 text-amber-400" />
             <span>Üstat Kalemler ({masterPoets.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('tracks')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'tracks'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <Music className="w-4 h-4 text-amber-400" />
+            <span>Playlist ({tracks.length})</span>
           </button>
 
           <button
@@ -370,6 +386,11 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
       {/* TAB 4: MASTER POETS MANAGEMENT */}
       {activeTab === 'masterPoets' && (
         <AdminMasterPoetsManager initialMasterPoets={masterPoets} />
+      )}
+
+      {/* TAB 5: TRACKS PLAYLIST MANAGEMENT */}
+      {activeTab === 'tracks' && (
+        <AdminTracksManager initialTracks={tracks} />
       )}
 
     </div>
