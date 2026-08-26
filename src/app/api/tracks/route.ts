@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { defaultPlaylist } from '@/lib/playlist';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
@@ -8,13 +10,9 @@ export async function GET() {
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     });
 
-    if (tracks.length === 0) {
-      return NextResponse.json(defaultPlaylist);
-    }
-
     return NextResponse.json(tracks);
   } catch (error) {
     console.error('Error fetching public tracks:', error);
-    return NextResponse.json(defaultPlaylist);
+    return NextResponse.json([]);
   }
 }

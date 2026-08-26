@@ -4,9 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Play, Pause, SkipForward, Music } from 'lucide-react';
-import { Track, defaultPlaylist } from '@/lib/playlist';
+import { Track } from '@/lib/playlist';
 
-// Custom Spotify Icon SVG component
 function SpotifyIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -17,28 +16,24 @@ function SpotifyIcon({ className }: { className?: string }) {
 
 export default function MiniPlayer() {
   const pathname = usePathname();
-  const [playlist, setPlaylist] = useState<Track[]>(defaultPlaylist);
+  const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const webAudioCtxRef = useRef<AudioContext | null>(null);
-  const webAudioIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const isHomepage = pathname === '/';
-  const currentTrack = playlist[currentIndex] || defaultPlaylist[0];
+  const currentTrack = playlist[currentIndex];
 
-  // Fetch playlist from API
+  // Fetch playlist dynamically from API
   useEffect(() => {
-    fetch('/api/tracks')
+    fetch('/api/tracks', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setPlaylist(data);
-          // Pick a random track start on page load
-          const randomIndex = Math.floor(Math.random() * data.length);
-          setCurrentIndex(randomIndex);
+          setCurrentIndex(0);
         }
         setHasLoadedPlaylist(true);
       })
@@ -49,19 +44,17 @@ export default function MiniPlayer() {
 
   // Handle route change & play/stop behavior
   useEffect(() => {
-    if (isHomepage) {
-      // Pause music on homepage
+    if (isHomepage || !currentTrack) {
       stopAudio();
     } else {
-      // Autoplay music on non-homepage routes
-      if (hasLoadedPlaylist) {
+      if (hasLoadedPlaylist && playlist.length > 0) {
         playAudio();
       }
     }
-  }, [pathname, hasLoadedPlaylist, currentIndex]);
+  }, [pathname, hasLoadedPlaylist, currentIndex, playlist]);
 
   const playAudio = () => {
-    if (isHomepage) return;
+    if (isHomepage || !currentTrack) return;
 
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
@@ -69,12 +62,9 @@ export default function MiniPlayer() {
         .play()
         .then(() => {
           setIsPlaying(true);
-          stopWebAudio();
         })
         .catch(() => {
-          // Web Audio fallback if MP3 fails to load
-          startWebAudioFallback();
-          setIsPlaying(true);
+          setIsPlaying(false);
         });
     }
   };
@@ -83,7 +73,6 @@ export default function MiniPlayer() {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    stopWebAudio();
     setIsPlaying(false);
   };
 
@@ -96,6 +85,7 @@ export default function MiniPlayer() {
   };
 
   const nextTrack = () => {
+    if (playlist.length === 0) return;
     const nextIdx = (currentIndex + 1) % playlist.length;
     setCurrentIndex(nextIdx);
   };
@@ -104,57 +94,8 @@ export default function MiniPlayer() {
     nextTrack();
   };
 
-  // Web Audio synth fallback
-  const startWebAudioFallback = () => {
-    try {
-      if (!webAudioCtxRef.current) {
-        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-        webAudioCtxRef.current = new AudioCtx();
-      }
-
-      if (webAudioCtxRef.current.state === 'suspended') {
-        webAudioCtxRef.current.resume();
-      }
-
-      if (!webAudioIntervalRef.current) {
-        const notes = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25];
-        webAudioIntervalRef.current = setInterval(() => {
-          if (!webAudioCtxRef.current) return;
-          const ctx = webAudioCtxRef.current;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-
-          const freq = notes[Math.floor(Math.random() * notes.length)];
-          osc.frequency.setValueAtTime(freq, ctx.currentTime);
-          osc.type = 'sine';
-
-          gain.gain.setValueAtTime(0.05, ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
-
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-
-          osc.start();
-          osc.stop(ctx.currentTime + 1.8);
-        }, 2200);
-      }
-    } catch (e) {
-      console.warn('Web audio fallback error', e);
-    }
-  };
-
-  const stopWebAudio = () => {
-    if (webAudioIntervalRef.current) {
-      clearInterval(webAudioIntervalRef.current);
-      webAudioIntervalRef.current = null;
-    }
-    if (webAudioCtxRef.current && webAudioCtxRef.current.state === 'running') {
-      webAudioCtxRef.current.suspend();
-    }
-  };
-
-  // Hide MiniPlayer on homepage as requested
-  if (isHomepage) {
+  // Hide MiniPlayer on homepage or when playlist is empty
+  if (isHomepage || !currentTrack || playlist.length === 0) {
     return null;
   }
 
@@ -232,14 +173,16 @@ export default function MiniPlayer() {
           </button>
 
           {/* Next Track Button */}
-          <button
-            type="button"
-            onClick={nextTrack}
-            className="w-7 h-7 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors min-w-[28px] min-h-[28px]"
-            title="Sonraki Şarkı"
-          >
-            <SkipForward className="w-4 h-4" />
-          </button>
+          {playlist.length > 1 && (
+            <button
+              type="button"
+              onClick={nextTrack}
+              className="w-7 h-7 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors min-w-[28px] min-h-[28px]"
+              title="Sonraki Şarkı"
+            >
+              <SkipForward className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Spotify Direct Link */}
           {currentTrack.spotifyUrl && (

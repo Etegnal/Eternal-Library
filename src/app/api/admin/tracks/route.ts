@@ -2,24 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { defaultPlaylist } from '@/lib/playlist';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // GET all tracks
 export async function GET() {
   try {
-    let tracks = await prisma.track.findMany({
+    const tracks = await prisma.track.findMany({
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     });
 
-    // If database has no tracks yet, return defaultPlaylist
-    if (tracks.length === 0) {
-      return NextResponse.json(defaultPlaylist);
-    }
-
     return NextResponse.json(tracks);
   } catch (error) {
-    console.error('Error fetching tracks:', error);
-    return NextResponse.json(defaultPlaylist);
+    console.error('Error fetching admin tracks:', error);
+    return NextResponse.json([]);
   }
 }
 
