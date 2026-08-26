@@ -102,42 +102,33 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
                   {latestArticles.map((article, idx) => (
                     <article
                       key={article.id}
-                      className="group flex gap-4 p-4 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all duration-200"
+                      className="group flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] hover:border-[#8B4513]/40 shadow-sm hover:shadow-md transition-all duration-200 min-h-[128px]"
                     >
-                      {article.coverImage ? (
-                        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 shadow-inner">
-                          <Image
-                            src={article.coverImage}
-                            alt={article.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-amber-100/80 flex items-center justify-center shrink-0 border border-amber-200">
-                          <BookOpen className="w-8 h-8 text-amber-700" />
-                        </div>
-                      )}
-
-                      <div className="flex-1 flex flex-col justify-between py-0.5">
-                        <div>
-                          <h3 className="font-serif font-bold text-base text-[#362215] group-hover:text-amber-800 transition-colors line-clamp-1">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="font-serif font-bold text-base sm:text-lg text-[#362215] group-hover:text-amber-800 transition-colors leading-snug">
                             <Link href={`/yazilar/${article.slug}`}>
                               {idx + 1}. {article.title}
                             </Link>
                           </h3>
-                          <p className="text-xs text-[#5C4033] line-clamp-2 mt-1.5 font-sans leading-relaxed">
-                            {article.excerpt}
-                          </p>
+                          <span className="text-[11px] text-[#8B4513] font-mono shrink-0">
+                            {new Date(article.publishedAt).toLocaleDateString('tr-TR')}
+                          </span>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] text-[#8B4513] font-mono mt-2 pt-2 border-t border-amber-200/60">
-                          <span>{article.author ? `${article.author} • ` : ''}{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
-                          <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-0.5">
-                            <span>Oku</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </Link>
-                        </div>
+                        <p className="text-xs sm:text-sm text-[#5C4033] line-clamp-2 font-sans leading-relaxed">
+                          {article.excerpt}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] text-[#8B4513] pt-2.5 mt-3 border-t border-amber-200/60">
+                        <span className="italic font-serif text-[#5C4033]">
+                          {article.author ? `— ${article.author}` : '— Eternal'}
+                        </span>
+                        <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-1">
+                          <span>Yazıyı Oku</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </div>
                     </article>
                   ))}
@@ -218,23 +209,27 @@ export default function HomepageParchment({ latestArticles, featuredPoems }: Hom
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {latestArticles.map((article, idx) => (
-                  <article key={article.id} className="group p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm hover:shadow-md transition-all space-y-3">
-                    {article.coverImage && (
-                      <div className="relative w-full h-40 rounded-xl overflow-hidden bg-amber-950">
-                        <Image src={article.coverImage} alt={article.title} fill className="object-cover group-hover:scale-105 transition-transform" />
+                  <article key={article.id} className="group p-5 sm:p-6 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] hover:border-[#8B4513]/40 shadow-sm hover:shadow-md transition-all space-y-3 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] group-hover:text-amber-800 transition-colors leading-snug">
+                          <Link href={`/yazilar/${article.slug}`}>{idx + 1}. {article.title}</Link>
+                        </h3>
+                        <span className="text-xs text-[#8B4513] font-mono shrink-0">
+                          {new Date(article.publishedAt).toLocaleDateString('tr-TR')}
+                        </span>
                       </div>
-                    )}
-                    <h3 className="font-serif font-bold text-lg text-[#362215] group-hover:text-amber-800 transition-colors">
-                      <Link href={`/yazilar/${article.slug}`}>{idx + 1}. {article.title}</Link>
-                    </h3>
-                    <p className="text-xs text-[#5C4033] line-clamp-3 font-sans leading-relaxed">
-                      {article.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between pt-2 text-xs font-mono text-[#8B4513] border-t border-amber-200/60">
-                      <span>{new Date(article.publishedAt).toLocaleDateString('tr-TR')}</span>
+                      <p className="text-xs sm:text-sm text-[#5C4033] line-clamp-3 font-sans leading-relaxed">
+                        {article.excerpt}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between pt-3 text-xs font-mono text-[#8B4513] border-t border-amber-200/60">
+                      <span className="italic font-serif text-[#5C4033]">
+                        {article.author ? `— ${article.author}` : '— Eternal'}
+                      </span>
                       <Link href={`/yazilar/${article.slug}`} className="font-bold text-[#8B4513] hover:underline flex items-center gap-1">
                         <span>Devamını Oku</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </div>
                   </article>
