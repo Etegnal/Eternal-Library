@@ -87,7 +87,7 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
                   </div>
 
                   {/* STANZA QUOTE BLOCK */}
-                  <div className="relative pl-4 border-l-2 border-[#9A3412]/50 font-serif italic text-xs sm:text-sm text-[#5C4033] leading-relaxed whitespace-pre-line bg-amber-50/40 p-3.5 rounded-r-xl border-y border-r border-amber-200/40">
+                  <div className="relative pl-4 border-l-2 border-[#9A3412]/50 font-serif italic text-[13px] sm:text-sm text-[#5C4033] leading-relaxed whitespace-pre-line bg-amber-50/40 p-3.5 rounded-r-xl border-y border-r border-amber-200/40 tracking-tight sm:tracking-normal">
                     <Quote className="w-4 h-4 text-amber-600/30 absolute top-2 right-2 pointer-events-none" />
                     "{item.excerpt}"
                   </div>

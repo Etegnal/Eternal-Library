@@ -161,8 +161,8 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
       </div>
 
       {/* SINGLE PARCHMENT CARD FOR POEM */}
-      <div className="p-8 sm:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
-        <div className="font-serif text-lg sm:text-xl leading-loose text-[#362215] italic whitespace-pre-line text-center max-w-xl mx-auto">
+      <div className="p-5 sm:p-8 md:p-12 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment text-[#362215] space-y-8">
+        <div className="font-serif text-[15px] sm:text-lg md:text-xl leading-relaxed sm:leading-loose text-[#362215] italic whitespace-pre-line text-center max-w-xl mx-auto tracking-tight sm:tracking-normal">
           {poem.content}
         </div>
 
