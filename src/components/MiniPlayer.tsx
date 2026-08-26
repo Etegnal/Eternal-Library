@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, ChevronRight } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Music, ChevronRight } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
 // Helper to extract YouTube video ID from various YouTube URL formats
@@ -14,9 +14,9 @@ export function getYouTubeId(url: string): string | null {
   return match && match[2].length === 11 ? match[2] : null;
 }
 
-function SpotifyIcon({ className }: { className?: string }) {
+function SpotifyIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <svg className={className} style={style} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm5.521 17.341c-.218.359-.684.475-1.043.257-2.86-1.748-6.462-2.143-10.704-1.171-.407.093-.815-.162-.908-.57-.093-.408.162-.816.57-.909 4.646-1.063 8.625-.615 11.828 1.344.359.218.475.684.257 1.049zm1.474-3.277c-.274.444-.859.587-1.303.313-3.274-2.012-8.266-2.597-12.14-1.419-.501.152-1.031-.131-1.183-.632-.152-.501.131-1.031.632-1.183 4.426-1.344 9.932-.693 13.682 1.616.444.274.587.859.312 1.305zm.143-3.411c-3.924-2.33-10.389-2.545-14.133-1.408-.601.182-1.242-.164-1.424-.765-.182-.601.164-1.242.765-1.424 4.304-1.307 11.442-1.042 15.968 1.644.542.322.722 1.026.4 1.568-.323.542-1.027.722-1.576.401z" />
     </svg>
   );
@@ -27,8 +27,8 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.75);
-  const [isMuted, setIsMuted] = useState(false);
+  const [volume] = useState(0.75);
+  const [isMuted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasUserPaused, setHasUserPaused] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
@@ -150,24 +150,12 @@ export default function MiniPlayer() {
     nextTrack();
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setVolume(val);
-    if (isMuted && val > 0) {
-      setIsMuted(false);
-    }
-  };
-
-  const toggleMute = () => {
-    setIsMuted((prev) => !prev);
-  };
-
   // Hide MiniPlayer on homepage or when playlist is empty
   if (isHomepage || !currentTrack || playlist.length === 0) {
     return null;
   }
 
-  // COLLAPSED COMPACT SPOTIFY FLOATING BUTTON (Matching MiniPlayer theme & dimensions)
+  // COLLAPSED COMPACT SPOTIFY FLOATING BUTTON
   if (isCollapsed) {
     return (
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 animate-fadeIn">
@@ -192,17 +180,20 @@ export default function MiniPlayer() {
         <button
           type="button"
           onClick={() => setIsCollapsed(false)}
-          className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 text-stone-300 hover:text-amber-200 shadow-2xl shadow-black/60 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer group"
+          className="flex items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] rounded-2xl bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 text-stone-300 hover:text-amber-200 shadow-2xl shadow-black/60 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer group"
           title="Müzik Çaları Genişlet"
           aria-label="Müzik Çaları Genişlet"
         >
-          <SpotifyIcon className={`w-5 h-5 text-stone-300 group-hover:text-[#1DB954] transition-colors ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`} />
+          <SpotifyIcon
+            style={{ animation: isPlaying ? 'spin 8s linear infinite' : 'none' }}
+            className="w-5 h-5 text-stone-300 group-hover:text-[#1DB954] transition-colors"
+          />
         </button>
       </div>
     );
   }
 
-  // FULL EXPANDED MINIPLAYER BAR
+  // FULL EXPANDED MINIPLAYER BAR (Strictly Fixed Dimensions)
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[calc(100vw-2rem)] transition-all duration-500 animate-fadeIn">
       
@@ -226,37 +217,35 @@ export default function MiniPlayer() {
         />
       )}
 
-      {/* Glassmorphism & Glow Container */}
-      <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
+      {/* Glassmorphism & Glow Container with Fixed Bar Height & Size Stability */}
+      <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0">
         
         {/* Far Left Collapse Arrow Button */}
         <button
           type="button"
           onClick={() => setIsCollapsed(true)}
-          className="p-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/10 transition-colors flex-shrink-0"
+          className="p-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/10 transition-colors shrink-0"
           title="Müzik Çaları Küçült"
           aria-label="Müzik Çaları Küçült"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
 
-        {/* Album / Vinyl Cover with Rotation */}
-        <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center shadow-inner">
+        {/* Strictly Fixed Vinyl Record Disc Container */}
+        <div className="relative w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner">
           {coverUrl ? (
             <Image
               src={coverUrl}
               alt={currentTrack.title}
               fill
               unoptimized
-              className={`object-cover scale-[1.35] transition-transform ${
-                isPlaying ? 'animate-[spin_10s_linear_infinite]' : '[animation-play-state:paused]'
-              }`}
+              style={{ animation: isPlaying ? 'spin 10s linear infinite' : 'none' }}
+              className="object-cover scale-[1.35]"
             />
           ) : (
             <div
-              className={`w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200 transition-transform ${
-                isPlaying ? 'animate-[spin_10s_linear_infinite]' : '[animation-play-state:paused]'
-              }`}
+              style={{ animation: isPlaying ? 'spin 10s linear infinite' : 'none' }}
+              className="w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200"
             >
               <Music className="w-5 h-5 text-amber-300" />
             </div>
@@ -286,7 +275,7 @@ export default function MiniPlayer() {
         </div>
 
         {/* Controls Row: Prev, Play/Pause, Next & Spotify */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           
           {/* Previous Track Button */}
           <button
