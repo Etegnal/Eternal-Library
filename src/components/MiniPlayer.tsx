@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, ChevronRight } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
 // Helper to extract YouTube video ID from various YouTube URL formats
@@ -161,7 +161,7 @@ export default function MiniPlayer() {
     return null;
   }
 
-  // COLLAPSED COMPACT SPOTIFY FLOATING BUTTON
+  // COLLAPSED COMPACT SPOTIFY FLOATING BUTTON (Matching MiniPlayer theme & dimensions)
   if (isCollapsed) {
     return (
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 animate-fadeIn">
@@ -186,18 +186,11 @@ export default function MiniPlayer() {
         <button
           type="button"
           onClick={() => setIsCollapsed(false)}
-          className="relative group flex items-center justify-center w-12 h-12 rounded-full bg-[#120e0b]/90 backdrop-blur-md border-2 border-amber-500/40 text-[#1DB954] shadow-2xl shadow-black/80 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
-          title="Mini Müzik Çaları Genişlet"
-          aria-label="Mini Müzik Çaları Genişlet"
+          className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 text-stone-300 hover:text-amber-200 shadow-2xl shadow-black/60 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer group"
+          title="Müzik Çaları Genişlet"
+          aria-label="Müzik Çaları Genişlet"
         >
-          <div className="relative w-7 h-7 rounded-full flex items-center justify-center">
-            <SpotifyIcon className={`w-6 h-6 text-[#1DB954] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`} />
-          </div>
-
-          {/* Expand Arrow Badge */}
-          <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-xs font-bold border border-amber-300 shadow-sm group-hover:scale-110 transition-transform">
-            <ChevronLeft className="w-3.5 h-3.5 stroke-[3]" />
-          </span>
+          <SpotifyIcon className={`w-5 h-5 text-stone-300 group-hover:text-[#1DB954] transition-colors ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`} />
         </button>
       </div>
     );
@@ -235,7 +228,7 @@ export default function MiniPlayer() {
           type="button"
           onClick={() => setIsCollapsed(true)}
           className="p-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/10 transition-colors flex-shrink-0"
-          title="Müzik Çaları Spotify Simgesine Küçült"
+          title="Müzik Çaları Küçült"
           aria-label="Müzik Çaları Küçült"
         >
           <ChevronRight className="w-4 h-4" />
