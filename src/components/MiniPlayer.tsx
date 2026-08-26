@@ -285,7 +285,7 @@ export default function MiniPlayer() {
           </span>
         </div>
 
-        {/* Controls Row: Prev, Play/Pause, Next, Volume & Spotify */}
+        {/* Controls Row: Prev, Play/Pause, Next & Spotify */}
         <div className="flex items-center gap-1 flex-shrink-0">
           
           {/* Previous Track Button */}
@@ -321,36 +321,6 @@ export default function MiniPlayer() {
           >
             <SkipForward className="w-3.5 h-3.5" />
           </button>
-
-          {/* Volume Control Button & Expandable Hover Slider */}
-          <div className="relative group/vol flex items-center">
-            <button
-              type="button"
-              onClick={toggleMute}
-              className="p-1.5 text-stone-400 hover:text-amber-200 transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center"
-              title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
-            >
-              {isMuted || volume === 0 ? (
-                <VolumeX className="w-4 h-4 text-amber-500/60" />
-              ) : (
-                <Volume2 className="w-4 h-4 text-stone-300 group-hover/vol:text-amber-300" />
-              )}
-            </button>
-
-            {/* Hover Slider */}
-            <div className="w-0 overflow-hidden group-hover/vol:w-16 transition-all duration-300 flex items-center">
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="w-14 accent-amber-500 h-1 bg-amber-950/80 rounded-lg cursor-pointer ml-1"
-                title="Ses Seviyesi"
-              />
-            </div>
-          </div>
 
           {/* Spotify Direct Link */}
           {currentTrack.spotifyUrl && (
