@@ -323,9 +323,9 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
                   className="p-4 rounded-2xl bg-[#FEFBF3] border border-[#E8DCC4] shadow-sm flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-amber-900/80 border border-amber-700/50 flex-shrink-0 relative overflow-hidden flex items-center justify-center text-amber-100 font-bold">
+                    <div className="w-12 h-12 rounded-full bg-amber-900/80 border border-amber-700/50 flex-shrink-0 relative overflow-hidden flex items-center justify-center text-amber-100 font-bold shadow-inner">
                       {previewCover ? (
-                        <Image src={previewCover} alt={track.title} fill unoptimized className="object-cover" />
+                        <Image src={previewCover} alt={track.title} fill unoptimized className="object-cover scale-[1.35]" />
                       ) : (
                         <Music className="w-6 h-6 text-amber-300" />
                       )}

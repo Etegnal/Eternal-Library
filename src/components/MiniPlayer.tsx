@@ -241,14 +241,14 @@ export default function MiniPlayer() {
         </button>
 
         {/* Album / Vinyl Cover with Rotation */}
-        <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center">
+        <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center shadow-inner">
           {coverUrl ? (
             <Image
               src={coverUrl}
               alt={currentTrack.title}
               fill
               unoptimized
-              className={`object-cover transition-transform ${
+              className={`object-cover scale-[1.35] transition-transform ${
                 isPlaying ? 'animate-[spin_10s_linear_infinite]' : '[animation-play-state:paused]'
               }`}
             />
