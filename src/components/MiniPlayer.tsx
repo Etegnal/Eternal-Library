@@ -217,8 +217,8 @@ export default function MiniPlayer() {
         />
       )}
 
-      {/* Glassmorphism & Glow Container with Fixed Bar Height & Size Stability */}
-      <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0">
+      {/* Glassmorphism & Glow Container with Fixed Bar Dimensions & Zero Layout Shift */}
+      <div className="flex items-center justify-between gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0 w-[270px] sm:w-[310px]">
         
         {/* Far Left Collapse Arrow Button */}
         <button
@@ -252,24 +252,27 @@ export default function MiniPlayer() {
           )}
         </div>
 
-        {/* Track Title, Artist & Animated Equalizer */}
-        <div className="min-w-0 flex-1 space-y-0.5 pr-1">
-          <div className="flex items-center gap-1.5">
-            <h4 className="text-xs font-serif font-medium text-amber-100 max-w-[100px] sm:max-w-[130px] truncate">
+        {/* Track Title, Artist & Equalizer with Reserved Space */}
+        <div className="w-[95px] sm:w-[125px] shrink-0 space-y-0.5 pr-1 min-w-0">
+          <div className="flex items-center gap-1.5 justify-between">
+            <h4 className="text-xs font-serif font-medium text-amber-100 truncate flex-1">
               {currentTrack.title}
             </h4>
 
-            {/* Animated Equalizer Barmeter */}
-            {isPlaying && (
-              <div className="flex items-end gap-[2px] h-3 shrink-0" title="Çalıyor">
-                <span className="w-[2.5px] bg-amber-400 rounded-full animate-[bounce_0.8s_ease-in-out_infinite]" />
-                <span className="w-[2.5px] bg-amber-400 rounded-full animate-[bounce_0.6s_ease-in-out_0.2s_infinite]" />
-                <span className="w-[2.5px] bg-amber-400 rounded-full animate-[bounce_0.9s_ease-in-out_0.4s_infinite]" />
-              </div>
-            )}
+            {/* Equalizer Barmeter (Always occupies w-3.5 DOM space to prevent horizontal shifting) */}
+            <div
+              className={`flex items-end gap-[2px] h-3 w-3.5 shrink-0 transition-opacity duration-200 ${
+                isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+              title="Çalıyor"
+            >
+              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.8s_ease-in-out_infinite]' : 'h-1'}`} />
+              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.6s_ease-in-out_0.2s_infinite]' : 'h-1'}`} />
+              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.9s_ease-in-out_0.4s_infinite]' : 'h-1'}`} />
+            </div>
           </div>
 
-          <span className="text-[10px] text-stone-400 max-w-[100px] sm:max-w-[130px] truncate block font-sans">
+          <span className="text-[10px] text-stone-400 truncate block font-sans">
             {currentTrack.artist}
           </span>
         </div>
