@@ -107,7 +107,7 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
                 : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Feather className="w-4 h-4 text-amber-400" />
             <span>Üstat Kalemler ({masterPoets.length})</span>
           </button>
 

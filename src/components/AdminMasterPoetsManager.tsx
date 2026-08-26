@@ -144,7 +144,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
         <div className="flex items-center justify-between pb-4 border-b border-[#E6D7BC]">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-amber-100/80 border border-amber-300 text-amber-900">
-              <Sparkles className="w-5 h-5 text-amber-800" />
+              <Feather className="w-5 h-5 text-[#9A3412]" />
             </div>
             <div>
               <h2 className="font-serif font-bold text-xl text-[#362215]">

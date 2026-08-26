@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Feather, Sparkles, Quote, ArrowRight, PlusCircle } from 'lucide-react';
+import { Feather, Quote, ArrowRight, PlusCircle } from 'lucide-react';
 import { slugify } from '@/lib/slug';
 
 export interface MasterPoetData {
@@ -27,7 +27,7 @@ export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }
       {/* SECTION HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-widest bg-amber-100/90 px-4 py-1.5 rounded-full border border-amber-300/80 shadow-sm">
-          <Sparkles className="w-4 h-4 text-amber-700" />
+          <Feather className="w-4 h-4 text-[#9A3412]" />
           <span>Üstat Kalemler Antolojisi</span>
         </div>
         
