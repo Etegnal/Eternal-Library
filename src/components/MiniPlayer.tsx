@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
 // Helper to extract YouTube video ID from various YouTube URL formats
@@ -29,6 +29,7 @@ export default function MiniPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.75);
   const [isMuted, setIsMuted] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -160,6 +161,49 @@ export default function MiniPlayer() {
     return null;
   }
 
+  // COLLAPSED COMPACT SPOTIFY FLOATING BUTTON
+  if (isCollapsed) {
+    return (
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 animate-fadeIn">
+        {/* Audio Engines (Kept mounted so audio keeps playing in background) */}
+        {!youtubeId && (
+          <audio
+            ref={audioRef}
+            src={currentTrack.src}
+            onEnded={handleTrackEnded}
+            preload="auto"
+          />
+        )}
+        {youtubeId && (
+          <iframe
+            ref={iframeRef}
+            className="absolute w-0 h-0 opacity-0 pointer-events-none"
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&controls=0`}
+            allow="autoplay"
+          />
+        )}
+
+        <button
+          type="button"
+          onClick={() => setIsCollapsed(false)}
+          className="relative group flex items-center justify-center w-12 h-12 rounded-full bg-[#120e0b]/90 backdrop-blur-md border-2 border-amber-500/40 text-[#1DB954] shadow-2xl shadow-black/80 hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
+          title="Mini Müzik Çaları Genişlet"
+          aria-label="Mini Müzik Çaları Genişlet"
+        >
+          <div className="relative w-7 h-7 rounded-full flex items-center justify-center">
+            <SpotifyIcon className={`w-6 h-6 text-[#1DB954] ${isPlaying ? 'animate-[spin_8s_linear_infinite]' : ''}`} />
+          </div>
+
+          {/* Expand Arrow Badge */}
+          <span className="absolute -top-1 -left-1 w-5 h-5 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-xs font-bold border border-amber-300 shadow-sm group-hover:scale-110 transition-transform">
+            <ChevronLeft className="w-3.5 h-3.5 stroke-[3]" />
+          </span>
+        </button>
+      </div>
+    );
+  }
+
+  // FULL EXPANDED MINIPLAYER BAR
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[calc(100vw-2rem)] transition-all duration-500 animate-fadeIn">
       
@@ -184,10 +228,21 @@ export default function MiniPlayer() {
       )}
 
       {/* Glassmorphism & Glow Container */}
-      <div className="flex items-center gap-3 p-2.5 pr-3.5 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
+      <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
         
+        {/* Far Left Collapse Arrow Button */}
+        <button
+          type="button"
+          onClick={() => setIsCollapsed(true)}
+          className="p-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/10 transition-colors flex-shrink-0"
+          title="Müzik Çaları Spotify Simgesine Küçült"
+          aria-label="Müzik Çaları Küçült"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+
         {/* Album / Vinyl Cover with Rotation */}
-        <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center">
+        <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center">
           {coverUrl ? (
             <Image
               src={coverUrl}
@@ -212,7 +267,7 @@ export default function MiniPlayer() {
         {/* Track Title, Artist & Animated Equalizer */}
         <div className="min-w-0 flex-1 space-y-0.5 pr-1">
           <div className="flex items-center gap-1.5">
-            <h4 className="text-xs font-serif font-medium text-amber-100 max-w-[110px] sm:max-w-[140px] truncate">
+            <h4 className="text-xs font-serif font-medium text-amber-100 max-w-[100px] sm:max-w-[130px] truncate">
               {currentTrack.title}
             </h4>
 
@@ -226,7 +281,7 @@ export default function MiniPlayer() {
             )}
           </div>
 
-          <span className="text-[10px] text-stone-400 max-w-[110px] sm:max-w-[140px] truncate block font-sans">
+          <span className="text-[10px] text-stone-400 max-w-[100px] sm:max-w-[130px] truncate block font-sans">
             {currentTrack.artist}
           </span>
         </div>
