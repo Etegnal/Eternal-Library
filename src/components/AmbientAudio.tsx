@@ -103,6 +103,11 @@ export default function AmbientAudio() {
     }
   };
 
+  // Hide fireplace widget completely on non-homepage routes
+  if (!isHomepage) {
+    return null;
+  }
+
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
       <audio ref={audioRef} loop preload="auto">
