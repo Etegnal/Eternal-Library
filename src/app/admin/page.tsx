@@ -51,7 +51,7 @@ export default async function AdminDashboardPage() {
   });
 
   const masterPoetsRaw = await prisma.masterPoet.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
   });
 
   const posts = postsRaw.map((p) => ({

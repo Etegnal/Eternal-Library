@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Feather, Trash2, Edit3, Save, X, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Feather, Trash2, Edit3, Save, X, Sparkles, CheckCircle2, AlertCircle, ArrowUpDown } from 'lucide-react';
 
 export interface MasterPoetItem {
   id: string;
@@ -12,6 +12,7 @@ export interface MasterPoetItem {
   excerpt: string;
   content?: string;
   year?: string | null;
+  order?: number;
   createdAt: string;
 }
 
@@ -30,6 +31,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [year, setYear] = useState('');
+  const [order, setOrder] = useState('');
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const router = useRouter();
@@ -68,7 +70,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ author, title, excerpt, content, year }),
+        body: JSON.stringify({ author, title, excerpt, content, year, order }),
       });
 
       if (res.ok) {
@@ -98,6 +100,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
     setExcerpt(poet.excerpt);
     setContent(poet.content || poet.excerpt);
     setYear(poet.year || '');
+    setOrder(poet.order !== undefined && poet.order !== null ? String(poet.order) : '');
     setMsg(null);
   };
 
@@ -108,6 +111,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
     setExcerpt('');
     setContent('');
     setYear('');
+    setOrder('');
   };
 
   const handleDelete = async (id: string, name: string) => {
@@ -147,7 +151,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
                 {editingId ? 'Üstat Şiirini Düzenle' : 'Yeni Üstat Şiir / Kalem Ekle'}
               </h2>
               <p className="text-xs text-[#5C4033]">
-                Eklenen şiirler hem Üstat Kalemler alanında kart olarak listelenir hem de tıklanınca kendi okuma sayfasına geçer.
+                Eklenen şiirler belirlediğiniz sıralama numarasına göre veya varsayılan olarak en üstte görüntülenir.
               </p>
             </div>
           </div>
@@ -178,7 +182,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             
             {/* Author Name */}
             <div>
@@ -188,7 +192,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
               <input
                 type="text"
                 required
-                placeholder="Örn: Shakespeare, Attila İlhan"
+                placeholder="Örn: Attila İlhan, Shakespeare"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
@@ -203,7 +207,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
               <input
                 type="text"
                 required
-                placeholder="Örn: Hayatın Merkezi, Ben Sana Mecburum"
+                placeholder="Örn: Ben Sana Mecburum"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
@@ -217,14 +221,33 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
               </label>
               <input
                 type="text"
-                placeholder="Örn: 1610, 1960"
+                placeholder="Örn: 1960"
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
               />
             </div>
 
+            {/* Order / Sequence Position */}
+            <div>
+              <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1 flex items-center justify-between">
+                <span>Gösterim Sırası</span>
+                <span className="text-[10px] text-amber-700 lowercase font-normal">(1, 2, 3...)</span>
+              </label>
+              <input
+                type="number"
+                placeholder="Boşsa en üste gider"
+                value={order}
+                onChange={(e) => setOrder(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
+              />
+            </div>
+
           </div>
+
+          <p className="text-[11px] text-[#785438] italic font-serif">
+            * Sıralama numarasını (1, 2, 3...) belirleyebilirsiniz. Boş bırakırsanız yeni eklediğiniz şiir otomatik olarak <strong>en üste</strong> geçer.
+          </p>
 
           {/* Stanza Excerpt / Card Preview Quote */}
           <div>
@@ -248,7 +271,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
             </label>
             <textarea
               rows={6}
-              placeholder="Şiirin tam metnini buraya ekleyin (Boş bırakılırsa öne çıkan mısralar kullanılır)..."
+              placeholder="Şiirin tam metnini buraya ekleyin..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215] font-serif italic"
@@ -279,20 +302,30 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
               Kayıtlı Üstat Kalemler ({poets.length})
             </h3>
           </div>
+          <span className="text-xs text-[#785438] italic font-serif">
+            (Listedeki sıraya göre gösterilir)
+          </span>
         </div>
 
         {poets.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {poets.map((poet) => (
+            {poets.map((poet, idx) => (
               <div
                 key={poet.id}
                 className="p-5 rounded-2xl bg-[#FEFBF3] border border-[#E8DCC4] shadow-sm flex flex-col justify-between space-y-3"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-serif font-bold text-base text-[#362215]">
-                      {poet.author}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-200/90 text-amber-950 font-bold font-mono text-[11px] border border-amber-300 flex items-center gap-1">
+                        <ArrowUpDown className="w-3 h-3 text-amber-800" />
+                        <span>Sıra: {poet.order ?? (idx + 1)}</span>
+                      </span>
+                      <span className="font-serif font-bold text-base text-[#362215]">
+                        {poet.author}
+                      </span>
+                    </div>
+
                     {poet.year && (
                       <span className="text-[11px] font-mono text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
                         {poet.year}
@@ -328,7 +361,7 @@ export default function AdminMasterPoetsManager({ initialMasterPoets = [] }: Adm
                       className="px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold flex items-center gap-1 transition-colors"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
-                      <span>Düzenle</span>
+                      <span>Düzenle (Sırala)</span>
                     </button>
 
                     <button

@@ -4,11 +4,11 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
 
-// GET all master poets
+// GET all master poets sorted by order ascending then createdAt descending
 export async function GET() {
   try {
     const poets = await prisma.masterPoet.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     });
     return NextResponse.json(poets);
   } catch (error) {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { author, title, excerpt, content, year } = body;
+    const { author, title, excerpt, content, year, order } = body;
 
     if (!author || !title || !excerpt) {
       return NextResponse.json({ error: 'Lütfen şair adı, başlık ve mısraları doldurun.' }, { status: 400 });
@@ -43,6 +43,18 @@ export async function POST(req: NextRequest) {
       counter++;
     }
 
+    // Determine order: If user entered an order, parse it.
+    // If not entered, place at top by giving it (minOrder - 1) or 0
+    let finalOrder = 0;
+    if (order !== undefined && order !== null && String(order).trim() !== '') {
+      finalOrder = parseInt(String(order), 10) || 0;
+    } else {
+      const minPoet = await prisma.masterPoet.findFirst({
+        orderBy: { order: 'asc' },
+      });
+      finalOrder = minPoet ? minPoet.order - 1 : 1;
+    }
+
     // 1. Create MasterPoet entry
     const newPoet = await prisma.masterPoet.create({
       data: {
@@ -52,6 +64,7 @@ export async function POST(req: NextRequest) {
         excerpt: excerpt.trim(),
         content: fullContent,
         year: year ? year.trim() : null,
+        order: finalOrder,
       },
     });
 

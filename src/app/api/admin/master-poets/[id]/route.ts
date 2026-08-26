@@ -14,7 +14,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   try {
     const { id } = params;
     const body = await req.json();
-    const { author, title, excerpt, content, year } = body;
+    const { author, title, excerpt, content, year, order } = body;
 
     const existingPoet = await prisma.masterPoet.findUnique({ where: { id } });
     if (!existingPoet) {
@@ -22,6 +22,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     const fullContent = content && content.trim().length > 0 ? content.trim() : excerpt ? excerpt.trim() : existingPoet.content;
+
+    let parsedOrder = existingPoet.order;
+    if (order !== undefined && order !== null && String(order).trim() !== '') {
+      parsedOrder = parseInt(String(order), 10) || 0;
+    }
 
     const updatedPoet = await prisma.masterPoet.update({
       where: { id },
@@ -31,6 +36,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         excerpt: excerpt ? excerpt.trim() : undefined,
         content: fullContent,
         year: year !== undefined ? (year ? year.trim() : null) : undefined,
+        order: parsedOrder,
       },
     });
 

@@ -19,7 +19,7 @@ export default async function PoemsPage() {
   });
 
   const masterPoets = await prisma.masterPoet.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
   });
 
   return (
