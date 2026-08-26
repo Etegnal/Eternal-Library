@@ -239,13 +239,13 @@ export default function MiniPlayer() {
               alt={currentTrack.title}
               fill
               unoptimized
-              style={{ animation: isPlaying ? 'spin 10s linear infinite' : 'none' }}
-              className="object-cover scale-[1.35]"
+              className={`object-cover ${isPlaying ? 'animate-vinyl-spin' : 'animate-vinyl-spin-paused'}`}
             />
           ) : (
             <div
-              style={{ animation: isPlaying ? 'spin 10s linear infinite' : 'none' }}
-              className="w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200"
+              className={`w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200 ${
+                isPlaying ? 'animate-[spin_10s_linear_infinite]' : ''
+              }`}
             >
               <Music className="w-5 h-5 text-amber-300" />
             </div>
