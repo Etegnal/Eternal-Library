@@ -70,20 +70,25 @@ model Quote {
 }
 
 model Book {
-  id          String     @id @default(uuid())
-  slug        String     @unique
-  title       String
-  author      String
-  year        Int
-  pages       Int
-  category    String
-  summary     String     @db.Text
-  rating      Float      @default(4.8)
-  isReadable  Boolean    @default(false)
-  coverUrl    String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  bookPages   BookPage[]
+  id            String     @id @default(uuid())
+  slug          String     @unique @default(uuid())
+  title         String     @default("")
+  author        String     @default("")
+  year          Int        @default(0)
+  pages         Int        @default(0)
+  category      String     @default("Klasikler")
+  summary       String     @db.Text @default("")
+  rating        Float      @default(4.8)
+  isReadable    Boolean    @default(false)
+  coverUrl      String     @default("")
+  googleBookId  String?
+  authors       String?
+  description   String?
+  thumbnailUrl  String?
+  largeCoverUrl String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  bookPages     BookPage[]
 }
 
 model BookPage {
