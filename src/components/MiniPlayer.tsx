@@ -6,6 +6,14 @@ import Image from 'next/image';
 import { Play, Pause, SkipForward, Music } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
+// Helper to extract YouTube video ID from various YouTube URL formats
+export function getYouTubeId(url: string): string | null {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+}
+
 function SpotifyIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -22,9 +30,17 @@ export default function MiniPlayer() {
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   const isHomepage = pathname === '/';
   const currentTrack = playlist[currentIndex];
+
+  const youtubeId = currentTrack ? getYouTubeId(currentTrack.src) : null;
+  const coverUrl = currentTrack?.cover
+    ? currentTrack.cover
+    : youtubeId
+    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+    : null;
 
   // Fetch playlist dynamically from API
   useEffect(() => {
@@ -56,7 +72,13 @@ export default function MiniPlayer() {
   const playAudio = () => {
     if (isHomepage || !currentTrack) return;
 
-    if (audioRef.current) {
+    if (youtubeId) {
+      // YouTube IFrame API playCommand
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+      }
+      setIsPlaying(true);
+    } else if (audioRef.current) {
       audioRef.current.volume = 0.5;
       audioRef.current
         .play()
@@ -70,6 +92,9 @@ export default function MiniPlayer() {
   };
 
   const stopAudio = () => {
+    if (youtubeId && iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    }
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -101,23 +126,38 @@ export default function MiniPlayer() {
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[calc(100vw-2rem)] transition-all duration-500 animate-fadeIn">
-      <audio
-        ref={audioRef}
-        src={currentTrack.src}
-        onEnded={handleTrackEnded}
-        preload="auto"
-      />
+      
+      {/* HTML5 Audio for Direct MP3s */}
+      {!youtubeId && (
+        <audio
+          ref={audioRef}
+          src={currentTrack.src}
+          onEnded={handleTrackEnded}
+          preload="auto"
+        />
+      )}
+
+      {/* Hidden YouTube IFrame Audio Engine */}
+      {youtubeId && (
+        <iframe
+          ref={iframeRef}
+          className="absolute w-0 h-0 opacity-0 pointer-events-none"
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&controls=0`}
+          allow="autoplay"
+        />
+      )}
 
       {/* Glassmorphism & Glow Container */}
       <div className="flex items-center gap-3.5 p-2.5 pr-4 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
         
         {/* Album / Vinyl Cover with Rotation */}
         <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center">
-          {currentTrack.cover ? (
+          {coverUrl ? (
             <Image
-              src={currentTrack.cover}
+              src={coverUrl}
               alt={currentTrack.title}
               fill
+              unoptimized
               className={`object-cover transition-transform ${
                 isPlaying ? 'animate-[spin_10s_linear_infinite]' : '[animation-play-state:paused]'
               }`}

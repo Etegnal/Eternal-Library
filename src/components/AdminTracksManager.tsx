@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Music, Plus, Trash2, Edit3, Save, X, ExternalLink, CheckCircle2, AlertCircle, Play } from 'lucide-react';
 import Image from 'next/image';
+import { getYouTubeId } from '@/components/MiniPlayer';
 
 export interface TrackItem {
   id: string | number;
@@ -54,7 +55,7 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !artist.trim() || !src.trim()) {
-      setMsg({ type: 'error', text: 'Lütfen şarkı adı, sanatçı ve ses dosya yolunu (MP3 URL) eksiksiz girin.' });
+      setMsg({ type: 'error', text: 'Lütfen şarkı adı, sanatçı ve ses dosya yolunu / YouTube linkini eksiksiz girin.' });
       return;
     }
 
@@ -150,7 +151,7 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
                 {editingId ? 'Şarkıyı Düzenle' : 'Yeni Müzik / Şarkı Ekle'}
               </h2>
               <p className="text-xs text-[#5C4033]">
-                Sitedeki yüzen Mini Müzik Çalar (MiniPlayer) için çalma listesini yönetin.
+                Doğrudan MP3 URL'si veya <strong>YouTube video linki</strong> yapıştırabilirsiniz.
               </p>
             </div>
           </div>
@@ -191,7 +192,7 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
               <input
                 type="text"
                 required
-                placeholder="Örn: Nocturne in C-Sharp Minor"
+                placeholder="Örn: Özgürüm, Nocturne in C-Sharp"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
@@ -206,7 +207,7 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
               <input
                 type="text"
                 required
-                placeholder="Örn: Frédéric Chopin"
+                placeholder="Örn: Haktan Altunkaya, Chopin"
                 value={artist}
                 onChange={(e) => setArtist(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215]"
@@ -216,12 +217,12 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
             {/* Audio Source (src) */}
             <div>
               <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1">
-                Ses Dosyası Yolu (MP3 URL) *
+                Ses Dosyası veya YouTube URL *
               </label>
               <input
                 type="text"
                 required
-                placeholder="Örn: /audio/chopin.mp3 veya https://..."
+                placeholder="Örn: https://www.youtube.com/watch?v=... veya /audio/..."
                 value={src}
                 onChange={(e) => setSrc(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215] font-mono text-xs"
@@ -235,11 +236,11 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
             {/* Cover Image */}
             <div>
               <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1">
-                Kapak Görseli URL (Opsiyonel)
+                Kapak Görseli URL (Spotify / Web)
               </label>
               <input
                 type="text"
-                placeholder="Örn: /assets/logo.png veya https://..."
+                placeholder="Örn: https://i.scdn.co/image/... (Boşsa YouTube resmi alınır)"
                 value={cover}
                 onChange={(e) => setCover(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215] font-mono text-xs"
@@ -276,6 +277,10 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
 
           </div>
 
+          <p className="text-[11px] text-[#785438] italic font-serif">
+            💡 <strong>İpucu:</strong> İndirmekle uğraşmadan doğrudan YouTube video linki (`https://www.youtube.com/watch?v=...`) yapıştırabilirsiniz. Sistem sesi otomatik çalar!
+          </p>
+
           {/* Submit Button */}
           <div className="flex justify-end pt-2">
             <button
@@ -304,64 +309,73 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
 
         {tracks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {tracks.map((track) => (
-              <div
-                key={track.id}
-                className="p-4 rounded-2xl bg-[#FEFBF3] border border-[#E8DCC4] shadow-sm flex items-center justify-between gap-4"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-12 h-12 rounded-xl bg-amber-900/80 border border-amber-700/50 flex-shrink-0 relative overflow-hidden flex items-center justify-center text-amber-100 font-bold">
-                    {track.cover ? (
-                      <Image src={track.cover} alt={track.title} fill className="object-cover" />
-                    ) : (
-                      <Music className="w-6 h-6 text-amber-300" />
+            {tracks.map((track) => {
+              const ytId = getYouTubeId(track.src);
+              const previewCover = track.cover
+                ? track.cover
+                : ytId
+                ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+                : null;
+
+              return (
+                <div
+                  key={track.id}
+                  className="p-4 rounded-2xl bg-[#FEFBF3] border border-[#E8DCC4] shadow-sm flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-12 h-12 rounded-xl bg-amber-900/80 border border-amber-700/50 flex-shrink-0 relative overflow-hidden flex items-center justify-center text-amber-100 font-bold">
+                      {previewCover ? (
+                        <Image src={previewCover} alt={track.title} fill unoptimized className="object-cover" />
+                      ) : (
+                        <Music className="w-6 h-6 text-amber-300" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <h4 className="font-serif font-bold text-sm text-[#362215] truncate">
+                        {track.title}
+                      </h4>
+                      <p className="text-xs text-[#785438] truncate">
+                        {track.artist}
+                      </p>
+                      <p className="text-[10px] font-mono text-stone-500 truncate">
+                        {track.src}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {track.spotifyUrl && (
+                      <a
+                        href={track.spotifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-bold transition-colors"
+                        title="Spotify Bağlantısı"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
                     )}
-                  </div>
 
-                  <div className="min-w-0">
-                    <h4 className="font-serif font-bold text-sm text-[#362215] truncate">
-                      {track.title}
-                    </h4>
-                    <p className="text-xs text-[#785438] truncate">
-                      {track.artist}
-                    </p>
-                    <p className="text-[10px] font-mono text-stone-500 truncate">
-                      {track.src}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  {track.spotifyUrl && (
-                    <a
-                      href={track.spotifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 text-xs font-bold transition-colors"
-                      title="Spotify Bağlantısı"
+                    <button
+                      onClick={() => startEdit(track)}
+                      className="p-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 transition-colors"
+                      title="Düzenle"
                     >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
+                      <Edit3 className="w-4 h-4" />
+                    </button>
 
-                  <button
-                    onClick={() => startEdit(track)}
-                    className="p-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 transition-colors"
-                    title="Düzenle"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(track.id, `${track.artist} - ${track.title}`)}
-                    className="p-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 transition-colors"
-                    title="Sil"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                    <button
+                      onClick={() => handleDelete(track.id, `${track.artist} - ${track.title}`)}
+                      className="p-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 transition-colors"
+                      title="Sil"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="p-8 text-center bg-amber-50/50 rounded-2xl border border-amber-200/80 space-y-2">
