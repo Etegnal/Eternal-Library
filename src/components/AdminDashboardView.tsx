@@ -63,7 +63,7 @@ interface AdminDashboardViewProps {
 }
 
 export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
+  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -100,6 +100,14 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
             <FileText className="w-4 h-4" />
             <span>İçerikler ({posts.length})</span>
           </button>
+
+          <Link
+            href="/admin/books/add"
+            className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border-amber-300 shadow-sm"
+          >
+            <BookOpen className="w-4 h-4 text-[#9A3412]" />
+            <span>+ Eser & Kapak Yükle</span>
+          </Link>
 
           <button
             type="button"

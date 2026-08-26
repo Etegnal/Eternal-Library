@@ -70,38 +70,31 @@ model Quote {
 }
 
 model Book {
-  id              String   @id @default(uuid())
-  googleBookId    String?  @unique
-  isbn10          String?
-  isbn13          String?
-  title           String
-  subtitle        String?
-  authors         String   // JSON string veya virgülle ayrılmış yazar listesi
-  publisher       String?
-  publishedDate   String?
-  description     String?  // Uzun özet metni
-  pageCount       Int?
-  categories      String   // Kategori listesi
-  averageRating   Float?   @default(0)
-  ratingsCount    Int?     @default(0)
-  thumbnailUrl    String?
-  largeCoverUrl   String?
-  previewUrl      String?
-  isFeatured      Boolean  @default(false)
-  curatedCategory String?  // "Felsefe & Düşünce", "Dünya Klasikleri", "Şiir & Edebiyat" vb.
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  affiliateClicks AffiliateClick[]
+  id          String     @id @default(uuid())
+  slug        String     @unique
+  title       String
+  author      String
+  year        Int
+  pages       Int
+  category    String
+  summary     String     @db.Text
+  rating      Float      @default(4.8)
+  isReadable  Boolean    @default(false)
+  coverUrl    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  bookPages   BookPage[]
 }
 
-model AffiliateClick {
-  id        String   @id @default(uuid())
-  bookId    String
-  platform  String   // "amazon", "kitapyurdu", "dr"
-  ipAddress String?
-  createdAt DateTime @default(now())
-  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+model BookPage {
+  id         String   @id @default(uuid())
+  bookId     String
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  pageNumber Int
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+
+  @@unique([bookId, pageNumber])
 }
 
 model Letter {
