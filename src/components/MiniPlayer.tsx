@@ -30,6 +30,7 @@ export default function MiniPlayer() {
   const [volume, setVolume] = useState(0.75);
   const [isMuted, setIsMuted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [hasUserPaused, setHasUserPaused] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -64,13 +65,14 @@ export default function MiniPlayer() {
   // Handle route change & play/stop behavior
   useEffect(() => {
     if (isHomepage || !currentTrack) {
-      stopAudio();
+      stopAudioEngine();
     } else {
-      if (hasLoadedPlaylist && playlist.length > 0) {
-        playAudio();
+      // Only auto-play if user has NOT explicitly paused the audio
+      if (hasLoadedPlaylist && playlist.length > 0 && !hasUserPaused) {
+        playAudioEngine();
       }
     }
-  }, [pathname, hasLoadedPlaylist, currentIndex, playlist]);
+  }, [pathname, hasLoadedPlaylist, currentIndex, playlist, hasUserPaused]);
 
   // Sync volume changes to audio engines
   useEffect(() => {
@@ -89,7 +91,7 @@ export default function MiniPlayer() {
     }
   }, [volume, isMuted, youtubeId]);
 
-  const playAudio = () => {
+  const playAudioEngine = () => {
     if (isHomepage || !currentTrack) return;
 
     if (youtubeId) {
@@ -110,7 +112,7 @@ export default function MiniPlayer() {
     }
   };
 
-  const stopAudio = () => {
+  const stopAudioEngine = () => {
     if (youtubeId && iframeRef.current && iframeRef.current.contentWindow) {
       iframeRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
@@ -122,20 +124,24 @@ export default function MiniPlayer() {
 
   const togglePlay = () => {
     if (isPlaying) {
-      stopAudio();
+      setHasUserPaused(true);
+      stopAudioEngine();
     } else {
-      playAudio();
+      setHasUserPaused(false);
+      playAudioEngine();
     }
   };
 
   const nextTrack = () => {
     if (playlist.length === 0) return;
+    setHasUserPaused(false);
     const nextIdx = (currentIndex + 1) % playlist.length;
     setCurrentIndex(nextIdx);
   };
 
   const prevTrack = () => {
     if (playlist.length === 0) return;
+    setHasUserPaused(false);
     const prevIdx = (currentIndex - 1 + playlist.length) % playlist.length;
     setCurrentIndex(prevIdx);
   };
