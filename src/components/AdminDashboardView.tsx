@@ -13,6 +13,7 @@ import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail
 
 import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
 import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
+import AdminBooksListManager from '@/components/AdminBooksListManager';
 import { Music } from 'lucide-react';
 
 interface LikedUserItem {
@@ -101,12 +102,25 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
             <span>İçerikler ({posts.length})</span>
           </button>
 
+          <button
+            type="button"
+            onClick={() => setActiveTab('books')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'books'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-amber-400" />
+            <span>Eserler & Kitaplık</span>
+          </button>
+
           <Link
             href="/admin/books/add"
             className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border-amber-300 shadow-sm"
           >
-            <BookOpen className="w-4 h-4 text-[#9A3412]" />
-            <span>+ Eser & Kapak Yükle</span>
+            <Plus className="w-4 h-4 text-[#9A3412]" />
+            <span>+ Eser Yükle</span>
           </Link>
 
           <button
@@ -389,6 +403,11 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
             </div>
           )}
         </div>
+      )}
+
+      {/* TAB: BOOKS & KİTAPLIK MANAGEMENT */}
+      {activeTab === 'books' && (
+        <AdminBooksListManager />
       )}
 
       {/* TAB 4: MASTER POETS MANAGEMENT */}
