@@ -10,7 +10,7 @@ export interface VerifiedBook {
   rating: number;
   isReadable: boolean;
   coverUrl: string;
-  fullPages?: string[]; // Full text pages for readable classics
+  fullPages?: string[]; // Full text multi-page chapter data
 }
 
 export const verifiedBooksData: VerifiedBook[] = [
@@ -100,40 +100,84 @@ export const verifiedBooksData: VerifiedBook[] = [
     displayYear: '1848',
     pages: 80,
     category: 'Klasik & Roman',
-    summary: 'St. Petersburg’un mehtaplı beyaz gecelerinde yalnız bir hayalperest ile Nastenka’nın dört gece süren sevdalı ve hüzünlü karşılaşması.',
+    summary: 'St. Petersburg’un mehtaplı beyaz gecelerinde yalnız bir hayalperest ile Nastenka’nın beş aşamalı sevdalı ve hüzünlü karşılaşması.',
     rating: 4.7,
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `1. GECE
+      `BİRİNCİ GECE: Karşılaşma
 
-St. Petersburg'da harika bir geceydi, çocukluğumdan beri öylesine güzel bir gece görmemiştim. Gökyüzü o kadar yıldızlı, o kadar aydınlıktı ki, ona bakan insan ister istemez kendi kendine soruyordu: Böyle bir gökyüzünün altında kötü huylu, huysuz insanlar nasıl yaşayabilir?
+St. Petersburg'da harika bir geceydi; çocukluğumdan beri öylesine güzel bir gece görmemiştim. Gökyüzü o kadar yıldızlı, o kadar aydınlıktı ki, ona bakan insan ister istemez kendi kendine soruyordu: Böyle bir gökyüzünün altında kötü huylu, huysuz insanlar nasıl yaşayabilir? Bu soru tam anlamıyla gençlik işi bir sorudur dostum, ama dilerim Tanrı sizin de ruhunuza sık sık böyle sorular fısıldasın...
 
-Ben yalnız bir insandım. Yıllardır bu kentin sokaklarında tek başıma yürür, evlerin yüzlerini, pencerelerini tanırdım. Evler bile benimle konuşurdu sanki. Bir gün Nevski Bulvarı'nda yürürken hüzünlü bir kız gördüm. Kanal kıyısındaki korkuluklara dayanmış, sessizce ağlıyordu. Yanına yaklaşmaya cesaret edemedim önce, ama bir sarhoş onu rahatsız edince araya girdim.
+Ben yalnız bir insandım. Yıllardır bu kentin sokaklarında tek başıma yürür, evlerin yüzlerini, pencerelerini tanırdım. Evler bile benimle konuşurdu sanki. Biri derdi ki: "Bugün sarıya boyanıyorum!", öteki: "Yarın restorasyona giriyorum!" 
+
+İşte o gece, Nevski Bulvarı'nda yürürken hüzünlü bir kız gördüm. Kanal kıyısındaki korkuluklara dayanmış, başını nehrin karanlık sularına eğmiş sessizce ağlıyordu. Yanına yaklaşmaya cesaret edemedim önce. Fakat biraz sonra caddeden geçen sarhoş bir adam kıza laf atıp onu rahatsız etmeye başlayınca hemen araya girdim. Adamı uzaklaştırdım. Kız koluma tutundu.
 
 İşte Nastenka ile ilk karşılaşmamız böyle oldu. O gece boyunca birbirimize hayatlarımızı anlattık. O, anneannesiyle yaşayan ve sevdiği adamı bekleyen masum bir ruhtu. Bense sadece hayallerinde yaşayan, gerçek dünyayı teğet geçen bir hülyaperest...`,
 
-      `2. GECE
+      `BİRİNCİ GECE (Devamı): Hayalperestin İtirafı
 
-Nastenka ile sözleştiğimiz gibi ertesi gece yine aynı yerde buluştuk. Bana dedi ki: "Bana aşık olmayacaksın, söz ver! Sadece dost olacağız." Oysa kalbim onun her cümlesiyle biraz daha fazla çarpıyordu.
+Nastenka bana sordu: "Siz kimsiniz? Ne iş yaparsınız?"
 
-Nastenka kendi hikayesini anlattı: Anneannesinin çengelli iğneyle elbisesine iğnelediği o dar odada yaşarken, üst kattaki kiracı genç adama nasıl aşık olduğunu söyledi. O genç adam Moskova'ya gitmek zorunda kalmıştı ama tam bir yıl sonra, bu mehtaplı gecelerde döneceğine dair söz vermişti. İşte Nastenka bir yıldır bu sözün tutulacağı geceyi bekliyordu.
+Ona dedim ki: "Ben bir hayalperestim Nastenka! Hayalperest öyle bir varlıktır ki, insan sayılmaz artık; o nötr bir yaratıktır. Genellikle odasının bir köşesine çekilir, dış dünyadan kopar. Kendi zihninde saraylar kurar, şiirler yazar, hiç tanışmadığı kadınlara aşık olur.
 
-Bense dinledim... Onun gözlerindeki umudu, yüreğindeki saf bekleyişi dinledim. Kendi yalnızlığımı onun umuduna feda etmeye hazırdım. Hayalperest bir adam için bir başkasının mutluluğuna şahit olmak bile en büyük mutluluk sayılmaz mıydı?`,
+Benim hiç gerçek dostum olmadı Nastenka. İnsanlarla nasıl konuşulacağını bile bilmem. Sokaklarda yürürken insanları izlerim, onların sevinçlerine ve kederlerine uzaktan ortak olurum. Ama evime döndüğümde, o karanlık ve nemli odamda yalnızlığımla baş başa kalırım. 
 
-      `3. GECE
+Bu gece sizinle konuşurken ilk kez kanımın damarlarımda akışını hissettim. İlk kez gerçek bir insanın sesini duyuyorum ve gözlerine bakıyorum."
 
-Üçüncü gece hava biraz bulutluydu, içimdeki hüzün gibi. Nastenka endişeliydi; çünkü beklediği adam hala gelmemişti, hiçbir mektup da yollamamıştı.
+Nastenka gözlerini bana dikti, hafifçe gülümsedi ve elini elimin üzerine koydu: "Siz çok iyi bir insansınız," dedi. "Sizinle dost olacağız!"`,
 
-"Neden gelmiyor?" diye ağladı. "Beni unuttu mu yoksa?"
+      `İKİNCİ GECE: Nastenka'nın Hikayesi
 
-Onun gözyaşlarını silmek için elimin tersiyle kendi yüreğimi ezdim. "Gelecektir," dedim, "mutlaka geçerli bir sebebi vardır, yarın yine bekleyeceğiz." O gece ona hissettiklerimi açıklamak istedim ama tuttum kendimi. Onun kırgın kalbine yük olmak istemedim. Nastenka elimi tuttu ve "Sen öyle iyi, öyle yüce bir insansın ki," dedi. Bu kelimeler kalbime sıcak bir bıçak gibi saplandı.`,
+Sözleştiğimiz gibi ertesi gece yine aynı saatte kanal kıyısında buluştuk. Nastenka bana dedi ki: "Bana aşık olmayacaksın, söz ver! Sadece dost olacağız. Çünkü kalbim başkasına ait."
 
-      `4. GECE VE SABAH
+Oysa kalbim onun her cümlesiyle biraz daha fazla çarpıyordu. Nastenka kendi hikayesini anlatmaya başladı:
 
-Dördüncü gece... Nastenka tam umudunu kesmişken, karanlığın içinden bir gölge belirdi. Sevdiği adam gelmişti! Nastenka sevinç çığlığı atarak onun kollarına koştu. Bir an durdu, bana döndü, beni öptü ve "Beni bağışla, seni hiç unutmayacağım!" diyerek onunla birlikte gecenin içinde kayboldu.
+"Anneannem kördür benim. Beni korumak için elbisesinin eteğini kendi elbisesine çengelli iğneyle iğnelerdi. Bütün gün o küçük odada oturur, ona kitap okurdum. Hayatım tekdüze ve renksizdi.
 
-Ertesi sabah uyandığımda odam daha karanlık, St. Petersburg daha soğuk görünüyordu. Ama kırgın değildim. Bana yaşattığı o dört gecelik mutluluk için ona minnettardım. 
+Derken evimizin üst katındaki küçük odaya yeni bir kiracı geldi. Genç, fakir ama gururlu bir öğrenciydi. Bana kitaplar getirmeye başladı: Walter Scott, Puşkin... İğnelendiğim o koltuktan zihnimin kanatlarıyla uçmaya başladım. O gence aşık oldum. Annem fark etmeden ona mektuplar yazdım."`,
+
+      `İKİNCİ GECE (Devamı): Söz ve Bekleyiş
+
+"Bir gün genç adam yanıma geldi ve Moskova'ya gitmek zorunda olduğunu söyledi. Orada iş bulup para kazanacak, durumunu düzeltecekti. Bana dedi ki: 'Nastenka, tam bir yıl sonra bugün buraya dönüp seni isteyeceğim. Eğer beni hala seviyorsan benimle evlenirsin.'
+
+O günün üzerinden tam bir yıl geçti. Dün gece o yıldı Nastenka! O genç adam St. Petersburg'a döndü, biliyorum. Ama üç gündür buradayım, ne yanıma geldi ne de bir mektup yolladı. 
+
+İşte dünkü ağlayışım bundandı dostum. Beni unuttu mu acaba? Başka birini mi sevdi?"
+
+Onun gözlerindeki hüzün benim kalbimi dilim dilim kesti. "Ona bir mektup yazalım," dedim. "Ben senin mektubunu ona ulaştırırım. Belki de bir engeli çıkmıştır, seni unutması imkansız!" Nastenka sevinçle boynuma sarıldı.`,
+
+      `ÜÇÜNCÜ GECE: Mektup ve Umutsuzluk
+
+Üçüncü gece hava biraz bulutluydu, içimdeki hüzün gibi. Nastenka mektubu yazdığını ve bir tanıdık vasıtasıyla gence ilettiğini söyledi.
+
+"Bu gece yanıt gelecektir," diyordu heyecanla. "Saat dokuzda kanal kıyısında olacağını söyledi."
+
+Saat dokuz oldu, dokuzu çeyrek geçti, dokuz yarım oldu... Kimse gelmedi. Nastenka'nın yüzündeki o canlı umut ışığı yavaş yavaş söndü. Gözlerinden yaşlar süzülmeye başladı.
+
+"Neden gelmiyor?" diye haykırdı. "Beni unuttu işte! Ben onu böyle severken o benim acımı umursamıyor!"
+
+Onu teselli etmeye çalıştım: "Yarın gelecektir Nastenka, mutlaka geçerli bir sebebi vardır!" Ama içten içe biliyordum ki, eğer o adam Nastenka gibi saf bir ruhu bekletiyorsa, dünyadaki en gaddar insandı.`,
+
+      `DÖRDÜNCÜ GECE: İtiraf
+
+Dördüncü gece Nastenka tamamen umudunu kesmişti. Ağlayarak bana döndü: "Artık onu sevmiyorum!" dedi. "Beni böyle yüzüstü bırakan bir adam için gözyaşı dökmeyeceğim. Sen bana ondan bin kat daha iyisin. Beni içtenlikle seven, acımı paylaşan tek insan sensin."
+
+O an kendimi tutamadım. Bütün duygularımı döktüm:
+
+"Nastenka! Ben seni ilk gördüğüm andan beri seviyorum! Senin için canımı vermeye hazırım. Senden hiçbir şey talep etmiyorum, sadece yanında olmama, seni korumama izin ver!"
+
+Nastenka şaşırdı, gözleri doldu. "Ben de seni seveceğim," dedi. "Kalbimdeki o eski yarayı saracaksın. Birlikte yaşayacağız!" El ele tutuştuk. Hayatımda ilk kez kendimi bir hayalperest değil, yaşayan bir insan olarak hissettim.`,
+
+      `SON SABAH VE VEDA
+
+Tam o an, karanlığın içinden bir gölge yavaşça yaklaşmaya başladı. Genç bir adam silueti belirdi.
+
+Nastenka aniden donakaldı. Adama baktı, sonra bana baktı. "O!" diye bağırdı. Sevinç çığlığı atarak benim elimi bıraktı ve o adamın kollarına koştu. Adam onu kucakladı, öptü.
+
+Nastenka bir an durdu, bana doğru geri koştu. Boynuma sarıldı, beni yanağımdan öptü: "Beni bağışla! Seni hep bir kardeş gibi seveceğim, beni unutma!" dedi. Sonra o adamın koluna girip gecenin karanlığında kayboldu.
+
+Ertesi sabah odamda uyandığımda St. Petersburg daha soğuk, odam daha karanlıktı. Masamda Nastenka'nın bıraktığı veda mektubu duruyordu. Ama ona kırgın değildim. Bana yaşattığı o dört gecelik mutluluk için ona minnettardım.
 
 Bütün bir ömür için tek bir anlık tam mutluluk yetmez mi insan ruhuna? Tanrım, o tek anlık mutluluk için sana şükürler olsun!`
     ]
@@ -164,7 +208,7 @@ Bütün bir ömür için tek bir anlık tam mutluluk yetmez mi insan ruhuna? Tan
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `Giyotin ve Mahkumiyet
+      `1. GECE VE BİCETRE ZİNDANI
 
 İdam mahkûmu!
 
@@ -172,17 +216,33 @@ Beş haftadan beri bu düşünceyle yaşıyorum; her an bu fikirle baş başayı
 
 Bicêtre cezaevinin taş duvarları soğuk ve nemli. Dışarıda güneş açıyor olabilir, kuşlar ötüyor olabilir ama burada zaman sadece giyotinin giyotine yaklaşan adımlarıyla ölçülüyor. Neden ben? Bir anlık bir öfke, bir talihsizlik yüzünden bir insanın hayatına son vermek hangi adaletin kuralıdır?`,
 
-      `Zamanın Daralması ve Küçük Kızım
+      `2. YARGILAMA VE KARAR ANISINI HATIRLAMA
 
-Giyotin hazırlıkları başladı. Saçlarımı kestiler, boynumu açtılar. Gardiyanlar görevlerini sıradan bir iş gibi yapıyorlar; onlar için ben sadece sıradaki bir dosya numarasından ibaretim.
+Oğustos ayının o sıcak sabahını hatırlıyorum. Mahkeme salonu ağzına kadar doluydu. Yargıçlar, jüri üyeleri, avukatlar... Hepsi sıcak havada yelpazeleniyor, sabırsızlıkla kararın okunmasını bekliyordu.
 
-En çok küçük kızım Marie'yi düşünüyorum. Onu bugün ziyaretime getirdiler. Küçük meleğim bana baktı ve "Siz benim babam değilsiniz, babam gökyüzünde!" dedi. Kendi öz çocuğum bile beni tanıyamadı artık. İçimdeki son yaşam kırıntısı da o an yok oldu. Beni öldüren şey giyotin bıçağı değil, kızımın o yabancı bakışları oldu.
+Karar açıklandı: "Ölüm!"
 
-Toplum kendisini korumak adına bir insanı yok ederken aslında neyi temizlediğini sanıyor? İdam cezası bir adalet değil, yasal bir intikamdır!`,
+O an etrafımdaki tüm sesler kesildi. Hakimlerin yüzleri buz gibi soğudu. Salondaki kalabalık mırıltıyla dışarı döküldü. Bense celladın eline teslim edilecek bir et parçası haline gelmiştim. Beni ölüme mahkum eden insanlar akşam evlerine gidip çocuklarını öpecekler, yemek yiyeceklerdi. Oysa benim için dünya o salonda durmuştu.`,
 
-      `Son Anlar ve Cellat
+      `3. HÜCREDEKİ DUVAR YAZILARI
 
-Saat dört. Arabaya bindirildim. Greve Meydanı'na doğru ilerliyoruz. Sokaklar meraklı kalabalıklarla dolu; bir insanın ölüme gidişini bir tiyatro oyunu gibi izlemeye gelmişler. 
+Hücremin taş duvarları benden önceki mahkumların kazıdığı isimlerle ve tarihlerle dolu. Bir köşede "Lemaire - 1815", öbür köşede "Papavoine" yazıyor. Hepsi bu yoldan geçti. Hepsi giyotinin o soğuk bıçağının altında can verdi.
+
+Ben de isimlerimi o taşlara kazıdım. Belki benden sonra buraya atılacak bir baksana, ölüme giderken yalnız olmadığını hatırlatır. 
+
+İnsan öldürmek günahsa, devletin yasal kılıf altında bir insanı koyun gibi boğazlaması nasıl adalet sayılabilir?`,
+
+      `4. KÜÇÜK KIZIM MARIE'NİN ZİYARETİ
+
+Giyotin hazırlıkları başlamadan önce küçük kızım Marie'yi ziyaretime getirdiler. Üç yaşındaki melek yüzlü kızım... 
+
+Onu kucağıma aldım, öptüm, kokladım. Ama o bana baktı ve mırıldandı: "Siz benim babam değilsiniz, babam gökyüzünde!"
+
+Kendi öz çocuğum bile beni tanıyamadı artık. İçimdeki son yaşam kırıntısı da o an yok oldu. Beni öldüren şey giyotin bıçağı değil, kızımın o yabancı bakışları oldu.`,
+
+      `5. SON SAATLER VE GREVE MEYDANI
+
+Saat dört. Arabaya bindirildim. Greve Meydanı'na doğru ilerliyoruz. Sokaklar meraklı kalabalıklarla dolu; bir insanın ölüme gidişini bir tiyatro oyunu gibi izlemeye gelmişler.
 
 Cellat arkamda duruyor. Merdivenleri çıkıyorum. Gökyüzüne son bir kez bakıyorum. Yaşamak ne kadar güzelmiş meğer... Kuşların sesi, rüzgarın dokunuşu... Hepsini ne kadar kolay gözden çıkarıyoruz. 
 
@@ -202,58 +262,76 @@ Bıçak yukarıda parıldıyor. Ve son nefesimde haykırıyorum: Merhamet! Ama i
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: Yoksul Kunduracı ve Yabancı
+      `1. BÖLÜM: Yoksul Kunduracı Semen
 
-Yoksul bir kunduracı olan Semen, karısı Matryona ve çocuklarıyla birlikte küçük bir köy evinde yaşardı. Bir kış günü Semen, koyun derisi almak için kasabaya gitti fakat parası yetmediği için koyun derisini alamadan köye dönmek zorunda kaldı.
+Yoksul bir kunduracı olan Semen, karısı Matryona ve çocuklarıyla birlikte küçük bir köy evinde yaşardı. Kendi evi bile yoktu, kirada kalıyorlardı. Semen'in tek bir eski kürkü vardı, o da karısıyla ortak kullanılıyordu.
 
-Yolda, kilisenin duvarının dibinde çıplak ve donmak üzere olan bir adam gördü. Semen önce korktu, yanından geçip gitmek istedi. Fakat vicdanı el vermedi. Geri döndü, üzerindeki eski kürkünü çıkarıp adama giydirdi ve onu evine getirdi.
+Bir kış günü Semen, koyun derisi almak için kasabaya gitti fakat alacaklılardan parasını toplayamadığı için koyun derisini alamadan köye dönmek zorunda kaldı. Yolda cebindeki son kopeklerle biraz şarap içti, içi ısındı ama eli boş eve dönmenin hüznüyle yürüyordu.`,
 
-Karısı Matryona önce çok kızdı; evde ekmek bile yokken tanımsız bir yabancıyı eve getirdiği için Semen'e bağırdı. Fakat Semen "Matryona, Tanrı aşkına söyle, sende hiç merhamet yok mu?" deyince kadının yüreği yumuşadı. Yabancıya yemek verdi. O an yabancının yüzünde hafif bir tebessüm belirdi.`,
+      `2. BÖLÜM: Kilise Duvarındaki Yabancı
 
-      `BÖLÜM 2: Üç Gerçek
+Köyün dışındaki küçük kilisenin yanından geçerken duvarın dibinde beyaz bir şey gördü. Yaklaştığında, dondurucu soğukta çıplak ve hareketsiz yatan genç bir adam fark etti. 
 
-Görünüşte sessiz ve garip olan bu adamın adı Mikail'di. Mikail, Semen'in yanında kunduracılık öğrenmeye başladı ve kısa sürede kentin en mahir ustası oldu. Yıllar geçti. Bir gün zengin bir bey evlerine geldi ve kendisi için bir yıl boyunca yıpranmayacak sağlam çizmeler yapmasını istedi.
+Semen önce korktu: "Belki bir soyguncudur ya da başıma belaya sokar," diye düşünüp hızla uzaklaşmaya çalıştı. Fakat birkaç adım attıktan sonra vicdanı el vermedi. "Utan kendinden Semen!" dedi kendi kendine. Geri döndü, üzerindeki eski kürkünü çıkarıp adama giydirdi, kendi çizmelerini ona verdi ve onu kolundan tutup evine getirdi.`,
 
-Mikail beye baktı ve birden arkasında ölüm meleğini gördü. Çizme yapmak yerine hafif deriden bir kefen patiği dikti. Beyin uşağı akşamüstü gelip beyin yolda ansızın öldüğünü bildirdi. Mikail ikinci kez tebessüm etti.
+      `3. BÖLÜM: Matryona'nın Öfkesi ve Yumuşaması
 
-Sonunda Mikail gerçeği açıkladı: O bir melekti. Bir kadının ruhunu alması emredilmişti ama kadının yetim ikiz bebekleri için yalvarması üzerine kıyamamış, ruhu almamıştı. Tanrı da onu cezalandırıp yeryüzüne üç gerçeği öğrenmesi için göndermişti.`,
+Karısı Matryona evde çocuklara verecek ekmek bile yokken Semen'in eli boş ve üstelik yanında çıplak bir yabancıyla eve geldiğini görünce öfkeden çılgına döndü. Semen'e bağırdı, yabancıya hakaret etti.
 
-      `BÖLÜM 3: Sevgi
+Semen sakince karısının gözlerine baktı ve dedi ki: "Matryona, Tanrı aşkına söyle, sende hiç Tanrı korkusu ve merhamet yok mu?"
 
-Mikail öğrendiği üç gerçeği şöyle sıraladı:
+Bu sözler üzerine Matryona'nın yüreği aniden yumuşadı. Utandı. Masaya son ekmek kırıntılarını ve çorbayı koydu. Yabancıya kendi elleriyle yemek verdi. O an yabancı adam ilk kez gülümsedi ve yüzünden ilahi bir ışık saçıldı.`,
 
-1. İnsanda ne vardır? İnsanda **sevgi** vardır. Matryona melek gibi yüreğini açtığında ilk gerçeği öğrendim.
-2. İnsana ne verilmemiştir? İnsana **kendi geleceğini bilme yetisi** verilmemiştir. Zengin bey bir yıllık çizme isterken birkaç saat sonra öleceğini bilmiyordu.
-3. İnsan ne ile yaşar? İnsan **sevgi ile yaşar**. Yetim çocukları kendi çocuğu gibi büyüten kadın bana öğretti ki, insanlar kendi kaygılarıyla değil, Tanrı'nın kalplerine koyduğu sevgi ile yaşarlar.
+      `4. BÖLÜM: Mikail'in İşe Başlaması
 
-Bu sözlerin ardından Mikail göğe doğru yükseldi ve melek suretine bürünüp kayboldu.`
+Görünüşte sessiz ve garip olan bu adamın adı Mikail'di. Nereden geldiğini, kim olduğunu söylemiyordu. Semen onu yanına çırak olarak aldı. 
+
+Mikail inanılmaz bir el çabukluğuna sahipti. Bir kez gösterilen dikişi hemen öğreniyor, diktiği çizmeler kentin en sağlam çizmeleri oluyordu. Çevreden insanlar sadece Mikail'in diktiği çizmeleri almak için Semen'in dükkanına akın etmeye başladı. Semen'in durumu düzeldi, zenginleşti.`,
+
+      `5. BÖLÜM: Zengin Beyin Çizmeleri
+
+Aradan beş yıl geçti. Bir gün dükkanın önüne görkemli bir atlı araba yanaştı. İçinden devasa cüsseli, gururlu zengin bir bey indi. Yanında pahalı bir Alman derisi getirmişti.
+
+Bey masaya deriyi vurup dedi ki: "Bu deriden bana öyle bir çizme dikeceksiniz ki, bir yıl boyunca ne yırtılacak ne de şekli bozulacak! Eğer bir yıldan önce bozulursa sizi hapse attırırım!"
+
+Semen korktu, bu sorumluluğu almaktan çekindi. Fakat Mikail öne çıktı, deriyi kabul etti. Bey gittikten sonra Mikail deriyi ölçtü ama çizme dikmek yerine deriyi kesti ve bir kefen patiği dikmeye başladı. Semen bunu görünce dehşete düştü: "Ne yaptın sen Mikail! Mahvolduk!" dedi.`,
+
+      `6. BÖLÜM: Ölüm Haberi
+
+Semen henüz şaşkınlığını atlatamamışken, akşamüstü beyin uşağı at sırtında kan ter içinde dükkana geri geldi.
+
+Uşak dedi ki: "Usta, çizmeleri dikmeyi bırakın. Beyimiz eve dönerken arabada ansızın kriz geçirdi ve öldü. Hanımım dedi ki: 'Cesete giydirmek için hafif deriden bir patik diksinler.' Eğer başladıysanız patik yapın."
+
+Mikail diktiği patikleri uşağa teslim etti ve yüzünde ikinci kez ilahi bir tebessüm belirdi.`,
+
+      `7. BÖLÜM: İkiz Yetimler
+
+Yıllar sonra bir kadın dükkana iki küçük kız çocuğuyla geldi. Kızlardan birinin bacağı aksıyordu. Kadın ikizler için sağlam ayakkabılar istedi.
+
+Matryona kadınla sohbet ederken öğrendi ki, bu çocuklar kadının öz çocukları değildi. Komşusu olan anne doğumda ölmüş, kadın bu iki yetime kendi çocukları gibi bakıp büyütmüştü.
+
+Mikail çocuklara ve kadına baktı, gözlerinden yaşlar süzüldü ve yüzünde üçüncü kez görkemli bir tebessüm belirdi. Kadınlar gittikten sonra dükkan ilahi bir ışıkla doldu.`,
+
+      `8. BÖLÜM: Meleğin İtirafı ve Üç Gerçek
+
+Mikail üzerindeki eski giysileri çıkardı; vücudundan güneş gibi bir ışık yayılmaya başladı. Semen ve Matryona korkuyla diz çöktüler.
+
+Mikail dedi ki: "Ben Tanrı'nın bir meleğiyim. İkiz çocukları doğuran o kadının ruhunu almakla görevlendirilmiştim. Fakat kadının 'Bebeklerim yetim kalır' diye ağlamasına kıyamayıp ruhunu almadan göğe döndüm. Tanrı bana dedi ki: 'Git ve yeryüzünde üç gerçeği öğreninceye kadar kal:
+
+1. İnsanda ne vardır?
+2. İnsana ne verilmemiştir?
+3. İnsan ne ile yaşar?'"`,
+
+      `9. BÖLÜM: Üç Gerçeğin Açıklanması
+
+"1. Matryona bana öfkelenip sonra merhamet gösterdiğinde öğrendim ki: **İnsanda sevgi vardır.**
+
+2. Zengin bey bir yıllık çizme isterken birkaç saat sonra öleceğini bilmiyordu. Orada öğrendim ki: **İnsana kendi geleceğini ve neye ihtiyacı olduğunu bilme yetisi verilmemiştir.**
+
+3. İkiz yetimleri öz çocuğu gibi büyüten o kadını gördüğümde öğrendim ki: **İnsan kendi kaygılarıyla değil, Tanrı'nın kalplerine koyduğu sevgi ile yaşar.**"
+
+Bu sözlerin ardından Mikail göğe doğru yükseldi, melek kanatları açıldı ve ilahi bir ezgi eşliğinde gökyüzünde kayboldu.`
     ]
-  },
-  {
-    slug: 'savas-ve-baris',
-    title: 'Savaş ve Barış',
-    author: 'Tolstoy',
-    year: 1869,
-    displayYear: '1869',
-    pages: 1225,
-    category: 'Roman & Tarih',
-    summary: 'Napolyon’un Rusya seferi fonunda Pierre Bezukhov, Prens Andrey ve Nataşa Rostova’nın hayatları, aşkları, varoluşsal arayışları ve insanlık tarihinin felsefi analizi.',
-    rating: 5.0,
-    isReadable: false,
-    coverUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=600',
-  },
-  {
-    slug: 'boyle-buyurdu-zerdust',
-    title: 'Böyle Buyurdu Zerdüşt',
-    author: 'Nietzsche',
-    year: 1883,
-    displayYear: '1883',
-    pages: 350,
-    category: 'Felsefe',
-    summary: 'Üstinsan, Güç İstenci ve Ebedi Dönüş düşüncelerinin şiirsel bir üslupla anlatıldığı, "Tanrı öldü" nidasıyla eski ahlakın yıkılışını müjdeleyen başyapıt.',
-    rating: 4.8,
-    isReadable: false,
-    coverUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=600',
   },
   {
     slug: 'donusum',
@@ -268,29 +346,69 @@ Bu sözlerin ardından Mikail göğe doğru yükseldi ve melek suretine bürün�
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1509021436468-d51039746b42?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: Değişim
+      `BÖLÜM 1: Uyanış ve Böcek
 
-Gregor Samsa bir sabah huzursuz düşlerden uyandığında, kendini yatağında devasa bir böceğe dönüşmüş olarak buldu. Zırh gibi sertleşmiş sırtının üzerinde yatıyordu; kafasını biraz kaldırdığında kahverengi, kubbemsi, sert şeritlerle bölünmüş karnını gördü. Karnının tepesinde yorgan neredeyse tamamen kaymak üzereydi.
+Gregor Samsa bir sabah huzursuz düşlerden uyandığında, kendini yatağında devasa bir böceğe dönüşmüş olarak buldu. Zırh gibi sertleşmiş sırtının üzerinde yatıyordu; kafasını biraz kaldırdığında kahverengi, kubbemsi, sert şeritlerle bölünmüş karnını gördü. Karnının tepesinde yorgan neredeyse tamamen kaymak üzereydi. Çok sayıda, bedeninin geri kalanına göre acınacak kadar ince bacakları gözlerinin önünde çaresizce çırpınıyordu.
 
 "Bana ne oldu böyle?" diye düşündü. Bu bir düş değildi. Odası, biraz küçükçe ama gerçek bir insan odasıydı.
 
 Duvara asılı duran kürk kasketli ve kürk etollü kadının resmi yerinde duruyordu. Gregor gözlerini pencereye çevirdi; kasvetli hava (sinekliğin sacına vuran yağmur damlalarının sesi duyuluyordu) onu iyice hüzünlendirdi. "Biraz daha uyusam da bütün bu saçmalıkları unutsam nasıl olur?" diye düşündü. Ama bu imkansızdı, çünkü sağ yanına yatma alışkanlığı vardı ve şu anki durumunda bu duruma geçmesi mümkün değildi.`,
 
-      `BÖLÜM 2: Aile ve Yabancılaşma
+      `BÖLÜM 1 (Devamı): İşe Geç Kalış ve Temsilci
 
-Kapının ardında annesi, babası ve kız kardeşi Grete sırayla ona sesleniyor, işe neden geç kaldığını soruyorlardı. Gregor treni kaçırmıştı ve ticaret şirketinin temsilcisi eve kadar gelmişti. 
+Saat altı buçuktu ve çalar saat çalmaya devam ediyordu. Gregor ticaret firmasında gezici tezgahtar olarak çalışıyordu. Babasının eski borçlarını ödemek ve kız kardeşi Grete'yi konservatuvara gönderebilmek için bu nefret ettiği işte gece gündüz çalışmak zorundaydı.
 
-Gregor binbir güçlükle kapının kilidini ağzıyla açmayı başardığında dışarıdakilerin çığlığı evi kapladı. Annesi bayıldı, temsilci korkuyla kaçtı, babası ise elindeki bastonla Gregor'u odasına geri kovalamaya çalıştı. Gregor kapı eşiğinde sıkışarak kabuklarını kanattı ve odasına hapsedildi.
+Kapının ardında annesi ve babası sırayla ona sesleniyor, treni kaçırıp kaçırmadığını soruyorlardı. Gregor yanıt vermeye çalıştı ama sesinin arasından cırtlak, insan dışı bir gıcırtı çıkıyordu.
 
-İlk günlerde sadece kız kardeşi Grete ona çürümüş yiyecekler getirip odasını temizliyordu. Ancak zamanla Grete bile ondan iğrenmeye başladı. Artık Gregor insan dilini anlıyor ama konuşamıyordu.`,
+Derken dış kapı çaldı: Şirket temsilcisi eve kadar gelmişti! Şirket yönetimi Gregor'un bir saatlik gecikmesini bile hırsızlık veya şüpheyle karşılıyordu. Gregor yataktan yuvarlanarak kapıya doğru süründü.`,
 
-      `BÖLÜM 3: Son
+      `BÖLÜM 1 (Devamı): Kapının Açılışı
 
-Bir akşam Grete keman çalarken Gregor müziğin büyüsüne kapılıp salona çıktı. Eve alınan kiracılar böceği görünce evi terk edeceklerini söylediler. 
+Gregor kilidi çenesi ve ağzıyla açmaya çalışırken ağzından kahverengi bir sıvı aktı. Sonunda kilit açıldı ve kapı aralandı.
 
-Kız kardeşi Grete gözyaşları içinde haykırdı: "Ondan kurtulmalıyız! O artık Gregor değil. Eğer Gregor olsaydı, insanların böyle bir yaratıkla yaşayamayacağını anlar ve kendiliğinden giderdi!"
+Dışarıdakilerin çığlığı evi kapladı! Şirket temsilcisi elini ağzına götürerek dehşet içinde geriledi. Annesi dizlerinin üzerine çöküp ellerini yüzüne kapattı. Babası ise gözlerinde öfke ve kinsizlikle elindeki bastonu ve gazeteyi sallayarak Gregor'u odasına kovaladı.
 
-Gregor odasına geri sürüklendi. Kapı arkasından kilitlendi. Karanlıkta sabaha kadar düşündü. Ailesine karşı hissettiği tek şey sevgiydi. Şafak vakti sökerken Gregor Samsa son nefesini verdi. Hizmetçi kadın sabah onun cansız bedenini süpürgeyle çöpe attığında, aile rahat bir nefes alıp kıra gezintisine çıkma kararı aldı.`
+Gregor kapı esnetmesinde sıkıştı, kabukları kanadı ve babasının arkadan attığı bir tekmeyle odasına yuvarlanıp hapsedildi. Kapı arkasından kilitlendi.`,
+
+      `BÖLÜM 2: Kız Kardeş ve Süt
+
+Gregor uyandığında akşam olmuştu. Odasına hafif bir ışık sızıyordu. Kapının yanına konulmuş taze süt ve ekmek dilimlerini fark etti. Normalde süte bayılırdı ama taze süt ona iğrenç geldi.
+
+Ertesi gün kız kardeşi Grete odaya girdi. Sütün içilmediğini görünce onu alıp yerine çürümüş sebzeler, küflü peynirler ve eski kemik parçaları getirdi. Gregor bu çürümüş yiyecekleri büyük bir iştahla yedi.
+
+Grete her gün abisinin odasına giriyor, pencereyi açıyor ve çöpleri temizliyordu. Ancak abisinin iğrenç görüntüsünü görmemek için onun kanepenin altına saklanmasını bekliyordu.`,
+
+      `BÖLÜM 2 (Devamı): Odadaki Mobilyalar
+
+Geçen haftalar içinde Gregor tavanlarda ve duvarlarda tırmanma yeteneğini keşfetti. Tavanda baş aşağı durmak ona büyük bir özgürlük hissi veriyordu.
+
+Bunu fark eden Grete, annesiyle birlikte Gregor'un odasındaki mobilyaları boşaltmaya karar verdi. Böylece Gregor rahatça tırmanabilecekti. Fakat mobilyalar çıkarılırken Gregor insani geçmişinin tek tek yok edildiğini hissetti.
+
+Duvardaki kürk etollü kadının resmini korumak için resmin üzerine tırmandı ve göğsünü cama dayadı. Annesi odaya girip böceğin resmi kapladığını görünce bayıldı.`,
+
+      `BÖLÜM 2 (Devamı): Elma Yaralanması
+
+O sırada eve dönen baba, kızının "Gregor kaçtı!" çığlığını duyunca öfkeye kapıldı. Banka üniformasını giymiş olan baba, masadaki elmaları alıp Gregor'a fırlatmaya başladı.
+
+Elmalardan biri Gregor'un sırtına saplandı ve etine gömüldü. Bu ağır yara Gregor'un hareket kabiliyetini tamamen kısıtladı. Haftalarca sırtında çürüyen elmayla yatağında acı içinde yattı.`,
+
+      `BÖLÜM 3: Kiracılar ve Keman Sesi
+
+Aile geçimini sağlayabilmek için evin odalarından birini üç sert sakallı kiracıya kiralamıştı. Gregor artık odasında tamamen yalnızdı, eşyalar depolama alanı gibi odasına yığılmıştı.
+
+Bir akşam kız kardeşi Grete salonda kiracılara keman çalmaya başladı. Kemanın büyüleyici melodisi Gregor'un ruhuna dokundu. "Eğer bir hayvan olsaydım müzik beni böyle derinden etkiler miydi?" diye düşündü.
+
+Gregor keman çalan kardeşinin elbisesini çekip onu odasına davet etmek için salona doğru süzüldü. Kiracılar böceği görünce tiksintiyle bağırıp kira ödemeden evi terk edeceklerini bildirdiler.`,
+
+      `BÖLÜM 3 (Devamı): Grete'nin Kararı ve Son
+
+Kız kardeşi Grete gözyaşları içinde anne babasına haykırdı:
+
+"Ondan kurtulmalıyız! Başka yolu yok! O yaratığın Gregor olduğunu düşünmeyi bırakmalısınız. Eğer o gerçekten Gregor olsaydı, insanların böyle bir mahlukla yaşayamayacağını anlar ve kendiliğinden giderdi!"
+
+Gregor bu sözleri duydu. Odasına geri sürüklendi. Kapı arkasından kilitlendi. Karanlıkta sabaha kadar düşündü. Ailesine karşı duyduğu tek şey sonsuz bir sevgi ve acımaydı.
+
+Şafak vakti sökerken Gregor Samsa son nefesini verdi. Hizmetçi kadın sabah onun cansız bedenini süpürgeyle çöpe attığında, aile rahat bir nefes alıp kıra gezintisine çıkma kararı aldı.`
     ]
   },
   {
@@ -319,12 +437,21 @@ Gregor odasına geri sürüklendi. Kapı arkasından kilitlendi. Karanlıkta sab
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: İsyan ve Yedi Emir
+      `BÖLÜM 1: Koca Reis'in Konuşması ve Düşü
 
-Beylik Çiftlik'in sahibi Bay Jones sızıp uyuduğunda, ihtiyar domuz Koca Reis tüm hayvanları samanlıkta topladı. İnsanların hayvanları nasıl sömürdüğünü, ürettikleri süt ve yumurtayı çaldıklarını anlattı. "Bütün insanlar düşmandır, bütün hayvanlar yoldaştır!" rüyasını paylaştı.
+Beylik Çiftlik'in sahibi Bay Jones sızıp uyuduğunda, ihtiyar domuz Koca Reis tüm hayvanları büyük samanlıkta topladı.
 
-Koca Reis birkaç gün sonra öldü ama fikirleri Snowball ve Napoleon adlı iki zeki domuz tarafından önderlik edilen bir isyana dönüştü. Bay Jones çiftlikten kovuldu. Çiftliğin adı **Hayvan Çiftliği** olarak değiştirildi ve duvara Yedi Emir yazıldı:
+Koca Reis hayvanlara seslendi: "Yoldaşlar! Hayatımızın ne olduğunu gözden geçirelim: Ömrümüz sefalet ve kölelik içinde geçiyor. İnsan, üretmeden tüketen tek yaratıktır! Sütümüzü alır, yumurtalarımızı çalar, yaşlandığımızda bizi boğazlar! Bütün kötülüklerin kaynağı insandır. İnsanı ortadan kaldırın, açlık ve kölelik sonsuza dek bitsin!"
 
+Koca Reis rüyasında duyduğu *İngiltere'nin Hayvanları* şarkısını öğretti. Bütün hayvanlar coşkuyla bağırmaya başladı.`,
+
+      `BÖLÜM 2: Ayaklanma ve Yedi Emir
+
+Koca Reis birkaç gün sonra öldü. Zeki iki genç domuz olan Snowball ve Napoleon onun fikirlerini "Hayvancılık" adı altında sistemleştirdiler.
+
+Bir gün Bay Jones hayvanları yemlemeyi unutunca hayvanlar dayanamayıp ambarın kapısını kırdı. Bay Jones ve adamları kamçılarıyla müdahale etmek istedi ama hayvanlar güç birliği yaparak insanları çiftlikten kovaladı.
+
+Çiftliğin adı **Hayvan Çiftliği** yapıldı. Snowball duvara Yedi Emir'i yazdı:
 1. İki ayak üstünde yürüyen herkes düşmandır.
 2. Dört ayak üstünde yürüyen veya kanatları olan herkes dosttur.
 3. Hiçbir hayvan giysi giymeyecektir.
@@ -333,25 +460,34 @@ Koca Reis birkaç gün sonra öldü ama fikirleri Snowball ve Napoleon adlı iki
 6. Hiçbir hayvan başka bir hayvanı öldürmeyecektir.
 7. Bütün hayvanlar eşittir.`,
 
-      `BÖLÜM 2: Yozlaşma ve İktidar Savaşı
+      `BÖLÜM 3: Ağıl Savaşı ve Yel Değirmeni
 
-Başta işler harika gitti. At Boxer "Daha çok çalışacağım!" parolasıyla herkese örnek oluyordu. Ancak zamanla Napoleon ile Snowball arasında iktidar kavgası başladı. Yel değirmeni projesi tartışılırken Napoleon, gizlice yetiştirdiği dokuz vahşi köpeği Snowball'un üzerine saldırtıp onu çiftlikten sürdü.
+İlk yıl ürünler bollukla toplandı. Sadık at Boxer "Daha çok çalışacağım!" ve "Napoleon her zaman haklıdır!" parolalarıyla gecesini gündüzüne katıyordu.
 
-Artık Napoleon tek liderdi. Kararları kendi alıyor, Squealer adlı domuz ise hayvanları kandırmak için propaganda yapıyordu. Yavaş yavaş emirler değiştirilmeye başlandı:
+Snowball çiftliği modernize etmek için bir yel değirmeni projesi çizdi. Ancak Napoleon bu projeye karşı çıktı.
 
-- "Hiçbir hayvan yatakta yatmayacaktır" kuralına "çarşaflı" kelimesi eklendi.
-- "Hiçbir hayvan içki içmeyecektir" kuralına "aşırı" kelimesi eklendi.
-- Sadık Boxer yaşlanıp sakatlandığında mezbahaya satıldı, parasıyla domuzlara viski alındı.`,
+Yel değirmeni oylamasında Snowball muazzam bir konuşma yaparken, Napoleon gizlice büyüttüğü dokuz azgın köpeği salona saldırtıp Snowball'u ölümden zor kurtararak çiftlikten sürdü.`,
 
-      `BÖLÜM 3: Dönüşüm
+      `BÖLÜM 4: Propaganda ve İnfazlar
 
-Yıllar geçti. Hayvanlar başlangıçtaki ideallerini unuttular. Domuzlar iki ayak üzerinde yürümeye, ellerinde kırbaç taşımaya ve Bay Jones'un eski elbiselerini giymeye başladılar.
+Snowball gittikten sonra Napoleon değirmen projesini kendi fikriymiş gibi yürütmeye başladı. Sözcü domuz Squealer halka dedi ki: "Snowball bir haindi, Bay Jones'un ajanıydı!"
 
-Duvardaki Yedi Emir silinmiş, yerine tek bir cümle yazılmıştı:
+Napoleon emirlere uymayan domuz ve tavukları köpeklerine boğazlattı. Altıncı Emir yavaşça değiştirildi:
+* "Hiçbir hayvan başka bir hayvanı **sebepsiz yere** öldürmeyecektir."
 
+Domuzlar çiftlik evine taşındı. Dördüncü Emir değiştirildi:
+* "Hiçbir hayvan yatakta **çarşaflı** yatmayacaktır."`,
+
+      `BÖLÜM 5: Boxer'ın Sonu ve Son Dönüşüm
+
+Yel değirmeni bir fırtınada yıkıldı ama suç Snowball'a atıldı. Sadık at Boxer ağır taşları taşırken ciğerini patlattı ve sakatlandı.
+
+Napoleon, Boxer'ı tedavi ettirme bahnesiyle bir arabaya bindirdi. Arabanın üzerinde "Kesimhane ve Tutkal Fabrikası" yazıyordu. Boxer kurtulmaya çalıştı ama gücü yetmedi. Squealer ertesi gün Boxer'ın hastanede huzur içinde öldüğünü yalanını söyledi ve o gece domuzlar Boxer'ın satışından gelen parayla viski alemi yaptılar.
+
+Yıllar geçti. Yedi Emir silindi. Yerine tek bir kural yazıldı:
 **"BÜTÜN HAYVANLAR EŞİTTİR, AMA BAZI HAYVANLAR ÖTEKİLERDEN DAHA EŞİTTİR."**
 
-Son gece, komşu insan çiftlik sahipleri domuzları ziyaret etti. Birlikte iskambil oynayıp içki içiyorlardı. Dışarıdaki diğer hayvanlar pencereden içeri baktılar: Bir domuzların yüzüne, bir insanların yüzüne baktılar; ama hangisinin insan, hangisinin domuz olduğunu ayırt edemiyorlardı.`
+İnsan komşular domuzların evine davet edildi. Pencereden içeri bakan hayvanlar domuzların yüzüne ve insanların yüzüne baktılar; ama hangisinin insan hangisinin domuz olduğunu ayırt edemiyorlardı.`
     ]
   },
   {
@@ -367,21 +503,29 @@ Son gece, komşu insan çiftlik sahipleri domuzları ziyaret etti. Birlikte iska
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: Annenin Ölümü ve Sahil
+      `1. BÖLÜM: Annenin Ölümü
 
-"Bugün annem öldü. Belki de dün, bilmiyorum."
+"Bugün annem öldü. Belki de dün, bilmiyorum. Huzurevinden bir telgraf aldım: 'Anneniz vefat etti. Cenaze yarın. Derin taziyelerimizle.' Bu pek bir şey ifade etmiyor. Belki de dün ölmüştür."
 
-Cezayir'de yaşayan sıradan bir büro memuru olan Meursault, bakımevindeki annesinin cenazesine gitti. Ağlamadı, cenazede kahve içip sigara yaktı. Ertesi gün Cezayir'e dönüp kız arkadaşı Marie ile denize girdi, komedi filmi izledi.
+Cezayir'de yaşayan sıradan bir büro memuru olan Meursault, Marengo'daki bakımevine gitti. Annesinin tabutunu açtırmadı, cenaze nöbetinde kahve içip sigara yaktı. Ağlamadı.
 
-Birkaç hafta sonra komşusu Raymond ile birlikte sahile gittiler. Sahilde Raymond'un husumetli olduğu Araplarla karşılaştılar. Sıcak hava yakıcıydı, güneş Meursault'nun alnına bir bıçak gibi saplanıyordu. Gözlerini silerken cebindeki tabancaya dokundu ve sebebsizce tetiğe bastı. Adam yere düştü. Ardından dört kez daha ateş etti.`,
+Ertesi gün Cezayir'e döndü. Eski iş arkadaşı Marie ile karşılaştı, birlikte denize girdiler, komedi filmi izlediler ve geceyi birlikte geçirdiler. Meursault için yaşam anlık duyusal deneyimlerden ibaretti.`,
 
-      `BÖLÜM 2: Mahkeme ve Saçma
+      `2. BÖLÜM: Sahildeki Cinayet
 
-Meursault tutuklandı. Mahkemede asıl yargılanan şey işlediği cinayet değil, annesinin cenazesinde ağlamamış olmasıydı. Savcı onu "ruhen bir canavar" olarak nitelendirdi; toplumun duygusal kalıplarına uymadığı için toplum dışına itildi.
+Bir pazar günü Meursault, Marie ve komşusu Raymond ile birlikte sahildeki bir kulübeye gittiler. Raymond'un husumetli olduğu Arap bir grup onları takip ediyordu.
 
-Meursault yalan söylemeyi reddetti. Pişmanlık tiyatrosu oynamadı. Sadece gerçeğe sadık kaldı.
+Sahilde kavga çıktı, Raymond yaralandı. Meursault silahı eline alıp yalnız başına kayalıklara yürüdü. Güneş alnına bir bıçak gibi saplanıyordu, ter gözlerini yakıyordu.
 
-Hücresinde idama hazırlanırken rahibin din telkinlerini reddetti. Dünyanın şefkatli umursamazlığına kendini açtı ve idam gününde kalabalığın nefret dolu çığlıklarıyla karşılanmayı diledi.`
+Karşısında duran Arap bıçağını çıkardı. Güneş ışığı bıçağın çeliğinden yansıyıp Meursault'nun gözünü aldı. Meursault tetiğe bastı. Adam düştü. Ardından kurşunun sessizliği bozduğunu bilerek cansız bedene dört kez daha ateş etti.`,
+
+      `3. BÖLÜM: Mahkeme ve İdam
+
+Meursault tutuklandı. Mahkemede yargıçlar cinayetin nedeninden çok, annesinin cenazesinde ağlamamış olmasını ve ertesi gün komedi filmine gitmesini sorguladılar.
+
+Savcı haykırdı: "Bu adam annesinin ölümüne kayıtsız kalmış bir canavardır!" Toplum yalan söylemeyi ve yapmacık duygular sergilemeyi reddeden Meursault'yu cezalandırmak istiyordu.
+
+İdam cezasına çarptırıldı. Hücresine gelen rahibin din telkinlerini öfkeyle reddetti. Dünyanın şefkatli umursamazlığına kendini açtı ve infaz gününde kalabalığın nefret dolu çığlıklarıyla karşılanmayı diledi.`
     ]
   },
   {
@@ -410,25 +554,37 @@ Hücresinde idama hazırlanırken rahibin din telkinlerini reddetti. Dünyanın 
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: Okyanus Gemisi ve Czentovic
+      `1. BÖLÜM: Mirko Czentovic ve Gemi
 
-New York'tan Buenos Aires'e gitmekte olan bir yolcu gemisinde, dünya satranç şampiyonu Mirko Czentovic de bulunmaktaydı. Czentovic, çocukluğundan itibaren ketum, kaba ve satranç dışında hiçbir entelektüel becerisi olmayan kaba bir dahiydi.
+New York'tan Buenos Aires'e gitmekte olan büyük bir okyanus gemisinde, dünya satranç şampiyonu Mirko Czentovic de bulunmaktaydı. Czentovic, çocukluğundan itibaren zihinsel olarak oldukça ağır hareket eden, kaba ve satranç dışında hiçbir entelektüel ilgisi olmayan tuhaf bir dahiydi.
 
-Gemideki zengin yolculardan McConnor, Czentovic ile parası karşılığında bir gösteri maçı yapması için anlaştı. Czentovic, gemideki tüm amatör oyuncuları aynı anda rahatça yeniyordu.`,
+Gemideki hırslı milyarder McConnor, Czentovic ile parası karşılığında bir gösteri maçı yapmak istedi. Czentovic kabul etti ve gemideki amatör oyuncuların tamamını aynı anda zahmetsizce mağlup etti.`,
 
-      `BÖLÜM 2: Dr. B'nin Müdahalesi ve Hücre Geçmişi
+      `2. BÖLÜM: Dr. B'nin Sahneye Çıkışı
 
-Maçın en kritik anında kalabalığın arasından zayıf, solgun bir adam (Dr. B.) öne çıktı ve McConnor'un hamlesini durdurdu: "Yapmayın! Kale'yi oynatırsanız üç hamlede mat olursunuz!" Dr. B'nin yönlendirmesiyle amatörler grubu dünya şampiyonunu berabere kalmaya zorladı.
+İkinci gösteri maçında Czentovic amatör grubu tam köşeye sıkıştırmışken, kalabalığın arasından zayıf, solgun bir adam (Dr. B.) öne atıldı:
 
-Herkes şaşkındı. Dr. B. daha sonra hikayesini anlattı: Viyana'da Avusturya aristokrasisinin paralarını koruyan bir avukattı. Gestapo onu tutuklamış ve tek bir mobilyanın bile bulunmadığı otel odasında mutlak tecride mahkûm etmişti. Ses yoktu, kitap yoktu, insan yoktu.
+"Durun! Vezir'i oraya oynarsanız üç hamlede mat olursunuz! Atı c4'e çekmelisiniz!"
 
-Bir gün sorgu sırasını beklerken bir paltonun cebinden bir kitap çaldı. Bu kitap ünlü satranç ustalarının 150 maçlık analizlerini içeriyordu.`,
+Dr. B'nin yönlendirmesiyle hamleler yapıldı ve dünya şampiyonu beklenmedik bir şekilde berabere kalmaya zorlandı. Czentovic şaşkınlıkla dedi ki: "Bu beyefendi bana karşı tek başına oynamalı!"`,
 
-      `BÖLÜM 3: Zihinsel Yarılma ve Son Oyun
+      `3. BÖLÜM: Hücre Yalnızlığı ve Satranç Kitabı
 
-Dr. B. odasında ekmek kırıntılarından yaptığı taşlarla bu 150 maçı yüzlerce kez oynadı. Ezberledikten sonra zihninde oynamaya başladı: Beyaz Dr. B. siyah Dr. B'ye karşı! Bu durum zihninin ikiye bölünmesine, "Satranç Humması" adı verilen ağır bir sinir krizine yol açtı. Hastaneye kaldırıldı ve serbest bırakıldı.
+Dr. B. hikayesini gemideki anlatıcıya itiraf etti: Viyana'da Avusturya krallığının mal varlığını yöneten bir avukattı. Gestapo onu tutuklamış ve tek bir mobilyanın, saatin veya kitabın bulunmadığı bir otel odasında mutlak tecride mahkûm etmişti.
 
-Gemide Czentovic ile teke tek maça çıktı. İlk maçı Dr. B. muazzam bir zekayla kazandı. Ancak ikinci maçta Czentovic onun sabırsızlığını fark edip hamlelerini kasıtlı olarak çok yavaş yapmaya başladı. Dr. B'nin zihnindeki eski hücre kabusu yeniden canlandı. Sonunda zihninin dengesini kaybetmemek için tahtadan kalktı ve satrancı sonsuza dek bıraktı.`
+Aylar süren zihinsel işkence altında aklını kaybetmek üzereydi. Bir gün sorgu sırasını beklerken bir paltodan küçük bir kitap çaldı. Bu kitap ünlü ustaların 150 şampiyonluk maçını içeriyordu.`,
+
+      `4. BÖLÜM: Zihinsel Yarılma (Satranç Humması)
+
+Dr. B. odasında ekmek kırıntılarından ve kareden yapılmış örtüden taşlar yaparak 150 maçı yüzlerce kez oynadı. Ezberledikten sonra taşları bıraktı ve zihninde oynamaya başladı.
+
+Fakat zamanla zihni ikiye bölündü: Beyaz Dr. B. ve Siyah Dr. B.! Zihni sürekli kendi kendine karşı savaşıyor, uyumasına bile izin vermiyordu. Bu "Satranç Humması" krizi sonucu krize girdi, hastaneye kaldırıldı ve hekiminin yardımıyla serbest bırakıldı.`,
+
+      `5. BÖLÜM: Son Maç ve Veda
+
+Gemide Czentovic ile ilk maçı Dr. B. muazzam bir zekayla kazandı. Ancak ikinci maçta Czentovic onun sabırsızlığını fark edip hamlelerini kasıtlı olarak çok yavaş yapmaya başladı.
+
+Dr. B'nin zihnindeki eski hücre kabusu yeniden canlandı. Taşları yanlış yerlerde görmeye başladı. Tehlikeyi fark eden Dr. B. tahtadan kalktı: "Beni bağışlayın, satrançla işim bitti," diyerek sonsuza dek tahtadan uzaklaştı.`
     ]
   },
   {
@@ -444,7 +600,7 @@ Gemide Czentovic ile teke tek maça çıktı. İlk maçı Dr. B. muazzam bir zek
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `Sana, Beni Hiç Tanımamış Olana...
+      `1. BÖLÜM: İtiraf Mektubu
 
 "Sana, beni hiç tanımamış olan sana!
 
@@ -452,13 +608,13 @@ Gemide Czentovic ile teke tek maça çıktı. İlk maçı Dr. B. muazzam bir zek
 
 Henüz on üç yaşında küçük bir kızken komşumuz oldun. Senin kapından giren kitap kokularını, şıklığını, gülüşünü izlerdim. Sen benim tek dünyam oldun. Büyüdüm, başka şehirlere gittim ama kalbim hep senin Viyana'daki kapının önünde kaldı."`,
 
-      `Karşılaşmalar ve Unutuluş
+      `2. BÖLÜM: Karşılaşmalar
 
 "Yıllar sonra Viyana'ya döndüm. Gece kulüplerinde, sokaklarda karşına çıktım. Beni evine götürdün, geceler geçirdik. Ama sen beni hiçbir zaman o eski küçük komşu kızı olarak tanımadın! Beni sadece bir gecelik güzel bir kadın sandın.
 
 Senden bir çocuğum oldu. Onu senden tek bir kuruş istemeden, lekesiz büyüttüm. Ama dün difteriden öldü... Şimdi ben de gidiyorum."`,
 
-      `Veda
+      `3. BÖLÜM: Beyaz Güller ve Son
 
 "Masanda duran beyaz gülleri her doğum gününde sana yollayan bendim. Artık bu yıl güller gelmeyecek.
 
@@ -480,13 +636,13 @@ Yazar mektubu bitirdiğinde elleri titriyordu. Vazodaki beyaz güllere baktı ve
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `Hissizlikten Uyanış
+      `1. BÖLÜM: Hissizlik ve Hipodrom
 
 Viyana burjuvazisinin zengin ve kaygısız bir üyesiydim. Hayatta her şeye sahiptim ama hiçbir şeyden heyecan duymuyordum. İçimde derin bir hissizlik, buz gibi bir kabuk oluşmuştu.
 
 Bir pazar günü hipodromda yarış izlerken yanımda duran adamın düşürdüğü kuponu bilerek ayağımın altına aldım ve cebime attım. Zengindim, paraya ihtiyacım yoktu ama bu küçük suç içimde aniden bir heyecan kıvılcımı çaktı.`,
 
-      `Gece Yolculuğu ve Şefkat
+      `2. BÖLÜM: Gece Gezintisi ve İnsanlığa Dönüş
 
 O gece kentin en karanlık sokaklarında yürüdüm. Hırsızlık yapmanın verdiği suçluluk duygusu beni insanlara yaklaştırdı. Yoksul insanlara yardım etmeye, cebimdeki tüm parayı tanımadığım insanlara dağıtmaya başladım.
 
@@ -506,23 +662,23 @@ O gece kentin en karanlık sokaklarında yürüdüm. Hırsızlık yapmanın verd
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `Doktor Ragin ve İvan Gromov
+      `1. BÖLÜM: Altıncı Koğuş ve Sakinleri
 
-Kasaba hastanesinin bakımsız, pis kokulu Altıncı Koğuşu'nda akıl hastaları kalıyordu. Hastanenin doktoru Andrey Yefimıç Ragin, hayattan bıkmış, Stoacı felsefeye sığınarak kasabadaki cehaleti teğet geçen bir adamdı.
+Kasaba hastanesinin arka bahçesindeki küçük, bakımsız binada Altıncı Koğuş yer alıyordu. Burası akıl hastalarının kaldığı, pis kokulu ve bakımsız bir yerdi.
 
-Bir gün Altıncı Koğuş'a girdiğinde, zulüm görmekten çıldırmış olan zeki hasta İvan Dmitriç Gromov ile sohbet etmeye başladı. Gromov ona dedi ki: "Siz sıcak odanızda oturup 'Acı sadece bir algıdır' felsefesi yapıyorsunuz. Parmağınızı kapıya sıkıştırın da bakalım acı algı mıymış!"`,
+Koğuş sakinlerinden biri İvan Dmitriç Gromov'du. Eski bir zabıt katibi olan Gromov, zulüm görme hezeyanları yaşıyordu. Felsefeye son derece meraklıydı.`,
 
-      `Akıl Sağlığı ve İzolasyon
+      `2. BÖLÜM: Doktor Ragin ve Tartışmalar
 
-Doktor Ragin, kasabada entelektüel düzeyde konuşabildiği tek insanın bu "deli" olduğunu fark etti ve her gün Altıncı Koğuş'a gidip onunla saatlerce tartıştı.
+Hastanenin başhekimi Andrey Yefimıç Ragin, kasabanın cehaletinden bıkmış bir Stoacıydı. Bir gün koğuşa girip Gromov ile konuşmaya başladı.
 
-Fakat toplum bunu kabullenemezdi. Bir doktorun bir deliyle arkadaşlık etmesi kasabalılar tarafından doktorun da çıldırdığı şeklinde yorumlandı. Ragin görevinden alındı, parası bitirildi.`,
+Gromov ona dedi ki: "Siz sıcak odanızda oturup 'Acı sadece bir algıdır' diyorsunuz. Parmağınızı kapıya sıkıştırın da bakalım acı algı mıymış!" Doktor Ragin kasabada konuşabildiği tek zeki insanın bu deli olduğunu anladı.`,
 
-      `Son Kaçınılmaz
+      `3. BÖLÜM: Trajik Son
 
-Sonunda meslektaşları Doktor Ragin'i kandırarak Altıncı Koğuş'a bir hasta olarak kapattılar. 
+Doktorun her gün bir deliyle saatlerce konuşması kasabada dedikoduya yol açtı. Doktorun çıldırdığına karar verip onu görevden aldılar.
 
-Ragin, yıllarca uzaktan izlediği o soğuk parmaklıkların ve gardiyan Nikita'nın dayağının acısını bizzat yaşadı. Ertesi gün geçirdiği felç sonucu öldü. Stoacı felsefe gerçek acının karşısında yok olmuştu.`
+Sonunda meslektaşları Ragin'i kandırarak Altıncı Koğuş'a bir hasta olarak kapattılar. Ragin gardiyan Nikita'nın dayağını yediğinde gerçek acıyı anladı ve ertesi gün felç geçirerek öldü.`
     ]
   },
   {
@@ -577,7 +733,7 @@ Ragin, yıllarca uzaktan izlediği o soğuk parmaklıkların ve gardiyan Nikita'
     isReadable: true,
     coverUrl: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&q=80&w=600',
     fullPages: [
-      `BÖLÜM 1: Çöl ve Küçük Prens
+      `1. BÖLÜM: Çöl ve Küçük Prens
 
 Sahra Çölü'ne uçağım arızalandığı için inmek zorunda kalmıştım. Yanımda sadece bir haftalık içme suyu vardı.
 
@@ -585,25 +741,19 @@ Sahra Çölü'ne uçağım arızalandığı için inmek zorunda kalmıştım. Ya
 
 Gözlerimi ovuşturdum. Karşımda altın sarısı saçlı, olağanüstü küçük bir prens duruyordu. Ona boğa yılanının fili yuttuğu çizimimi gösterdim, yetişkinlerin aksine o hemen tanıdı: "Hayır! Ben fil yutmuş bir boğa yılanı istemiyorum, bana bir koyun çiz!"`,
 
-      `BÖLÜM 2: Gül ve Tilki
+      `2. BÖLÜM: Gül ve Gezegenler
 
-Küçük Prens B-612 adlı küçük bir asteroidden geliyordu. Gezegeninde tek bir özel gül vardı. Ama Küçük Prens gezegenleri gezerken Dünya'da binlerce gül gördü ve çiçeğinin eşsiz olmadığını sanıp ağladı.
+Küçük Prens B-612 adlı küçük bir asteroidden geliyordu. Gezegeninde tek bir özel gül vardı. Ama Küçük Prens gezegenleri gezerken Kral, Kibirli, Sarhoş ve İşadamı gibi sığ yetişkinlerle karşılaştı.
 
-O sırada bir tilki çıktı karşısına. "Beni evcilleştir!" dedi tilki. 
+Dünya'da binlerce gül gördüğünde çiçeğinin eşsiz olmadığını sanıp ağladı.`,
 
-"Evcilleştirmek ne demek?" diye sordu Küçük Prens.
+      `3. BÖLÜM: Tilki ve Veda
 
-"Bağlar kurmak demek," dedi tilki. "Şimdi sen benim için sadece yüz bin küçük çocuktan birisin. Ama beni evcilleştirirsen birbirimize muhtaç oluruz. Sen benim için dünyada tek olursun, ben de senin için..."
+O sırada bir tilki çıktı karşısına. "Beni evcilleştir!" dedi tilki. "Evcilleştirmek bağlar kurmak demektir."
 
-Ve tilki ona en büyük sırrı verdi: **"İnsan ancak yüreğiyle baktığı zaman doğruyu görebilir. Gerçeğin mayası gözle görülmez."**`,
+Ve tilki ona en büyük sırrı verdi: **"İnsan ancak yüreğiyle baktığı zaman doğruyu görebilir. Gerçeğin mayası gözle görülmez."**
 
-      `BÖLÜM 3: Veda
-
-Küçük Prens çiçeğine karşı sorumlu olduğunu anladı. "Gülüme harcadığım zaman, gülümü bu kadar önemli kılan," dedi.
-
-Gezegenine dönmek için yılanın zehirli dokunuşunu kabul etti. Yıldızlara baktığımda onun kahkahasını duyacağımı söyledi.
-
-"Gökyüzüne bakın ve sorun kendi kendinize: Koyun çiçeği yedi mi, yemedi mi? Ve görün bakın nasıl değişiyor her şey..."`
+Küçük Prens çiçeğine dönmek için yılanın dokunuşunu kabul etti. Yıldızlara baktığımda onun kahkahasını duyacağımı söyledi.`
     ]
   },
   {
