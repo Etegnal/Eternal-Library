@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Play, Pause, SkipForward, Music } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Music } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
 // Helper to extract YouTube video ID from various YouTube URL formats
@@ -27,6 +27,8 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.75);
+  const [isMuted, setIsMuted] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -69,17 +71,33 @@ export default function MiniPlayer() {
     }
   }, [pathname, hasLoadedPlaylist, currentIndex, playlist]);
 
+  // Sync volume changes to audio engines
+  useEffect(() => {
+    const targetVolume = isMuted ? 0 : volume;
+
+    if (audioRef.current) {
+      audioRef.current.volume = targetVolume;
+    }
+
+    if (youtubeId && iframeRef.current && iframeRef.current.contentWindow) {
+      const ytVolume = Math.round(targetVolume * 100);
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'setVolume', args: [ytVolume] }),
+        '*'
+      );
+    }
+  }, [volume, isMuted, youtubeId]);
+
   const playAudio = () => {
     if (isHomepage || !currentTrack) return;
 
     if (youtubeId) {
-      // YouTube IFrame API playCommand
       if (iframeRef.current && iframeRef.current.contentWindow) {
         iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
       }
       setIsPlaying(true);
     } else if (audioRef.current) {
-      audioRef.current.volume = 0.5;
+      audioRef.current.volume = isMuted ? 0 : volume;
       audioRef.current
         .play()
         .then(() => {
@@ -115,8 +133,26 @@ export default function MiniPlayer() {
     setCurrentIndex(nextIdx);
   };
 
+  const prevTrack = () => {
+    if (playlist.length === 0) return;
+    const prevIdx = (currentIndex - 1 + playlist.length) % playlist.length;
+    setCurrentIndex(prevIdx);
+  };
+
   const handleTrackEnded = () => {
     nextTrack();
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setVolume(val);
+    if (isMuted && val > 0) {
+      setIsMuted(false);
+    }
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
   };
 
   // Hide MiniPlayer on homepage or when playlist is empty
@@ -148,7 +184,7 @@ export default function MiniPlayer() {
       )}
 
       {/* Glassmorphism & Glow Container */}
-      <div className="flex items-center gap-3.5 p-2.5 pr-4 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
+      <div className="flex items-center gap-3 p-2.5 pr-3.5 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group">
         
         {/* Album / Vinyl Cover with Rotation */}
         <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-900/40 flex-shrink-0 bg-amber-950 flex items-center justify-center">
@@ -176,7 +212,7 @@ export default function MiniPlayer() {
         {/* Track Title, Artist & Animated Equalizer */}
         <div className="min-w-0 flex-1 space-y-0.5 pr-1">
           <div className="flex items-center gap-1.5">
-            <h4 className="text-xs font-serif font-medium text-amber-100 max-w-[120px] sm:max-w-[150px] truncate">
+            <h4 className="text-xs font-serif font-medium text-amber-100 max-w-[110px] sm:max-w-[140px] truncate">
               {currentTrack.title}
             </h4>
 
@@ -190,14 +226,24 @@ export default function MiniPlayer() {
             )}
           </div>
 
-          <span className="text-[10px] text-stone-400 max-w-[120px] sm:max-w-[150px] truncate block font-sans">
+          <span className="text-[10px] text-stone-400 max-w-[110px] sm:max-w-[140px] truncate block font-sans">
             {currentTrack.artist}
           </span>
         </div>
 
-        {/* Controls: Play/Pause, Next & Spotify */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        {/* Controls Row: Prev, Play/Pause, Next, Volume & Spotify */}
+        <div className="flex items-center gap-1 flex-shrink-0">
           
+          {/* Previous Track Button */}
+          <button
+            type="button"
+            onClick={prevTrack}
+            className="w-7 h-7 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors min-w-[28px] min-h-[28px]"
+            title="Önceki Şarkı"
+          >
+            <SkipBack className="w-3.5 h-3.5" />
+          </button>
+
           {/* Play / Pause Button */}
           <button
             type="button"
@@ -213,16 +259,44 @@ export default function MiniPlayer() {
           </button>
 
           {/* Next Track Button */}
-          {playlist.length > 1 && (
+          <button
+            type="button"
+            onClick={nextTrack}
+            className="w-7 h-7 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors min-w-[28px] min-h-[28px]"
+            title="Sonraki Şarkı"
+          >
+            <SkipForward className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Volume Control Button & Expandable Hover Slider */}
+          <div className="relative group/vol flex items-center">
             <button
               type="button"
-              onClick={nextTrack}
-              className="w-7 h-7 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors min-w-[28px] min-h-[28px]"
-              title="Sonraki Şarkı"
+              onClick={toggleMute}
+              className="p-1.5 text-stone-400 hover:text-amber-200 transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center"
+              title={isMuted ? "Sesi Aç" : "Sesi Kapat"}
             >
-              <SkipForward className="w-4 h-4" />
+              {isMuted || volume === 0 ? (
+                <VolumeX className="w-4 h-4 text-amber-500/60" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-stone-300 group-hover/vol:text-amber-300" />
+              )}
             </button>
-          )}
+
+            {/* Hover Slider */}
+            <div className="w-0 overflow-hidden group-hover/vol:w-16 transition-all duration-300 flex items-center">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-14 accent-amber-500 h-1 bg-amber-950/80 rounded-lg cursor-pointer ml-1"
+                title="Ses Seviyesi"
+              />
+            </div>
+          </div>
 
           {/* Spotify Direct Link */}
           {currentTrack.spotifyUrl && (
@@ -230,7 +304,7 @@ export default function MiniPlayer() {
               href={currentTrack.spotifyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-stone-400 hover:text-[#1DB954] transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center"
+              className="p-1.5 text-stone-400 hover:text-[#1DB954] transition-colors min-w-[28px] min-h-[28px] flex items-center justify-center ml-0.5"
               title="Spotify'da Dinle"
             >
               <SpotifyIcon className="w-4 h-4" />
