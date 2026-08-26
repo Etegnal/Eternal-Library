@@ -217,8 +217,8 @@ export default function MiniPlayer() {
         />
       )}
 
-      {/* Glassmorphism & Glow Container with Fixed Bar Dimensions & Zero Layout Shift */}
-      <div className="flex items-center justify-between gap-2 sm:gap-3 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0 w-[270px] sm:w-[310px]">
+      {/* Glassmorphism & Glow Container with Perfectly Fitted Dimensions */}
+      <div className="flex items-center gap-2 sm:gap-2.5 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0">
         
         {/* Far Left Collapse Arrow Button */}
         <button
@@ -232,7 +232,7 @@ export default function MiniPlayer() {
         </button>
 
         {/* Strictly Fixed Vinyl Record Disc Container */}
-        <div className="relative w-11 h-11 min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner">
+        <div className="relative w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner">
           {coverUrl ? (
             <Image
               src={coverUrl}
@@ -252,23 +252,23 @@ export default function MiniPlayer() {
           )}
         </div>
 
-        {/* Track Title, Artist & Equalizer with Reserved Space */}
-        <div className="w-[95px] sm:w-[125px] shrink-0 space-y-0.5 pr-1 min-w-0">
-          <div className="flex items-center gap-1.5 justify-between">
+        {/* Track Title, Artist & Equalizer (Zero layout shift, responsive max-width) */}
+        <div className="min-w-0 max-w-[85px] sm:max-w-[125px] flex-1 space-y-0.5 pr-1">
+          <div className="flex items-center gap-1">
             <h4 className="text-xs font-serif font-medium text-amber-100 truncate flex-1">
               {currentTrack.title}
             </h4>
 
-            {/* Equalizer Barmeter (Always occupies w-3.5 DOM space to prevent horizontal shifting) */}
+            {/* Equalizer Barmeter (Reserved DOM slot prevents text shifting) */}
             <div
-              className={`flex items-end gap-[2px] h-3 w-3.5 shrink-0 transition-opacity duration-200 ${
+              className={`flex items-end gap-[2px] h-3 w-3 shrink-0 transition-opacity duration-200 ${
                 isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
               title="Çalıyor"
             >
-              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.8s_ease-in-out_infinite]' : 'h-1'}`} />
-              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.6s_ease-in-out_0.2s_infinite]' : 'h-1'}`} />
-              <span className={`w-[2.5px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.9s_ease-in-out_0.4s_infinite]' : 'h-1'}`} />
+              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.8s_ease-in-out_infinite]' : 'h-1'}`} />
+              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.6s_ease-in-out_0.2s_infinite]' : 'h-1'}`} />
+              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.9s_ease-in-out_0.4s_infinite]' : 'h-1'}`} />
             </div>
           </div>
 
