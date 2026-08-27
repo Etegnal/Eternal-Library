@@ -100,14 +100,6 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                   unoptimized
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                
-                {/* Readable Badge Badge */}
-                {book.isReadable && (
-                  <div className="absolute top-2 left-2 bg-[#8B4513]/90 backdrop-blur-md text-amber-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-amber-500/40 flex items-center gap-1 shadow-sm">
-                    <BookCheck className="w-3 h-3 text-amber-400" />
-                    <span>Tam Metin</span>
-                  </div>
-                )}
               </div>
 
               {/* RIGHT SIDE: DETAILS & ACTIONS */}
@@ -125,7 +117,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] group-hover:text-[#8B4513] transition-colors leading-snug line-clamp-1">
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] group-hover:text-[#8B4513] transition-colors leading-snug break-words">
                     <Link href={`/kitaplar/${book.slug}`}>
                       {book.title}
                     </Link>
@@ -153,26 +145,15 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
 
                 </div>
 
-                {/* ZERO-COMMERCE ACTIONS: 'Kitabı Oku' or 'Özet & Detay' */}
+                {/* UNIFIED ACTION: 'Kitabı İncele' */}
                 <div className="pt-3 mt-3 border-t border-amber-200/60 flex items-center gap-2">
-                  
-                  {book.isReadable ? (
-                    <button
-                      onClick={() => setSelectedBookForReading(book)}
-                      className="flex-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      <BookOpen className="w-3.5 h-3.5 text-amber-300" />
-                      <span>Kitabı Oku</span>
-                    </button>
-                  ) : (
-                    <Link
-                      href={`/kitaplar/${book.slug}`}
-                      className="flex-1 px-3.5 py-2 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs border border-amber-300/80 transition-all flex items-center justify-center gap-1.5"
-                    >
-                      <Eye className="w-3.5 h-3.5 text-amber-700" />
-                      <span>İncele & Özet</span>
-                    </Link>
-                  )}
+                  <Link
+                    href={`/kitaplar/${book.slug}`}
+                    className="flex-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Kitabı İncele</span>
+                  </Link>
 
                   <Link
                     href={`/kitaplar/${book.slug}`}
@@ -181,7 +162,6 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                   >
                     <Sparkles className="w-4 h-4 text-amber-600" />
                   </Link>
-
                 </div>
 
               </div>
