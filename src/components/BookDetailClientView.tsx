@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { BookOpen, Star, Calendar, FileText, Bookmark, Tag, BookCheck, ShoppingCart, ExternalLink } from 'lucide-react';
+import { BookOpen, Star, Calendar, FileText, Bookmark, Tag, ShoppingCart, ExternalLink } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
 
 interface BookDetailClientViewProps {
@@ -36,8 +36,8 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
       {/* LEFT SIDE: COVER IMAGE & ACTIONS */}
       <div className="md:col-span-4 flex flex-col items-center space-y-4">
         
-        {/* Cover Aspect Ratio 2/3 */}
-        <div className="relative aspect-[2/3] w-40 sm:w-52 rounded-2xl overflow-hidden shadow-cozy border-2 border-[#E6D7BC] bg-[#FEFBF3] group">
+        {/* Cover Aspect Ratio 2/3 (Slightly larger) */}
+        <div className="relative aspect-[2/3] w-48 sm:w-60 rounded-2xl overflow-hidden shadow-cozy border-2 border-[#E6D7BC] bg-[#FEFBF3] group">
           <Image
             src={book.coverUrl}
             alt={book.title}
@@ -48,19 +48,13 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           />
         </div>
 
-        {/* Rating Badge */}
-        <div className="flex items-center gap-2 text-xs font-bold text-amber-900 bg-amber-100/90 px-4 py-1.5 rounded-full border border-amber-300 shadow-sm">
-          <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-          <span>{book.rating.toFixed(1)} / 5.0 Değerlendirme</span>
-        </div>
-
         {/* Read Book / Editör İncelemesi Action Button */}
         <button
           onClick={() => setIsReaderOpen(true)}
           className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
         >
           <BookOpen className="w-4 h-4 text-amber-300" />
-          <span>Editör İncelemesini Oku</span>
+          <span>Editör İncelesini Oku</span>
         </button>
 
         {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
@@ -96,7 +90,7 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           </p>
         </div>
 
-        {/* Detailed Metadata Grid */}
+        {/* Detailed Metadata Grid (3 boxes: Yıl, Sayfa, Değerlendirme) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-medium text-[#5C4033]">
           <div className="flex items-center gap-2 bg-amber-50/80 p-3 rounded-xl border border-amber-200/80">
             <Calendar className="w-4 h-4 text-amber-700 shrink-0" />
@@ -115,19 +109,19 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           </div>
 
           <div className="flex items-center gap-2 bg-amber-50/80 p-3 rounded-xl border border-amber-200/80 col-span-2 sm:col-span-1">
-            <BookCheck className="w-4 h-4 text-amber-700 shrink-0" />
+            <Star className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
             <div>
-              <span className="block text-[10px] text-[#8B4513] uppercase font-bold">Kütüphane Durumu</span>
-              <span className="font-bold text-[#362215] block">{book.isReadable ? 'Tam Metin Aktif' : 'Mutlak Seçki'}</span>
+              <span className="block text-[10px] text-[#8B4513] uppercase font-bold">Değerlendirme</span>
+              <span className="font-mono font-bold text-[#362215] block">{book.rating.toFixed(1)} / 5.0</span>
             </div>
           </div>
         </div>
 
-        {/* Editör İncelemesi */}
+        {/* Kitap Özeti */}
         <div className="space-y-3 pt-2">
           <h2 className="font-serif font-bold text-xl text-[#362215] flex items-center gap-2 border-b border-amber-200/80 pb-2">
             <BookOpen className="w-5 h-5 text-amber-700" />
-            <span>Editör İncelemesi</span>
+            <span>Kitap Özeti</span>
           </h2>
           <p className="text-sm sm:text-base text-[#5C4033] leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 p-4 sm:p-5 rounded-2xl border border-amber-200/60 shadow-inner">
             {book.summary}
@@ -145,10 +139,6 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
             author: book.author,
             pages: book.pages,
             coverUrl: book.coverUrl,
-            bookPages: book.fullPages?.map((content, idx) => ({
-              pageNumber: idx + 1,
-              content,
-            })),
           }}
           onClose={() => setIsReaderOpen(false)}
         />
