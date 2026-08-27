@@ -12,9 +12,12 @@ export default async function BooksPage() {
   // Ensure the 30 verified masterpieces exist in Neon PostgreSQL DB
   await ensureVerifiedBooksInDb();
 
-  // Fetch all books from DB (Newest / Recently Added First)
+  // Fetch all books from DB (Highest Rated First by default)
   const dbBooks = await prisma.book.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: [
+      { rating: 'desc' },
+      { createdAt: 'desc' },
+    ],
   });
 
   // Map to VerifiedBook schema with displayYear

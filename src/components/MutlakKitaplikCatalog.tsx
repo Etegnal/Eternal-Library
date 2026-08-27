@@ -14,7 +14,7 @@ interface MutlakKitaplikCatalogProps {
 export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCatalogProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'newest' | 'rating_desc' | 'year_asc' | 'year_desc' | 'title_asc'>('newest');
+  const [sortBy, setSortBy] = useState<'rating_desc' | 'newest' | 'year_asc' | 'year_desc' | 'title_asc'>('rating_desc');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedBookForReading, setSelectedBookForReading] = useState<VerifiedBook | null>(null);
 
@@ -39,6 +39,10 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
     if (sortBy === 'rating_desc') {
       return b.rating - a.rating;
     }
+    if (sortBy === 'newest') {
+      // Preserve DB createdAt desc order
+      return 0;
+    }
     if (sortBy === 'year_asc') {
       return a.year - b.year;
     }
@@ -48,16 +52,17 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
     if (sortBy === 'title_asc') {
       return a.title.localeCompare(b.title, 'tr');
     }
-    // Default 'newest': preserve DB createdAt desc order
     return 0;
   });
 
   return (
     <div className="space-y-8">
       
-      {/* COMPACT SEARCH, SORT & FILTER TOGGLE CONTROL BAR */}
+      {/* CONTROL BAR (DESKTOP & MOBILE RESPONSIVE) */}
       <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+        
+        {/* DESKTOP LAYOUT (hidden sm:flex) */}
+        <div className="hidden sm:flex items-center gap-3">
           
           {/* Search Input */}
           <div className="relative flex-1 w-full">
@@ -72,24 +77,24 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
           </div>
 
           {/* Sort Select Dropdown */}
-          <div className="w-full sm:w-auto">
+          <div className="w-auto">
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
-              className="w-full sm:w-auto px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
+              className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
             >
-              <option value="newest">En Son Eklenenler</option>
               <option value="rating_desc">En Yüksek Puanlılar</option>
+              <option value="newest">En Son Eklenenler</option>
               <option value="year_asc">Yayın Yılı (Eskiden Yeniye)</option>
               <option value="year_desc">Yayın Yılı (Yeniden Eskiye)</option>
               <option value="title_asc">İsim (A-Z)</option>
             </select>
           </div>
 
-          {/* Filter Toggle Button */}
+          {/* Category Filter Toggle Button */}
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
               selectedCategory !== 'all' || isFilterOpen
                 ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
                 : 'bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border-amber-300/80'
@@ -108,39 +113,104 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
 
         </div>
 
-        {/* EXPANDABLE CATEGORY PILLS DRAWER */}
-        {isFilterOpen && (
-          <div className="pt-3 border-t border-amber-200/60 flex flex-wrap items-center gap-2 animate-fadeIn">
-            <button
-              onClick={() => {
-                setSelectedCategory('all');
-                setIsFilterOpen(false);
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                selectedCategory === 'all'
-                  ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
-                  : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
-              }`}
-            >
-              Tüm Eserler ({initialBooks.length})
-            </button>
+        {/* MOBILE LAYOUT (sm:hidden: Search Input + 1 Single Filter & Sort Button) */}
+        <div className="flex sm:hidden flex-col gap-3">
+          
+          {/* Search Input */}
+          <div className="relative w-full">
+            <Search className="w-4 h-4 text-amber-800/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Eser adı, yazar veya konu ara..."
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs text-[#362215] placeholder:text-stone-400 focus:outline-none focus:border-amber-600 transition-all"
+            />
+          </div>
 
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => {
-                  setSelectedCategory(cat);
-                  setIsFilterOpen(false);
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                  selectedCategory === cat
-                    ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
-                    : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
-                }`}
+          {/* SINGLE MOBILE FILTER & SORT BUTTON */}
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
+              selectedCategory !== 'all' || sortBy !== 'rating_desc' || isFilterOpen
+                ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
+                : 'bg-amber-100/90 text-[#78350F] border-amber-300/80'
+            }`}
+          >
+            <SlidersHorizontal className="w-4 h-4 text-amber-300" />
+            <span>
+              {selectedCategory !== 'all' ? `Tür: ${selectedCategory}` : 'Filtrele & Sırala'}
+            </span>
+            {isFilterOpen ? (
+              <ChevronUp className="w-4 h-4 ml-auto opacity-80" />
+            ) : (
+              <ChevronDown className="w-4 h-4 ml-auto opacity-80" />
+            )}
+          </button>
+
+        </div>
+
+        {/* EXPANDABLE FILTER & SORT DRAWER (Renders for Desktop & Mobile when isFilterOpen is true) */}
+        {isFilterOpen && (
+          <div className="pt-3 border-t border-amber-200/60 space-y-4 animate-fadeIn">
+            
+            {/* Sort Select Option (Mobile Only inside drawer for clean UX) */}
+            <div className="sm:hidden space-y-1">
+              <label className="block text-[11px] font-bold text-[#8B4513] uppercase tracking-wider">
+                Sıralama Ölçütü:
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e: any) => setSortBy(e.target.value)}
+                className="w-full p-2.5 rounded-xl text-xs font-bold bg-amber-50 border border-amber-300 text-[#78350F] focus:outline-none cursor-pointer"
               >
-                {cat}
-              </button>
-            ))}
+                <option value="rating_desc">En Yüksek Puanlılar</option>
+                <option value="newest">En Son Eklenenler</option>
+                <option value="year_asc">Yayın Yılı (Eskiden Yeniye)</option>
+                <option value="year_desc">Yayın Yılı (Yeniden Eskiye)</option>
+                <option value="title_asc">İsim (A-Z)</option>
+              </select>
+            </div>
+
+            {/* Category Pills */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-bold text-[#8B4513] uppercase tracking-wider">
+                Eser Türü:
+              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setIsFilterOpen(false);
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
+                      : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
+                  }`}
+                >
+                  Tüm Eserler ({initialBooks.length})
+                </button>
+
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setIsFilterOpen(false);
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                      selectedCategory === cat
+                        ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
+                        : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
           </div>
         )}
       </div>
