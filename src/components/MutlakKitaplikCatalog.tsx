@@ -258,8 +258,8 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
               className="group relative p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] hover:border-[#8B4513]/40 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 sm:gap-5"
             >
               
-              {/* LEFT SIDE: COVER IMAGE (Aspect Ratio 2/3) */}
-              <div className="relative w-28 sm:w-36 h-40 sm:h-52 rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 shadow-md">
+              {/* LEFT SIDE: COVER IMAGE (Self-stretching to fill full card height) */}
+              <div className="relative w-32 sm:w-44 self-stretch min-h-[200px] sm:min-h-[260px] rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 shadow-md">
                 <Image
                   src={book.coverUrl}
                   alt={book.title}
