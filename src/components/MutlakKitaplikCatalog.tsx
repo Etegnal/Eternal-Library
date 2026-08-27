@@ -78,11 +78,11 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
               onChange={(e: any) => setSortBy(e.target.value)}
               className="w-full sm:w-auto px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
             >
-              <option value="newest">✨ Son Eklenenler Üstte</option>
-              <option value="rating_desc">⭐ En Yüksek Puanlılar</option>
-              <option value="year_asc">📅 Yayın Yılı (Eskiden Yeniye)</option>
-              <option value="year_desc">📅 Yayın Yılı (Yeniden Eskiye)</option>
-              <option value="title_asc">🔤 İsim (A-Z)</option>
+              <option value="newest">En Son Eklenenler</option>
+              <option value="rating_desc">En Yüksek Puanlılar</option>
+              <option value="year_asc">Yayın Yılı (Eskiden Yeniye)</option>
+              <option value="year_desc">Yayın Yılı (Yeniden Eskiye)</option>
+              <option value="title_asc">İsim (A-Z)</option>
             </select>
           </div>
 
@@ -216,14 +216,6 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                   >
                     <BookOpen className="w-3.5 h-3.5 text-amber-300" />
                     <span>Kitabı İncele</span>
-                  </Link>
-
-                  <Link
-                    href={`/kitaplar/${book.slug}`}
-                    className="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-[#78350F] border border-amber-200 transition-colors"
-                    title="Eser Detayı"
-                  >
-                    <Sparkles className="w-4 h-4 text-amber-600" />
                   </Link>
                 </div>
 

@@ -30,10 +30,35 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
     ? book.buyUrl
     : `https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' satın al')}`;
 
+  const renderActionButtons = () => (
+    <>
+      {/* Read Book / Kitap Özeti Action Button */}
+      <button
+        onClick={() => setIsReaderOpen(true)}
+        className="w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
+      >
+        <BookOpen className="w-4 h-4 text-amber-300 shrink-0" />
+        <span>Kitap Özetini Oku</span>
+      </button>
+
+      {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
+      <a
+        href={purchaseTargetUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 border border-amber-300/80 cursor-pointer"
+      >
+        <ShoppingCart className="w-4 h-4 text-amber-800 shrink-0" />
+        <span>Satın Al / Fiyatı İncele</span>
+        <ExternalLink className="w-3 h-3 text-amber-600 ml-auto shrink-0" />
+      </a>
+    </>
+  );
+
   return (
     <div className="p-4 sm:p-10 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start relative overflow-hidden">
       
-      {/* LEFT SIDE: COVER IMAGE & ACTIONS */}
+      {/* LEFT SIDE: COVER IMAGE & DESKTOP ACTIONS */}
       <div className="md:col-span-4 flex flex-col items-center space-y-3 sm:space-y-4">
         
         {/* Cover Aspect Ratio 2/3 */}
@@ -48,29 +73,13 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           />
         </div>
 
-        {/* Read Book / Kitap Özeti Action Button */}
-        <button
-          onClick={() => setIsReaderOpen(true)}
-          className="w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
-        >
-          <BookOpen className="w-4 h-4 text-amber-300 shrink-0" />
-          <span>Kitap Özetini Oku</span>
-        </button>
-
-        {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
-        <a
-          href={purchaseTargetUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 border border-amber-300/80 cursor-pointer"
-        >
-          <ShoppingCart className="w-4 h-4 text-amber-800 shrink-0" />
-          <span>Satın Al / Fiyatı İncele</span>
-          <ExternalLink className="w-3 h-3 text-amber-600 ml-auto shrink-0" />
-        </a>
+        {/* DESKTOP ACTION BUTTONS (Hidden on mobile) */}
+        <div className="hidden sm:flex flex-col space-y-3 w-full">
+          {renderActionButtons()}
+        </div>
       </div>
 
-      {/* RIGHT SIDE: METADATA & SUMMARY */}
+      {/* RIGHT SIDE: METADATA, SUMMARY & MOBILE ACTIONS */}
       <div className="md:col-span-8 space-y-4 sm:space-y-6 text-[#362215]">
         
         {/* Category & Title */}
@@ -126,6 +135,11 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           <p className="text-xs sm:text-base text-[#5C4033] leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-200/60 shadow-inner">
             {book.summary}
           </p>
+        </div>
+
+        {/* MOBILE ACTION BUTTONS (Positioned AFTER Editor's Review on Mobile) */}
+        <div className="flex sm:hidden flex-col space-y-3 w-full pt-3 border-t border-amber-200/60">
+          {renderActionButtons()}
         </div>
 
       </div>

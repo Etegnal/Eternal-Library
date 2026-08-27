@@ -27,7 +27,7 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume] = useState(0.25);
+  const [volume] = useState(0.08);
   const [isMuted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasUserPaused, setHasUserPaused] = useState(false);
@@ -53,7 +53,8 @@ export default function MiniPlayer() {
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setPlaylist(data);
-          setCurrentIndex(0);
+          const randomIndex = Math.floor(Math.random() * data.length);
+          setCurrentIndex(randomIndex);
         }
         setHasLoadedPlaylist(true);
       })
