@@ -316,9 +316,9 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                 <div className="pt-3 mt-3 border-t border-amber-200/60 flex items-center gap-2">
                   <Link
                     href={`/kitaplar/${book.slug}`}
-                    className="flex-1 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <BookOpen className="w-3.5 h-3.5 text-amber-300" />
+                    <BookOpen className="w-3.5 h-3.5 text-amber-800" />
                     <span>Kitabı İncele</span>
                   </Link>
                 </div>
