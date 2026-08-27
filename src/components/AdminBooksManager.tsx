@@ -88,6 +88,7 @@ export default function AdminBooksManager() {
         rating: '4.8',
         isReadable: false,
         content: '',
+        buyUrl: '',
       });
       setCoverFile(null);
       setCoverPreview(null);
