@@ -27,7 +27,7 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume] = useState(0.75);
+  const [volume] = useState(0.25);
   const [isMuted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasUserPaused, setHasUserPaused] = useState(false);
