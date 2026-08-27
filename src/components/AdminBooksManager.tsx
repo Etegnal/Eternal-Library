@@ -251,12 +251,12 @@ export default function AdminBooksManager() {
 
         {/* SUMMARY */}
         <div>
-          <label className="block text-xs font-bold text-[#8B4513] mb-1">Eser Özeti ve Değerlendirmesi</label>
+          <label className="block text-xs font-bold text-[#8B4513] mb-1">Editör İncelemesi & Özet</label>
           <textarea
             rows={3}
             value={formData.summary}
             onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-            placeholder="Kitabın özeti ve edebi önemi..."
+            placeholder="Kitap hakkındaki editör incelemesi ve edebi değerlendirme..."
             className="w-full p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] leading-relaxed focus:outline-none focus:border-amber-600 font-sans"
           />
         </div>

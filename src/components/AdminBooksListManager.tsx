@@ -328,7 +328,7 @@ export default function AdminBooksListManager() {
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
-                          <span>Başucu Özeti</span>
+                          <span>Editör İncelemesi</span>
                         </span>
                       )}
                     </td>
@@ -495,7 +495,7 @@ export default function AdminBooksListManager() {
 
               {/* Summary */}
               <div>
-                <label className="block text-xs font-bold text-[#8B4513] mb-1">Eser Özeti</label>
+                <label className="block text-xs font-bold text-[#8B4513] mb-1">Editör İncelemesi & Özet Metni</label>
                 <textarea
                   rows={3}
                   value={editFormData.summary}

@@ -58,7 +58,7 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           </button>
         ) : (
           <div className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 text-stone-600 font-bold text-xs text-center border border-amber-200">
-            <span>Başucu Özeti & Arşiv Metni</span>
+            <span>Editör İncelemesi</span>
           </div>
         )}
       </div>
@@ -110,11 +110,11 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           </div>
         </div>
 
-        {/* Eser Özeti */}
+        {/* Editör İncelemesi */}
         <div className="space-y-3 pt-2">
           <h2 className="font-serif font-bold text-xl text-[#362215] flex items-center gap-2 border-b border-amber-200/80 pb-2">
             <BookOpen className="w-5 h-5 text-amber-700" />
-            <span>Eser Özeti ve Edebi İncelemesi</span>
+            <span>Editör İncelemesi</span>
           </h2>
           <p className="text-sm sm:text-base text-[#5C4033] leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 p-4 sm:p-5 rounded-2xl border border-amber-200/60 shadow-inner">
             {book.summary}

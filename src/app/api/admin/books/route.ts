@@ -33,20 +33,28 @@ export async function POST(req: NextRequest) {
 
     let coverUrl = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600';
 
-    // File Upload via fs/promises to public/covers/[slug].jpg
+    // Cover File Upload with Serverless (Vercel) + Local fallback
     if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      try {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
 
-      const publicCoversDir = path.join(process.cwd(), 'public', 'covers');
-      await mkdir(publicCoversDir, { recursive: true });
+        const publicCoversDir = path.join(process.cwd(), 'public', 'covers');
+        await mkdir(publicCoversDir, { recursive: true });
 
-      const fileExtension = path.extname(file.name) || '.jpg';
-      const fileName = `${slug}${fileExtension}`;
-      const filePath = path.join(publicCoversDir, fileName);
+        const fileExtension = path.extname(file.name) || '.jpg';
+        const fileName = `${slug}${fileExtension}`;
+        const filePath = path.join(publicCoversDir, fileName);
 
-      await writeFile(filePath, buffer);
-      coverUrl = `/covers/${fileName}`;
+        await writeFile(filePath, buffer);
+        coverUrl = `/covers/${fileName}`;
+      } catch (fsErr) {
+        console.warn('Local fs write failed (Serverless environment), converting to base64 Data URL:', fsErr);
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const mimeType = file.type || 'image/jpeg';
+        coverUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
     }
 
     // Atomic DB write using Prisma
@@ -67,7 +75,6 @@ export async function POST(req: NextRequest) {
 
     // If content is provided, split into pages or create BookPage records
     if (contentText && contentText.trim().length > 0) {
-      // Split by --- or paragraphs into pages
       const rawPages = contentText.split(/---|\n\n\n+/).filter((p) => p.trim().length > 0);
       for (let i = 0; i < rawPages.length; i++) {
         await prisma.bookPage.create({

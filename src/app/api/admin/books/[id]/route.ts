@@ -81,20 +81,28 @@ export async function PUT(
 
     let coverUrl = existing.coverUrl;
 
-    // File Upload via fs/promises if new cover is uploaded
+    // Cover File Upload with Serverless (Vercel) + Local fallback
     if (file && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+      try {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
 
-      const publicCoversDir = path.join(process.cwd(), 'public', 'covers');
-      await mkdir(publicCoversDir, { recursive: true });
+        const publicCoversDir = path.join(process.cwd(), 'public', 'covers');
+        await mkdir(publicCoversDir, { recursive: true });
 
-      const fileExtension = path.extname(file.name) || '.jpg';
-      const fileName = `${slug}${fileExtension}`;
-      const filePath = path.join(publicCoversDir, fileName);
+        const fileExtension = path.extname(file.name) || '.jpg';
+        const fileName = `${slug}${fileExtension}`;
+        const filePath = path.join(publicCoversDir, fileName);
 
-      await writeFile(filePath, buffer);
-      coverUrl = `/covers/${fileName}`;
+        await writeFile(filePath, buffer);
+        coverUrl = `/covers/${fileName}`;
+      } catch (fsErr) {
+        console.warn('Local fs write failed (Serverless environment), converting to base64 Data URL:', fsErr);
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const mimeType = file.type || 'image/jpeg';
+        coverUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
     }
 
     // Atomic DB Update
