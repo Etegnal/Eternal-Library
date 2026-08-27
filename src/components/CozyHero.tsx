@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AmbientAudio from '@/components/AmbientAudio';
-import { Feather, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Feather, BookOpen, Library, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getDateStringForDay } from '@/lib/quotes';
 
 interface CozyHeroProps {
@@ -145,22 +145,30 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
             </div>
           </div>
 
-          {/* HERO CTA BUTTONS: GHOST GLASS BUTTONS */}
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 pt-1 sm:pt-2 w-full max-w-md">
+          {/* HERO CTA BUTTONS: 3 COMPACT GHOST GLASS BUTTONS SIDE BY SIDE */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 pt-1 sm:pt-2 w-full max-w-md">
             <Link
               href="/yazilar"
-              className="px-4 py-3 rounded-xl bg-white/5 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
             >
-              <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Yazıları Keşfet</span>
+              <BookOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Yazıları Keşfet</span>
+            </Link>
+
+            <Link
+              href="/kitaplar"
+              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
+            >
+              <Library className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Kitaplar</span>
             </Link>
 
             <Link
               href="/siirler"
-              className="px-4 py-3 rounded-xl bg-white/5 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
             >
-              <Feather className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Şiir Antolojisi</span>
+              <Feather className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="truncate">Şiir Antolojisi</span>
             </Link>
           </div>
 
