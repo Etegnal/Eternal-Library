@@ -23,8 +23,8 @@ export default async function ArticlesPage() {
         <h1 className="font-serif font-bold text-4xl text-cozy-coffee">
           Denemeler ve Yazılar
         </h1>
-        <p className="text-cozy-coffee-light text-base leading-relaxed">
-          Zamanın yavaşladığı, sessizliğin düşünceye dönüştüğü anlardan süzülen edebiyat, felsefe ve hayat notları.
+        <p className="text-[#5C4033] text-base leading-relaxed font-serif italic max-w-xl mx-auto">
+          "Zamanın yavaşladığı, sessizliğin düşünceye dönüştüğü anlardan süzülen edebiyat, felsefe ve hayat notları."
         </p>
       </div>
 
