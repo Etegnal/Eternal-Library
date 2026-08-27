@@ -145,30 +145,34 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
             </div>
           </div>
 
-          {/* HERO CTA BUTTONS: 3 COMPACT GHOST GLASS BUTTONS SIDE BY SIDE */}
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 pt-1 sm:pt-2 w-full max-w-md">
-            <Link
-              href="/yazilar"
-              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="truncate">Yazıları Keşfet</span>
-            </Link>
+          {/* HERO CTA BUTTONS */}
+          <div className="space-y-2.5 pt-1 sm:pt-2 w-full max-w-md">
+            {/* ROW 1: YAZILAR & ŞİİRLER SIDE BY SIDE */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+              <Link
+                href="/yazilar"
+                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              >
+                <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Yazıları Keşfet</span>
+              </Link>
 
+              <Link
+                href="/siirler"
+                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              >
+                <Feather className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Şiir Antolojisi</span>
+              </Link>
+            </div>
+
+            {/* ROW 2: CENTERED KITAPLAR BUTTON UNDERNEATH */}
             <Link
               href="/kitaplar"
-              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
+              className="w-full px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
             >
-              <Library className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="truncate">Kitaplar</span>
-            </Link>
-
-            <Link
-              href="/siirler"
-              className="px-2 sm:px-3.5 py-2 sm:py-2.5 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-[11px] sm:text-xs transition-all flex items-center justify-center gap-1 sm:gap-1.5 text-center truncate"
-            >
-              <Feather className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="truncate">Şiir Antolojisi</span>
+              <Library className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Mutlak Kitaplık</span>
             </Link>
           </div>
 
