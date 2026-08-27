@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookOpen, Star, Sparkles, Search, Filter, BookCheck, Eye } from 'lucide-react';
+import { BookOpen, Star, Sparkles, Search, Filter, BookCheck, Eye, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
 import { VerifiedBook } from '@/lib/verifiedBooks';
 
@@ -14,6 +14,7 @@ interface MutlakKitaplikCatalogProps {
 export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCatalogProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedBookForReading, setSelectedBookForReading] = useState<VerifiedBook | null>(null);
 
   // Extract unique categories
@@ -35,9 +36,9 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
   return (
     <div className="space-y-8">
       
-      {/* SEARCH & FILTER BAR */}
-      <div className="p-4 sm:p-6 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row items-center gap-4">
+      {/* COMPACT SEARCH & FILTER TOGGLE CONTROL BAR */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
           
           {/* Search Input */}
           <div className="relative flex-1 w-full">
@@ -51,13 +52,39 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
             />
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 custom-scrollbar">
+          {/* Filter Toggle Button */}
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
+              selectedCategory !== 'all' || isFilterOpen
+                ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
+                : 'bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border-amber-300/80'
+            }`}
+          >
+            <SlidersHorizontal className="w-4 h-4 text-amber-300" />
+            <span>
+              {selectedCategory === 'all' ? 'Türleri Filtrele' : `Tür: ${selectedCategory}`}
+            </span>
+            {isFilterOpen ? (
+              <ChevronUp className="w-4 h-4 ml-1 opacity-80" />
+            ) : (
+              <ChevronDown className="w-4 h-4 ml-1 opacity-80" />
+            )}
+          </button>
+
+        </div>
+
+        {/* EXPANDABLE CATEGORY PILLS DRAWER */}
+        {isFilterOpen && (
+          <div className="pt-3 border-t border-amber-200/60 flex flex-wrap items-center gap-2 animate-fadeIn">
             <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
+              onClick={() => {
+                setSelectedCategory('all');
+                setIsFilterOpen(false);
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                 selectedCategory === 'all'
-                  ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
+                  ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
                   : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
               }`}
             >
@@ -67,10 +94,13 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setIsFilterOpen(false);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                   selectedCategory === cat
-                    ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
+                    ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
                     : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
                 }`}
               >
@@ -78,8 +108,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
               </button>
             ))}
           </div>
-
-        </div>
+        )}
       </div>
 
       {/* BOOKS LIST / GRID (Left Side Cover 2/3 Aspect Ratio, Right Side Details) */}
