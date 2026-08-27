@@ -27,7 +27,7 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.05); // Super quiet 5% initial volume
+  const [volume, setVolume] = useState(0.25); // Initial volume 25% (0.25)
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -68,7 +68,6 @@ export default function MiniPlayer() {
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setPlaylist(data);
-          // Pick a random track on every page refresh!
           const randomIndex = Math.floor(Math.random() * data.length);
           setCurrentIndex(randomIndex);
         }
@@ -100,7 +99,6 @@ export default function MiniPlayer() {
 
     if (youtubeId) {
       syncYoutubeVolume(volume);
-      // Repeated retries to force YouTube API to accept low volume after loading
       const t1 = setTimeout(() => syncYoutubeVolume(volume), 300);
       const t2 = setTimeout(() => syncYoutubeVolume(volume), 800);
       const t3 = setTimeout(() => syncYoutubeVolume(volume), 1500);
@@ -114,13 +112,21 @@ export default function MiniPlayer() {
     }
   }, [volume, isMuted, youtubeId, currentIndex, isPlaying]);
 
-  // Listen for YouTube video ENDED signal to auto-advance to next track
+  // Listen for YouTube events to synchronize play/pause UI state and auto-advance
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-        if (data && (data.info === 0 || (data.event === 'onStateChange' && data.info === 0))) {
-          nextTrack();
+        if (data) {
+          // YouTube API State: 1 = PLAYING, 2 = PAUSED, 0 = ENDED
+          if (data.info === 1 || (data.event === 'onStateChange' && data.info === 1)) {
+            setIsPlaying(true);
+          } else if (data.info === 2 || (data.event === 'onStateChange' && data.info === 2)) {
+            setIsPlaying(false);
+          } else if (data.info === 0 || (data.event === 'onStateChange' && data.info === 0)) {
+            setIsPlaying(false);
+            nextTrack();
+          }
         }
       } catch (e) {
         // Ignore non-JSON window messages
@@ -140,7 +146,7 @@ export default function MiniPlayer() {
       if (iframeRef.current && iframeRef.current.contentWindow) {
         syncYoutubeVolume(volume);
         iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        setTimeout(() => syncYoutubeVolume(volume), 500);
+        setTimeout(() => syncYoutubeVolume(volume), 400);
       }
       setIsPlaying(true);
     } else if (audioRef.current) {
@@ -207,6 +213,8 @@ export default function MiniPlayer() {
           <audio
             ref={audioRef}
             src={currentTrack.src}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
             onEnded={handleTrackEnded}
             preload="auto"
           />
@@ -245,6 +253,8 @@ export default function MiniPlayer() {
         <audio
           ref={audioRef}
           src={currentTrack.src}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
           onEnded={handleTrackEnded}
           preload="auto"
         />
