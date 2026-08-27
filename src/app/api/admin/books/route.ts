@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const summary = formData.get('summary') as string;
     const ratingStr = formData.get('rating') as string;
     const isReadableStr = formData.get('isReadable') as string;
+    const buyUrl = (formData.get('buyUrl') as string) || '';
     const contentText = formData.get('content') as string; // Optional full text
     const file = formData.get('cover') as File | null;
 
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
         rating,
         isReadable,
         coverUrl,
+        buyUrl,
       },
     });
 

@@ -81,6 +81,7 @@ model Book {
   rating        Float      @default(4.8)
   isReadable    Boolean    @default(false)
   coverUrl      String     @default("")
+  buyUrl        String?    @default("")
   googleBookId  String?
   authors       String?
   description   String?

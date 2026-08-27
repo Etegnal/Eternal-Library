@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { BookOpen, Star, Calendar, FileText, Bookmark, Tag, BookCheck } from 'lucide-react';
+import { BookOpen, Star, Calendar, FileText, Bookmark, Tag, BookCheck, ShoppingCart, ExternalLink } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
 
 interface BookDetailClientViewProps {
@@ -18,6 +18,7 @@ interface BookDetailClientViewProps {
     rating: number;
     isReadable: boolean;
     coverUrl: string;
+    buyUrl?: string | null;
     fullPages?: string[];
   };
 }
@@ -25,12 +26,18 @@ interface BookDetailClientViewProps {
 export default function BookDetailClientView({ book }: BookDetailClientViewProps) {
   const [isReaderOpen, setIsReaderOpen] = useState(false);
 
+  const purchaseTargetUrl = (book.buyUrl && book.buyUrl.trim().length > 0)
+    ? book.buyUrl
+    : `https://www.google.com/search?q=${encodeURIComponent(book.title + ' ' + book.author + ' satın al')}`;
+
   return (
     <div className="p-6 sm:p-10 rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment grid grid-cols-1 md:grid-cols-12 gap-8 items-start relative overflow-hidden">
       
-      {/* LEFT SIDE: COVER IMAGE & READ BUTTON */}
-      <div className="md:col-span-4 flex flex-col items-center justify-center space-y-5">
-        <div className="relative w-44 sm:w-48 h-64 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-200/80 shrink-0 bg-amber-950">
+      {/* LEFT SIDE: COVER IMAGE & ACTIONS */}
+      <div className="md:col-span-4 flex flex-col items-center space-y-4">
+        
+        {/* Cover Aspect Ratio 2/3 */}
+        <div className="relative aspect-[2/3] w-40 sm:w-52 rounded-2xl overflow-hidden shadow-cozy border-2 border-[#E6D7BC] bg-[#FEFBF3] group">
           <Image
             src={book.coverUrl}
             alt={book.title}
@@ -55,6 +62,18 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           <BookOpen className="w-4 h-4 text-amber-300" />
           <span>Editör İncelemesini Oku</span>
         </button>
+
+        {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
+        <a
+          href={purchaseTargetUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full py-2.5 px-4 rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 border border-amber-300/80 cursor-pointer"
+        >
+          <ShoppingCart className="w-4 h-4 text-amber-800" />
+          <span>Satın Al / Fiyatı İncele</span>
+          <ExternalLink className="w-3 h-3 text-amber-600 ml-auto" />
+        </a>
       </div>
 
       {/* RIGHT SIDE: METADATA & SUMMARY */}

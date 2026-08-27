@@ -15,6 +15,7 @@ export default function AdminBooksManager() {
     rating: '4.8',
     isReadable: false,
     content: '',
+    buyUrl: '',
   });
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -57,6 +58,7 @@ export default function AdminBooksManager() {
       data.append('rating', formData.rating);
       data.append('isReadable', formData.isReadable ? 'true' : 'false');
       data.append('content', formData.content);
+      data.append('buyUrl', formData.buyUrl);
 
       if (coverFile) {
         data.append('cover', coverFile);
@@ -258,6 +260,18 @@ export default function AdminBooksManager() {
             onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
             placeholder="Kitap hakkındaki editör incelemesi ve edebi değerlendirme..."
             className="w-full p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] leading-relaxed focus:outline-none focus:border-amber-600 font-sans"
+          />
+        </div>
+
+        {/* BUY URL */}
+        <div>
+          <label className="block text-xs font-bold text-[#8B4513] mb-1">Satın Alma / Mağaza Linki (Opsiyonel URL)</label>
+          <input
+            type="url"
+            value={formData.buyUrl}
+            onChange={(e) => setFormData({ ...formData, buyUrl: e.target.value })}
+            placeholder="https://www.amazon.com.tr/... veya https://www.bkmkitap.com/..."
+            className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] focus:outline-none focus:border-amber-600 font-mono"
           />
         </div>
 

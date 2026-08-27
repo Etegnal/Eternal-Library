@@ -18,6 +18,7 @@ export interface AdminBookItem {
   rating: number;
   isReadable: boolean;
   coverUrl: string;
+  buyUrl?: string | null;
   createdAt?: string;
   bookPages?: { pageNumber: number; content: string }[];
 }
@@ -40,6 +41,7 @@ export default function AdminBooksListManager() {
     rating: '4.8',
     isReadable: false,
     content: '',
+    buyUrl: '',
   });
 
   const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
@@ -105,6 +107,7 @@ export default function AdminBooksListManager() {
       rating: book.rating.toString(),
       isReadable: book.isReadable,
       content: contentText,
+      buyUrl: book.buyUrl || '',
     });
   };
 
@@ -134,6 +137,7 @@ export default function AdminBooksListManager() {
       data.append('rating', editFormData.rating);
       data.append('isReadable', editFormData.isReadable ? 'true' : 'false');
       data.append('content', editFormData.content);
+      data.append('buyUrl', editFormData.buyUrl);
 
       if (editCoverFile) {
         data.append('cover', editCoverFile);
@@ -501,6 +505,18 @@ export default function AdminBooksListManager() {
                   value={editFormData.summary}
                   onChange={(e) => setEditFormData({ ...editFormData, summary: e.target.value })}
                   className="w-full p-3 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] leading-relaxed focus:outline-none focus:border-amber-600"
+                />
+              </div>
+
+              {/* Buy URL */}
+              <div>
+                <label className="block text-xs font-bold text-[#8B4513] mb-1">Satın Alma / Mağaza Linki (Opsiyonel URL)</label>
+                <input
+                  type="url"
+                  value={editFormData.buyUrl}
+                  onChange={(e) => setEditFormData({ ...editFormData, buyUrl: e.target.value })}
+                  placeholder="https://www.amazon.com.tr/... veya https://www.bkmkitap.com/..."
+                  className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] focus:outline-none focus:border-amber-600 font-mono"
                 />
               </div>
 
