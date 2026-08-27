@@ -14,6 +14,7 @@ interface MutlakKitaplikCatalogProps {
 export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCatalogProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'newest' | 'rating_desc' | 'year_asc' | 'year_desc' | 'title_asc'>('newest');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedBookForReading, setSelectedBookForReading] = useState<VerifiedBook | null>(null);
 
@@ -33,10 +34,28 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
     return matchesSearch && matchesCategory;
   });
 
+  // Sort books
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    if (sortBy === 'rating_desc') {
+      return b.rating - a.rating;
+    }
+    if (sortBy === 'year_asc') {
+      return a.year - b.year;
+    }
+    if (sortBy === 'year_desc') {
+      return b.year - a.year;
+    }
+    if (sortBy === 'title_asc') {
+      return a.title.localeCompare(b.title, 'tr');
+    }
+    // Default 'newest': preserve DB createdAt desc order
+    return 0;
+  });
+
   return (
     <div className="space-y-8">
       
-      {/* COMPACT SEARCH & FILTER TOGGLE CONTROL BAR */}
+      {/* COMPACT SEARCH, SORT & FILTER TOGGLE CONTROL BAR */}
       <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
         <div className="flex flex-col sm:flex-row items-center gap-3">
           
@@ -50,6 +69,21 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
               placeholder="Eser adı, yazar veya konu ara..."
               className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs sm:text-sm text-[#362215] placeholder:text-stone-400 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all"
             />
+          </div>
+
+          {/* Sort Select Dropdown */}
+          <div className="w-full sm:w-auto">
+            <select
+              value={sortBy}
+              onChange={(e: any) => setSortBy(e.target.value)}
+              className="w-full sm:w-auto px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
+            >
+              <option value="newest">✨ Son Eklenenler Üstte</option>
+              <option value="rating_desc">⭐ En Yüksek Puanlılar</option>
+              <option value="year_asc">📅 Yayın Yılı (Eskiden Yeniye)</option>
+              <option value="year_desc">📅 Yayın Yılı (Yeniden Eskiye)</option>
+              <option value="title_asc">🔤 İsim (A-Z)</option>
+            </select>
           </div>
 
           {/* Filter Toggle Button */}
@@ -112,9 +146,9 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
       </div>
 
       {/* BOOKS LIST / GRID (Left Side Cover 2/3 Aspect Ratio, Right Side Details) */}
-      {filteredBooks.length > 0 ? (
+      {sortedBooks.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredBooks.map((book) => (
+          {sortedBooks.map((book) => (
             <article
               key={book.slug}
               className="group relative p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] hover:border-[#8B4513]/40 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 sm:gap-5"

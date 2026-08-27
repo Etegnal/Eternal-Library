@@ -122,6 +122,7 @@ export async function PUT(
         isReadable,
         coverUrl,
         buyUrl,
+        createdAt: new Date(),
       },
     });
 
