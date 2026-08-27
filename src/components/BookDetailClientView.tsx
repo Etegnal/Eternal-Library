@@ -48,13 +48,13 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           />
         </div>
 
-        {/* Read Book / Editör İncelemesi Action Button */}
+        {/* Read Book / Kitap Özeti Action Button */}
         <button
           onClick={() => setIsReaderOpen(true)}
           className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
         >
           <BookOpen className="w-4 h-4 text-amber-300" />
-          <span>Editör İncelesini Oku</span>
+          <span>Kitap Özetini Oku</span>
         </button>
 
         {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
@@ -117,11 +117,11 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           </div>
         </div>
 
-        {/* Kitap Özeti */}
+        {/* Editör İncelemesi */}
         <div className="space-y-3 pt-2">
           <h2 className="font-serif font-bold text-xl text-[#362215] flex items-center gap-2 border-b border-amber-200/80 pb-2">
             <BookOpen className="w-5 h-5 text-amber-700" />
-            <span>Kitap Özeti</span>
+            <span>Editör İncelemesi</span>
           </h2>
           <p className="text-sm sm:text-base text-[#5C4033] leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 p-4 sm:p-5 rounded-2xl border border-amber-200/60 shadow-inner">
             {book.summary}
