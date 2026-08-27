@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
 import { chunkTextIntoPages } from '@/lib/pageChunker';
 import { writeFile, mkdir } from 'fs/promises';
@@ -8,6 +10,12 @@ import path from 'path';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz işlem! Yalnızca yöneticiler kitap ekleyebilir.' }, { status: 401 });
+  }
+
   try {
     const formData = await req.formData();
 

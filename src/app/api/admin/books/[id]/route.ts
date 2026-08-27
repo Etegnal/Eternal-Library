@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
 import { chunkTextIntoPages } from '@/lib/pageChunker';
 import { writeFile, mkdir } from 'fs/promises';
@@ -44,6 +46,12 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz işlem! Yalnızca yöneticiler kitap düzenleyebilir.' }, { status: 401 });
+  }
+
   try {
     const { id } = params;
     const formData = await req.formData();
@@ -161,6 +169,12 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz işlem! Yalnızca yöneticiler kitap silebilir.' }, { status: 401 });
+  }
+
   try {
     const { id } = params;
 

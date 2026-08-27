@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   
-  if (!session) {
-    return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 401 });
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz erişim! Yalnızca yöneticiler yazı ekleyebilir.' }, { status: 401 });
   }
 
   try {

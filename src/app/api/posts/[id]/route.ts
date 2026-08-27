@@ -7,8 +7,8 @@ import { slugify } from '@/lib/slug';
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 401 });
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz erişim! Yalnızca yöneticiler bu işlemi yapabilir.' }, { status: 401 });
   }
 
   try {
@@ -24,8 +24,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 401 });
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz erişim! Yalnızca yöneticiler bu işlemi yapabilir.' }, { status: 401 });
   }
 
   try {
@@ -59,8 +59,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ error: 'Yetkisiz erişim' }, { status: 401 });
+  if (!session || (session.user as any)?.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Yetkisiz erişim! Yalnızca yöneticiler bu işlemi yapabilir.' }, { status: 401 });
   }
 
   try {
