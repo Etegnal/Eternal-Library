@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Play, Pause, SkipForward, SkipBack, Music, ChevronRight } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Music, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
 // Helper to extract YouTube video ID from various YouTube URL formats
@@ -27,8 +27,9 @@ export default function MiniPlayer() {
   const [playlist, setPlaylist] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume] = useState(0.08);
-  const [isMuted] = useState(false);
+  const [volume, setVolume] = useState(0.05); // Super quiet 5% initial volume
+  const [isMuted, setIsMuted] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasUserPaused, setHasUserPaused] = useState(false);
   const [hasLoadedPlaylist, setHasLoadedPlaylist] = useState(false);
@@ -46,13 +47,28 @@ export default function MiniPlayer() {
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : null;
 
-  // Fetch playlist dynamically from API
+  // Helper to send volume command to YouTube iframe safely with retries
+  const syncYoutubeVolume = (volRatio: number) => {
+    if (!iframeRef.current || !iframeRef.current.contentWindow) return;
+    const targetVol = isMuted ? 0 : Math.round(volRatio * 100);
+    try {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: 'setVolume', args: [targetVol] }),
+        '*'
+      );
+    } catch (e) {
+      // ignore cross-origin error
+    }
+  };
+
+  // Fetch playlist dynamically from API & pick a RANDOM starting song
   useEffect(() => {
     fetch('/api/tracks', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setPlaylist(data);
+          // Pick a random track on every page refresh!
           const randomIndex = Math.floor(Math.random() * data.length);
           setCurrentIndex(randomIndex);
         }
@@ -68,14 +84,13 @@ export default function MiniPlayer() {
     if (isHomepage || !currentTrack) {
       stopAudioEngine();
     } else {
-      // Only auto-play if user has NOT explicitly paused the audio
       if (hasLoadedPlaylist && playlist.length > 0 && !hasUserPaused) {
         playAudioEngine();
       }
     }
   }, [pathname, hasLoadedPlaylist, currentIndex, playlist, hasUserPaused]);
 
-  // Sync volume changes to audio engines
+  // Continuously sync volume to audio engines
   useEffect(() => {
     const targetVolume = isMuted ? 0 : volume;
 
@@ -83,14 +98,21 @@ export default function MiniPlayer() {
       audioRef.current.volume = targetVolume;
     }
 
-    if (youtubeId && iframeRef.current && iframeRef.current.contentWindow) {
-      const ytVolume = Math.round(targetVolume * 100);
-      iframeRef.current.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func: 'setVolume', args: [ytVolume] }),
-        '*'
-      );
+    if (youtubeId) {
+      syncYoutubeVolume(volume);
+      // Repeated retries to force YouTube API to accept low volume after loading
+      const t1 = setTimeout(() => syncYoutubeVolume(volume), 300);
+      const t2 = setTimeout(() => syncYoutubeVolume(volume), 800);
+      const t3 = setTimeout(() => syncYoutubeVolume(volume), 1500);
+      const t4 = setTimeout(() => syncYoutubeVolume(volume), 3000);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+        clearTimeout(t4);
+      };
     }
-  }, [volume, isMuted, youtubeId]);
+  }, [volume, isMuted, youtubeId, currentIndex, isPlaying]);
 
   // Listen for YouTube video ENDED signal to auto-advance to next track
   useEffect(() => {
@@ -116,7 +138,9 @@ export default function MiniPlayer() {
 
     if (youtubeId) {
       if (iframeRef.current && iframeRef.current.contentWindow) {
+        syncYoutubeVolume(volume);
         iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        setTimeout(() => syncYoutubeVolume(volume), 500);
       }
       setIsPlaying(true);
     } else if (audioRef.current) {
@@ -179,7 +203,6 @@ export default function MiniPlayer() {
   if (isCollapsed) {
     return (
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 animate-fadeIn">
-        {/* Audio Engines (Kept mounted so audio keeps playing in background) */}
         {!youtubeId && (
           <audio
             ref={audioRef}
@@ -213,7 +236,7 @@ export default function MiniPlayer() {
     );
   }
 
-  // FULL EXPANDED MINIPLAYER BAR (Strictly Fixed Dimensions)
+  // FULL EXPANDED MINIPLAYER BAR
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[calc(100vw-2rem)] transition-all duration-500 animate-fadeIn">
       
@@ -237,10 +260,10 @@ export default function MiniPlayer() {
         />
       )}
 
-      {/* Glassmorphism & Glow Container with Perfectly Fitted Dimensions */}
-      <div className="flex items-center gap-2 sm:gap-2.5 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/85 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/60 transition-all duration-300 group shrink-0">
+      {/* Glassmorphism Container */}
+      <div className="flex items-center gap-2 sm:gap-2.5 p-2 sm:p-2.5 pr-3 bg-[#120e0b]/90 backdrop-blur-md border border-amber-500/25 hover:border-amber-500/40 rounded-2xl shadow-2xl shadow-black/70 transition-all duration-300 group shrink-0">
         
-        {/* Far Left Collapse Arrow Button */}
+        {/* Collapse Arrow Button */}
         <button
           type="button"
           onClick={() => setIsCollapsed(true)}
@@ -251,7 +274,7 @@ export default function MiniPlayer() {
           <ChevronRight className="w-4 h-4" />
         </button>
 
-        {/* Strictly Fixed Vinyl Record Disc Container */}
+        {/* Vinyl Record Disc */}
         <div className="relative w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner">
           {coverUrl ? (
             <Image
@@ -272,14 +295,14 @@ export default function MiniPlayer() {
           )}
         </div>
 
-        {/* Track Title, Artist & Equalizer (Zero layout shift, responsive max-width) */}
+        {/* Track Title & Artist */}
         <div className="min-w-0 max-w-[85px] sm:max-w-[125px] flex-1 space-y-0.5 pr-1">
           <div className="flex items-center gap-1">
             <h4 className="text-xs font-serif font-medium text-amber-100 truncate flex-1">
               {currentTrack.title}
             </h4>
 
-            {/* Equalizer Barmeter (Reserved DOM slot prevents text shifting) */}
+            {/* Equalizer Barmeter */}
             <div
               className={`flex items-end gap-[2px] h-3 w-3 shrink-0 transition-opacity duration-200 ${
                 isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -297,10 +320,10 @@ export default function MiniPlayer() {
           </span>
         </div>
 
-        {/* Controls Row: Prev, Play/Pause, Next & Spotify */}
+        {/* Controls Row */}
         <div className="flex items-center gap-1 shrink-0">
           
-          {/* Previous Track Button */}
+          {/* Previous Track */}
           <button
             type="button"
             onClick={prevTrack}
@@ -310,7 +333,7 @@ export default function MiniPlayer() {
             <SkipBack className="w-3.5 h-3.5" />
           </button>
 
-          {/* Play / Pause Button */}
+          {/* Play / Pause */}
           <button
             type="button"
             onClick={togglePlay}
@@ -324,7 +347,7 @@ export default function MiniPlayer() {
             )}
           </button>
 
-          {/* Next Track Button */}
+          {/* Next Track */}
           <button
             type="button"
             onClick={nextTrack}
@@ -333,6 +356,49 @@ export default function MiniPlayer() {
           >
             <SkipForward className="w-3.5 h-3.5" />
           </button>
+
+          {/* Volume Control Button & Slider Toggle */}
+          <div className="relative flex items-center">
+            <button
+              type="button"
+              onClick={() => {
+                if (isMuted) {
+                  setIsMuted(false);
+                } else {
+                  setShowVolumeSlider(!showVolumeSlider);
+                }
+              }}
+              className="p-1.5 text-stone-400 hover:text-amber-300 transition-colors rounded-full"
+              title="Ses Seviyesi"
+            >
+              {isMuted || volume === 0 ? (
+                <VolumeX className="w-3.5 h-3.5 text-red-400" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5 text-amber-300" />
+              )}
+            </button>
+
+            {showVolumeSlider && (
+              <div className="absolute bottom-full right-0 mb-2 p-2 bg-[#120e0b]/95 border border-amber-500/30 rounded-xl shadow-xl flex items-center gap-2 animate-fadeIn z-50">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={isMuted ? 0 : volume}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    setVolume(val);
+                    setIsMuted(val === 0);
+                  }}
+                  className="w-20 accent-amber-500 h-1 bg-amber-950 rounded-lg cursor-pointer"
+                />
+                <span className="text-[10px] font-mono text-amber-300 font-bold w-6 text-right">
+                  {Math.round((isMuted ? 0 : volume) * 100)}%
+                </span>
+              </div>
+            )}
+          </div>
 
           {/* Spotify Direct Link */}
           {currentTrack.spotifyUrl && (
