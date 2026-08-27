@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { BookOpen, Upload, Plus, CheckCircle, AlertCircle, Star, Calendar, FileText, Tag, Sparkles } from 'lucide-react';
+import { DEFAULT_BOOK_CATEGORIES } from '@/lib/categories';
 
 export default function AdminBooksManager() {
   const [formData, setFormData] = useState({
@@ -10,13 +11,16 @@ export default function AdminBooksManager() {
     author: '',
     year: '1900',
     pages: '100',
-    category: 'Klasikler',
+    category: DEFAULT_BOOK_CATEGORIES[0],
     summary: '',
     rating: '4.8',
     isReadable: false,
     content: '',
     buyUrl: '',
   });
+
+  const [isCustomCategory, setIsCustomCategory] = useState(false);
+  const [customCategory, setCustomCategory] = useState('');
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
@@ -44,6 +48,8 @@ export default function AdminBooksManager() {
       return;
     }
 
+    const finalCategory = isCustomCategory ? (customCategory.trim() || 'Klasikler') : formData.category;
+
     setIsSubmitting(true);
     setStatusMessage(null);
 
@@ -53,7 +59,7 @@ export default function AdminBooksManager() {
       data.append('author', formData.author);
       data.append('year', formData.year);
       data.append('pages', formData.pages);
-      data.append('category', formData.category);
+      data.append('category', finalCategory);
       data.append('summary', formData.summary);
       data.append('rating', formData.rating);
       data.append('isReadable', formData.isReadable ? 'true' : 'false');
@@ -227,14 +233,36 @@ export default function AdminBooksManager() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori</label>
-            <input
-              type="text"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              placeholder="Örn: Klasik & Felsefe"
-              className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] focus:outline-none focus:border-amber-600"
-            />
+            <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori / Tür (Zorunlu)</label>
+            <select
+              value={isCustomCategory ? 'CUSTOM' : formData.category}
+              onChange={(e) => {
+                if (e.target.value === 'CUSTOM') {
+                  setIsCustomCategory(true);
+                } else {
+                  setIsCustomCategory(false);
+                  setFormData({ ...formData, category: e.target.value });
+                }
+              }}
+              className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-600 cursor-pointer"
+            >
+              {DEFAULT_BOOK_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+              <option value="CUSTOM">+ Yeni Tür/Kategori Ekle...</option>
+            </select>
+
+            {isCustomCategory && (
+              <input
+                type="text"
+                value={customCategory}
+                onChange={(e) => setCustomCategory(e.target.value)}
+                placeholder="Yeni Kategori Adı Girin (Örn: Korku & Gerilim)..."
+                className="w-full mt-2 p-2.5 rounded-xl bg-amber-100/80 border border-amber-400 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-700 animate-fadeIn"
+              />
+            )}
           </div>
 
           <div>

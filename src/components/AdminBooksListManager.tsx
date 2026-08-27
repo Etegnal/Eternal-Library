@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookOpen, Edit, Trash2, Plus, Search, CheckCircle, AlertCircle, Upload, X, Star, BookCheck, Eye, RefreshCw } from 'lucide-react';
+import { BookOpen, Edit, Trash2, Plus, Search, CheckCircle, AlertCircle, Upload, X, Star, BookCheck, Eye, RefreshCw, Calendar, FileText, Tag, Sparkles } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
+import { DEFAULT_BOOK_CATEGORIES } from '@/lib/categories';
 
 export interface AdminBookItem {
   id: string;
@@ -34,15 +35,18 @@ export default function AdminBooksListManager() {
   const [editFormData, setEditFormData] = useState({
     title: '',
     author: '',
-    year: '1900',
-    pages: '100',
-    category: 'Klasikler',
+    year: '',
+    pages: '',
+    category: DEFAULT_BOOK_CATEGORIES[0],
     summary: '',
     rating: '4.8',
     isReadable: false,
     content: '',
     buyUrl: '',
   });
+
+  const [isEditCustomCategory, setIsEditCustomCategory] = useState(false);
+  const [editCustomCategory, setEditCustomCategory] = useState('');
 
   const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
   const [editCoverPreview, setEditCoverPreview] = useState<string | null>(null);
@@ -85,6 +89,15 @@ export default function AdminBooksListManager() {
     setEditCoverFile(null);
     setEditCoverPreview(book.coverUrl);
 
+    const isPreset = DEFAULT_BOOK_CATEGORIES.includes(book.category);
+    if (isPreset) {
+      setIsEditCustomCategory(false);
+      setEditCustomCategory('');
+    } else {
+      setIsEditCustomCategory(true);
+      setEditCustomCategory(book.category);
+    }
+
     // Fetch full book pages content if available
     let contentText = '';
     try {
@@ -102,7 +115,7 @@ export default function AdminBooksListManager() {
       author: book.author,
       year: book.year.toString(),
       pages: book.pages.toString(),
-      category: book.category,
+      category: isPreset ? book.category : DEFAULT_BOOK_CATEGORIES[0],
       summary: book.summary,
       rating: book.rating.toString(),
       isReadable: book.isReadable,
@@ -123,6 +136,8 @@ export default function AdminBooksListManager() {
     e.preventDefault();
     if (!editingBook) return;
 
+    const finalCategory = isEditCustomCategory ? (editCustomCategory.trim() || 'Klasikler') : editFormData.category;
+
     setIsSubmitting(true);
     setStatusMessage(null);
 
@@ -132,7 +147,7 @@ export default function AdminBooksListManager() {
       data.append('author', editFormData.author);
       data.append('year', editFormData.year);
       data.append('pages', editFormData.pages);
-      data.append('category', editFormData.category);
+      data.append('category', finalCategory);
       data.append('summary', editFormData.summary);
       data.append('rating', editFormData.rating);
       data.append('isReadable', editFormData.isReadable ? 'true' : 'false');
@@ -476,13 +491,36 @@ export default function AdminBooksListManager() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori</label>
-                  <input
-                    type="text"
-                    value={editFormData.category}
-                    onChange={(e) => setEditFormData({ ...editFormData, category: e.target.value })}
-                    className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-[#362215] focus:outline-none focus:border-amber-600"
-                  />
+                  <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori / Tür (Zorunlu)</label>
+                  <select
+                    value={isEditCustomCategory ? 'CUSTOM' : editFormData.category}
+                    onChange={(e) => {
+                      if (e.target.value === 'CUSTOM') {
+                        setIsEditCustomCategory(true);
+                      } else {
+                        setIsEditCustomCategory(false);
+                        setEditFormData({ ...editFormData, category: e.target.value });
+                      }
+                    }}
+                    className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-600 cursor-pointer"
+                  >
+                    {DEFAULT_BOOK_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                    <option value="CUSTOM">+ Yeni Tür/Kategori Ekle...</option>
+                  </select>
+
+                  {isEditCustomCategory && (
+                    <input
+                      type="text"
+                      value={editCustomCategory}
+                      onChange={(e) => setEditCustomCategory(e.target.value)}
+                      placeholder="Yeni Kategori Adı Girin (Örn: Korku & Gerilim)..."
+                      className="w-full mt-2 p-2.5 rounded-xl bg-amber-100/80 border border-amber-400 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-700 animate-fadeIn"
+                    />
+                  )}
                 </div>
 
                 <div>
