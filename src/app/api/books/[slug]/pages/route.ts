@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifiedBooksData } from '@/lib/verifiedBooks';
+import { chunkTextIntoPages } from '@/lib/pageChunker';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +11,7 @@ export async function GET(
 ) {
   try {
     const { slug } = params;
-    
+
     // Find book in DB
     const book = await prisma.book.findUnique({
       where: { slug },
@@ -33,6 +34,16 @@ export async function GET(
         content,
       }));
       return NextResponse.json(formattedPages);
+    }
+
+    // Auto-chunk summary into pages if no dedicated bookPages exist
+    if (book && book.summary) {
+      const chunks = chunkTextIntoPages(book.summary);
+      const generatedPages = chunks.map((content, idx) => ({
+        pageNumber: idx + 1,
+        content,
+      }));
+      return NextResponse.json(generatedPages);
     }
 
     return NextResponse.json([]);

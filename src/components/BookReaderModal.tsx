@@ -172,7 +172,7 @@ export default function BookReaderModal({ book, onClose }: BookReaderModalProps)
               {/* PAGE HEADER NUMBER */}
               <div className="text-center pb-4 border-b border-[#36271c]/60">
                 <span className="font-serif text-xs uppercase tracking-widest text-[#a89582]">
-                  — BÖLÜM / SAYFA {currentPage} —
+                  — EDİTÖR İNCELEMESİ / SAYFA {currentPage} —
                 </span>
               </div>
 

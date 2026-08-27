@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { chunkTextIntoPages } from '@/lib/pageChunker';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
@@ -122,24 +123,26 @@ export async function PUT(
       },
     });
 
-    // Update BookPages if contentText is provided
-    if (typeof contentText === 'string') {
+    // Auto-chunk full text or summary into pages
+    const textToChunk = (typeof contentText === 'string' && contentText.trim().length > 0)
+      ? contentText
+      : (summary || '');
+
+    if (textToChunk.trim().length > 0) {
       // Delete old pages
       await prisma.bookPage.deleteMany({
         where: { bookId: existing.id },
       });
 
-      if (contentText.trim().length > 0) {
-        const rawPages = contentText.split(/---|\n\n\n+/).filter((p) => p.trim().length > 0);
-        for (let i = 0; i < rawPages.length; i++) {
-          await prisma.bookPage.create({
-            data: {
-              bookId: existing.id,
-              pageNumber: i + 1,
-              content: rawPages[i].trim(),
-            },
-          });
-        }
+      const generatedPages = chunkTextIntoPages(textToChunk);
+      for (let i = 0; i < generatedPages.length; i++) {
+        await prisma.bookPage.create({
+          data: {
+            bookId: existing.id,
+            pageNumber: i + 1,
+            content: generatedPages[i],
+          },
+        });
       }
     }
 

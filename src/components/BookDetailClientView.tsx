@@ -47,20 +47,14 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
           <span>{book.rating.toFixed(1)} / 5.0 Değerlendirme</span>
         </div>
 
-        {/* Read Book Action Button */}
-        {book.isReadable ? (
-          <button
-            onClick={() => setIsReaderOpen(true)}
-            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
-          >
-            <BookOpen className="w-4 h-4 text-amber-300" />
-            <span>Eseri Dijital Oku</span>
-          </button>
-        ) : (
-          <div className="w-full py-2.5 px-4 rounded-2xl bg-amber-50 text-stone-600 font-bold text-xs text-center border border-amber-200">
-            <span>Editör İncelemesi</span>
-          </div>
-        )}
+        {/* Read Book / Editör İncelemesi Action Button */}
+        <button
+          onClick={() => setIsReaderOpen(true)}
+          className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#78350F] to-[#9A3412] hover:from-[#5C2E0B] hover:to-[#78350F] text-amber-100 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 border border-amber-600/40 cursor-pointer"
+        >
+          <BookOpen className="w-4 h-4 text-amber-300" />
+          <span>Editör İncelemesini Oku</span>
+        </button>
       </div>
 
       {/* RIGHT SIDE: METADATA & SUMMARY */}
