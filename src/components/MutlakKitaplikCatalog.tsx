@@ -58,11 +58,9 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
   return (
     <div className="space-y-8">
       
-      {/* CONTROL BAR (DESKTOP & MOBILE RESPONSIVE) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
-        
-        {/* DESKTOP LAYOUT (hidden sm:flex) */}
-        <div className="hidden sm:flex items-center gap-3">
+      {/* DESKTOP CONTROL BAR (hidden sm:block) */}
+      <div className="hidden sm:block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
+        <div className="flex items-center gap-3">
           
           {/* Search Input */}
           <div className="relative flex-1 w-full">
@@ -113,49 +111,91 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
 
         </div>
 
-        {/* MOBILE LAYOUT (sm:hidden: Search Input + 1 Single Filter & Sort Button) */}
-        <div className="flex sm:hidden flex-col gap-3">
-          
-          {/* Search Input */}
-          <div className="relative w-full">
-            <Search className="w-4 h-4 text-amber-800/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Eser adı, yazar veya konu ara..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs text-[#362215] placeholder:text-stone-400 focus:outline-none focus:border-amber-600 transition-all"
-            />
-          </div>
-
-          {/* SINGLE MOBILE FILTER & SORT BUTTON */}
-          <button
-            onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
-              selectedCategory !== 'all' || sortBy !== 'rating_desc' || isFilterOpen
-                ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
-                : 'bg-amber-100/90 text-[#78350F] border-amber-300/80'
-            }`}
-          >
-            <SlidersHorizontal className="w-4 h-4 text-amber-300" />
-            <span>
-              {selectedCategory !== 'all' ? `Tür: ${selectedCategory}` : 'Filtrele & Sırala'}
-            </span>
-            {isFilterOpen ? (
-              <ChevronUp className="w-4 h-4 ml-auto opacity-80" />
-            ) : (
-              <ChevronDown className="w-4 h-4 ml-auto opacity-80" />
-            )}
-          </button>
-
-        </div>
-
-        {/* EXPANDABLE FILTER & SORT DRAWER (Renders for Desktop & Mobile when isFilterOpen is true) */}
+        {/* EXPANDABLE CATEGORY PILLS DRAWER (DESKTOP) */}
         {isFilterOpen && (
-          <div className="pt-3 border-t border-amber-200/60 space-y-4 animate-fadeIn">
+          <div className="pt-3 border-t border-amber-200/60 flex flex-wrap items-center gap-2 animate-fadeIn">
+            <button
+              onClick={() => {
+                setSelectedCategory('all');
+                setIsFilterOpen(false);
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                selectedCategory === 'all'
+                  ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
+                  : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
+              }`}
+            >
+              Tüm Eserler ({initialBooks.length})
+            </button>
+
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setIsFilterOpen(false);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                  selectedCategory === cat
+                    ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
+                    : 'bg-amber-50/80 hover:bg-amber-100 text-[#362215] border-amber-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* MOBILE CONTROL BAR (sm:hidden: ONLY 1 STANDALONE YELLOW BUTTON, NO OUTER CARD BOX) */}
+      <div className="sm:hidden space-y-3">
+        
+        {/* SINGLE STANDALONE YELLOW BUTTON */}
+        <button
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          className={`w-full py-3 px-4 rounded-2xl text-xs font-bold transition-all border flex items-center justify-between cursor-pointer ${
+            selectedCategory !== 'all' || searchQuery.trim().length > 0 || isFilterOpen
+              ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-md'
+              : 'bg-amber-100/90 text-[#78350F] border-amber-300/80 shadow-sm'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <SlidersHorizontal className="w-4 h-4 text-amber-700" />
+            <span>
+              {searchQuery
+                ? `Arama: "${searchQuery}"`
+                : selectedCategory !== 'all'
+                ? `Tür: ${selectedCategory}`
+                : 'Filtrele & Sırala'}
+            </span>
+          </div>
+          {isFilterOpen ? <ChevronUp className="w-4 h-4 opacity-80" /> : <ChevronDown className="w-4 h-4 opacity-80" />}
+        </button>
+
+        {/* EXPANDABLE MOBILE DRAWER (CONTAINS SEARCH, SORT & CATEGORIES) */}
+        {isFilterOpen && (
+          <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-md space-y-4 animate-fadeIn">
             
-            {/* Sort Select Option (Mobile Only inside drawer for clean UX) */}
-            <div className="sm:hidden space-y-1">
+            {/* 1. Mobile Search Bar */}
+            <div className="space-y-1">
+              <label className="block text-[11px] font-bold text-[#8B4513] uppercase tracking-wider">
+                Eser / Yazar Arama:
+              </label>
+              <div className="relative w-full">
+                <Search className="w-4 h-4 text-amber-800/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Eser adı, yazar veya konu ara..."
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs text-[#362215] placeholder:text-stone-400 focus:outline-none focus:border-amber-600"
+                />
+              </div>
+            </div>
+
+            {/* 2. Mobile Sort Dropdown */}
+            <div className="space-y-1">
               <label className="block text-[11px] font-bold text-[#8B4513] uppercase tracking-wider">
                 Sıralama Ölçütü:
               </label>
@@ -172,17 +212,14 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
               </select>
             </div>
 
-            {/* Category Pills */}
+            {/* 3. Mobile Category Pills */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-bold text-[#8B4513] uppercase tracking-wider">
                 Eser Türü:
               </label>
               <div className="flex flex-wrap items-center gap-2">
                 <button
-                  onClick={() => {
-                    setSelectedCategory('all');
-                    setIsFilterOpen(false);
-                  }}
+                  onClick={() => setSelectedCategory('all')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                     selectedCategory === 'all'
                       ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
@@ -195,10 +232,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                 {categories.map((cat) => (
                   <button
                     key={cat}
-                    onClick={() => {
-                      setSelectedCategory(cat);
-                      setIsFilterOpen(false);
-                    }}
+                    onClick={() => setSelectedCategory(cat)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                       selectedCategory === cat
                         ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B]'
