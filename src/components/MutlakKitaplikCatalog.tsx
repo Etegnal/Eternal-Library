@@ -324,7 +324,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                   </Link>
 
                   <SaveBookButton
-                    bookId={book.id || book.slug}
+                    bookId={book.slug}
                     bookSlug={book.slug}
                     bookTitle={book.title}
                     variant="icon"
