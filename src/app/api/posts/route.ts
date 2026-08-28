@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
+import { sendMail, IS_TEST_MODE, TEST_TARGET_EMAIL } from '@/lib/email';
+import { generateNewPostEmailHtml } from '@/lib/emailTemplates';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -51,6 +53,38 @@ export async function POST(req: NextRequest) {
         publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
       },
     });
+
+    // Trigger automated email notification (runs asynchronously)
+    (async () => {
+      try {
+        const siteUrl = process.env.NEXTAUTH_URL || 'https://eternal-library.vercel.app';
+        const emailHtml = generateNewPostEmailHtml(
+          {
+            title: newPost.title,
+            slug: newPost.slug,
+            excerpt: newPost.excerpt,
+            type: newPost.type,
+            author: newPost.author,
+            readingTime: newPost.readingTime,
+          },
+          siteUrl
+        );
+
+        let recipients: string[] = [TEST_TARGET_EMAIL];
+        if (!IS_TEST_MODE) {
+          const allUsers = await prisma.user.findMany({ select: { email: true } });
+          recipients = allUsers.map((u) => u.email).filter(Boolean);
+        }
+
+        await sendMail({
+          to: recipients,
+          subject: `[Eternal Library] Yeni ${newPost.type === 'SIIR' ? 'Şiir' : 'Yazı'}: "${newPost.title}"`,
+          html: emailHtml,
+        });
+      } catch (err) {
+        console.error('Automated email dispatch error:', err);
+      }
+    })();
 
     return NextResponse.json(newPost, { status: 201 });
   } catch (error: any) {

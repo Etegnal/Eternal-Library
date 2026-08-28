@@ -9,13 +9,14 @@ import UserPasswordViewer from '@/components/UserPasswordViewer';
 import DeleteLetterButton from '@/components/DeleteLetterButton';
 import LetterDetailViewer from '@/components/LetterDetailViewer';
 import LikedUsersViewer from '@/components/LikedUsersViewer';
-import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles, Eye, Music } from 'lucide-react';
+import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles, Eye, Music, Send } from 'lucide-react';
 
 import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
 import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
 import AdminBooksListManager from '@/components/AdminBooksListManager';
 import AdminReadingAnalytics from '@/components/AdminReadingAnalytics';
 import UserActivityModal from '@/components/UserActivityModal';
+import SendEmailModal from '@/components/SendEmailModal';
 
 interface LikedUserItem {
   id: string;
@@ -71,6 +72,8 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
     name?: string | null;
     email?: string | null;
   } | null>(null);
+  const [isGeneralSendMailOpen, setIsGeneralSendMailOpen] = useState(false);
+  const [userToEmail, setUserToEmail] = useState<{ email: string; name: string } | null>(null);
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -128,6 +131,16 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
             <Plus className="w-4 h-4 text-[#9A3412]" />
             <span>+ Eser Yükle</span>
           </Link>
+
+          <button
+            type="button"
+            onClick={() => setIsGeneralSendMailOpen(true)}
+            className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border bg-gradient-to-r from-[#78350F] to-[#9A3412] text-amber-100 hover:from-[#9A3412] hover:to-[#78350F] border-amber-500/40 shadow-sm cursor-pointer"
+            title="E-Posta Gönderici Modalını Aç"
+          >
+            <Send className="w-4 h-4 text-amber-300" />
+            <span>✉️ Mail Gönder</span>
+          </button>
 
           <button
             type="button"
@@ -352,6 +365,16 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
                       <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
                         <button
                           type="button"
+                          onClick={() => setUserToEmail({ email: u.email, name: u.name || u.email })}
+                          className="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] text-amber-100 font-bold text-xs shadow-sm transition-all flex items-center gap-1 cursor-pointer hover:opacity-90"
+                          title="Kullanıcıya Özel E-Posta Gönder"
+                        >
+                          <Send className="w-3 h-3 text-amber-300" />
+                          <span>Mail</span>
+                        </button>
+
+                        <button
+                          type="button"
                           onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email })}
                           className="px-3 py-1.5 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs border border-amber-300/80 transition-colors flex items-center gap-1 cursor-pointer"
                           title="Kullanıcı Aktivite Detaylarını Gör"
@@ -462,6 +485,24 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
           userName={selectedUserForModal.name}
           userEmail={selectedUserForModal.email}
           onClose={() => setSelectedUserForModal(null)}
+        />
+      )}
+
+      {/* GENERAL EMAIL MODAL */}
+      {isGeneralSendMailOpen && (
+        <SendEmailModal
+          initialRecipientEmail="erenaoyunda@gmail.com"
+          initialRecipientName="Yasin Eren"
+          onClose={() => setIsGeneralSendMailOpen(false)}
+        />
+      )}
+
+      {/* USER-SPECIFIC EMAIL MODAL */}
+      {userToEmail && (
+        <SendEmailModal
+          initialRecipientEmail={userToEmail.email}
+          initialRecipientName={userToEmail.name}
+          onClose={() => setUserToEmail(null)}
         />
       )}
 

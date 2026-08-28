@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { X, BookOpen, Feather, Library, Heart, Eye, Star, ExternalLink, Loader2, Calendar, Mail, User } from 'lucide-react';
+import { X, BookOpen, Feather, Library, Heart, Eye, Star, ExternalLink, Loader2, Calendar, Mail, User, Send } from 'lucide-react';
+import SendEmailModal from '@/components/SendEmailModal';
 
 interface SavedBook {
   id: string;
@@ -64,6 +65,7 @@ export default function UserActivityModal({
   const [savedBooks, setSavedBooks] = useState<SavedBook[]>([]);
   const [likedPosts, setLikedPosts] = useState<LikedPost[]>([]);
   const [viewRecords, setViewRecords] = useState<ViewRecordItem[]>([]);
+  const [isSendMailOpen, setIsSendMailOpen] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -89,36 +91,57 @@ export default function UserActivityModal({
   const displayEmail = userEmail || userObj?.email || '';
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-      
-      {/* MODAL CONTAINER */}
-      <div className="bg-[#FFFDF9] border-2 border-[#E6D7BC] w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <>
+      {isSendMailOpen && (
+        <SendEmailModal
+          initialRecipientEmail={displayEmail}
+          initialRecipientName={displayName}
+          onClose={() => setIsSendMailOpen(false)}
+        />
+      )}
+
+      <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
         
-        {/* HEADER */}
-        <div className="p-6 bg-[#FEFBF3] border-b border-[#E6D7BC] flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-bold text-lg shadow-fire border border-amber-500/40 shrink-0">
-              {displayName.charAt(0).toUpperCase()}
+        {/* MODAL CONTAINER */}
+        <div className="bg-[#FFFDF9] border-2 border-[#E6D7BC] w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+          
+          {/* HEADER */}
+          <div className="p-6 bg-[#FEFBF3] border-b border-[#E6D7BC] flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-bold text-lg shadow-fire border border-amber-500/40 shrink-0">
+                {displayName.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <h3 className="font-serif font-bold text-xl text-[#362215]">
+                  {displayName} — Aktivite Detayı
+                </h3>
+                <p className="text-xs text-[#5C4033] flex items-center gap-1 font-mono">
+                  <Mail className="w-3.5 h-3.5 text-amber-700" />
+                  <span>{displayEmail}</span>
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-serif font-bold text-xl text-[#362215]">
-                {displayName} — Aktivite Detayı
-              </h3>
-              <p className="text-xs text-[#5C4033] flex items-center gap-1 font-mono">
-                <Mail className="w-3.5 h-3.5 text-amber-700" />
-                <span>{displayEmail}</span>
-              </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsSendMailOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#78350F] to-[#9A3412] text-amber-100 hover:from-[#9A3412] hover:to-[#78350F] font-bold text-xs shadow-cozy transition-all flex items-center gap-1.5 border border-amber-500/40 cursor-pointer"
+                title="Kullanıcıya Özel E-Posta Gönder"
+              >
+                <Send className="w-3.5 h-3.5 text-amber-300" />
+                <span>Mail Gönder</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-2 rounded-xl text-stone-500 hover:text-amber-900 hover:bg-amber-100/80 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-2 rounded-xl text-stone-500 hover:text-amber-900 hover:bg-amber-100/80 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
 
         {/* TABS SELECTOR */}
         <div className="flex flex-wrap items-center gap-2 px-6 pt-4 border-b border-amber-200/80 bg-[#FEF9EE]">
@@ -391,5 +414,6 @@ export default function UserActivityModal({
       </div>
 
     </div>
+    </>
   );
 }
