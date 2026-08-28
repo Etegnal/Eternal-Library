@@ -6,6 +6,8 @@ import { slugify } from '@/lib/slug';
 import { sendMail, IS_TEST_MODE, TEST_TARGET_EMAIL } from '@/lib/email';
 import { generateNewPostEmailHtml } from '@/lib/emailTemplates';
 
+import { getSiteUrl } from '@/lib/siteUrl';
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const featuredOnly = searchParams.get('featured') === 'true';
@@ -57,7 +59,7 @@ export async function POST(req: NextRequest) {
     // Trigger automated email notification (runs asynchronously)
     (async () => {
       try {
-        const siteUrl = process.env.NEXTAUTH_URL || 'https://eternal-library.vercel.app';
+        const siteUrl = getSiteUrl();
         const emailHtml = generateNewPostEmailHtml(
           {
             title: newPost.title,

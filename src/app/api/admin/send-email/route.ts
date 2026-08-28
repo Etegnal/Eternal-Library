@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { sendMail, IS_TEST_MODE, TEST_TARGET_EMAIL } from '@/lib/email';
 import { generateCustomAdminEmailHtml } from '@/lib/emailTemplates';
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     let targetRecipients: string[] = [];
-    const siteUrl = process.env.NEXTAUTH_URL || 'https://eternal-library.vercel.app';
+    const siteUrl = getSiteUrl();
 
     if (!recipientEmail || recipientEmail === 'all') {
       const allUsers = await prisma.user.findMany({
