@@ -15,6 +15,7 @@ import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMaste
 import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
 import AdminBooksListManager from '@/components/AdminBooksListManager';
 import AdminReadingAnalytics from '@/components/AdminReadingAnalytics';
+import UserActivityModal from '@/components/UserActivityModal';
 
 interface LikedUserItem {
   id: string;
@@ -65,6 +66,11 @@ interface AdminDashboardViewProps {
 
 export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
   const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
+  const [selectedUserForModal, setSelectedUserForModal] = useState<{
+    id: string;
+    name?: string | null;
+    email?: string | null;
+  } | null>(null);
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -343,7 +349,16 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
                       <td className="px-6 py-4 text-xs text-[#5C4033]">
                         {new Date(u.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email })}
+                          className="px-3 py-1.5 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] font-bold text-xs border border-amber-300/80 transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Kullanıcı Aktivite Detaylarını Gör"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-amber-800" />
+                          <span>Aktivite Detayı</span>
+                        </button>
                         <DeleteUserButton userId={u.id} userName={u.name || u.email} />
                       </td>
                     </tr>
@@ -438,6 +453,16 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
       {/* TAB 5: TRACKS PLAYLIST MANAGEMENT */}
       {activeTab === 'tracks' && (
         <AdminTracksManager initialTracks={tracks} />
+      )}
+
+      {/* USER ACTIVITY MODAL */}
+      {selectedUserForModal && (
+        <UserActivityModal
+          userId={selectedUserForModal.id}
+          userName={selectedUserForModal.name}
+          userEmail={selectedUserForModal.email}
+          onClose={() => setSelectedUserForModal(null)}
+        />
       )}
 
     </div>

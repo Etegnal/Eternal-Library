@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BookOpen, Feather, Eye, User, Search, RefreshCw, Sparkles, Shield, Clock, Users, ArrowUpRight } from 'lucide-react';
+import { BookOpen, Feather, Eye, User, Search, RefreshCw, Sparkles, Shield, Clock, Users, ArrowUpRight, Heart, Library } from 'lucide-react';
+import UserActivityModal from '@/components/UserActivityModal';
 
 export interface ViewLogItem {
   id: string;
@@ -51,6 +52,12 @@ export default function AdminReadingAnalytics() {
   const [typeFilter, setTypeFilter] = useState<'all' | 'YAZI' | 'SIIR'>('all');
   const [readerTypeFilter, setReaderTypeFilter] = useState<'all' | 'member' | 'guest'>('all');
   const [activeTab, setActiveTab] = useState<'stream' | 'users'>('stream');
+  const [selectedUserForModal, setSelectedUserForModal] = useState<{
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    initialTab?: 'savedBooks' | 'likedPosts' | 'views';
+  } | null>(null);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -397,36 +404,62 @@ export default function AdminReadingAnalytics() {
                     <tr key={u.id} className="hover:bg-amber-50/50 transition-colors">
                       
                       <td className="p-3.5">
-                        <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email, initialTab: 'savedBooks' })}
+                          className="flex items-center gap-3 text-left group cursor-pointer"
+                        >
                           <span className="font-mono font-bold text-amber-800 text-xs w-5 text-center">
                             #{idx + 1}
                           </span>
 
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-bold text-xs shadow-sm shrink-0 group-hover:scale-105 transition-transform">
                             {(u.name || 'U').charAt(0).toUpperCase()}
                           </div>
 
                           <div>
-                            <div className="font-bold text-[#362215]">
-                              {u.name || 'İsimsiz Kullanıcı'}
+                            <div className="font-bold text-[#362215] group-hover:text-[#9A3412] transition-colors flex items-center gap-1">
+                              <span>{u.name || 'İsimsiz Kullanıcı'}</span>
+                              <Sparkles className="w-3 h-3 text-amber-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                             <div className="text-[11px] text-[#785438] font-mono">
                               {u.email}
                             </div>
                           </div>
-                        </div>
+                        </button>
                       </td>
 
-                      <td className="p-3.5 text-center font-bold font-mono text-sm text-[#78350F]">
-                        {u._count.viewRecords} okuma
+                      <td className="p-3.5 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email, initialTab: 'views' })}
+                          className="font-bold font-mono text-xs text-[#78350F] hover:bg-amber-100/80 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+                          title="Okuma Geçmişini Gör"
+                        >
+                          {u._count.viewRecords} okuma
+                        </button>
                       </td>
 
-                      <td className="p-3.5 text-center font-bold font-mono text-xs text-rose-900">
-                        ❤️ {u._count.likeRecords}
+                      <td className="p-3.5 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email, initialTab: 'likedPosts' })}
+                          className="font-bold font-mono text-xs text-rose-900 hover:bg-rose-100/80 px-2.5 py-1.5 rounded-lg border border-rose-200/80 transition-colors cursor-pointer"
+                          title="Beğenilen Yazı ve Şiirleri Gör"
+                        >
+                          ❤️ {u._count.likeRecords}
+                        </button>
                       </td>
 
-                      <td className="p-3.5 text-center font-bold font-mono text-xs text-amber-900">
-                        📚 {u._count.savedBooks}
+                      <td className="p-3.5 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedUserForModal({ id: u.id, name: u.name, email: u.email, initialTab: 'savedBooks' })}
+                          className="font-bold font-mono text-xs text-amber-900 hover:bg-amber-100 px-2.5 py-1.5 rounded-lg border border-amber-300/80 transition-colors cursor-pointer"
+                          title="Kaydedilen Kitapları Gör"
+                        >
+                          📚 {u._count.savedBooks}
+                        </button>
                       </td>
 
                       <td className="p-3.5 text-right font-mono text-[11px] text-[#785438]">
@@ -443,10 +476,20 @@ export default function AdminReadingAnalytics() {
                   </tr>
                 )}
               </tbody>
-
             </table>
           </div>
         </div>
+      )}
+
+      {/* USER ACTIVITY MODAL */}
+      {selectedUserForModal && (
+        <UserActivityModal
+          userId={selectedUserForModal.id}
+          userName={selectedUserForModal.name}
+          userEmail={selectedUserForModal.email}
+          initialTab={selectedUserForModal.initialTab || 'savedBooks'}
+          onClose={() => setSelectedUserForModal(null)}
+        />
       )}
 
     </div>
