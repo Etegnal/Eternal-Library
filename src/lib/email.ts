@@ -1,4 +1,36 @@
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
+import dns from 'dns';
+
+// Force Node.js to prefer IPv4 over IPv6 for SMTP DNS lookups on Windows
+try {
+  if (dns.setDefaultResultOrder) {
+    dns.setDefaultResultOrder('ipv4first');
+  }
+} catch (e) {
+  // ignore
+}
+
+function loadEnvFile() {
+  if (!process.env.SMTP_USER) {
+    try {
+      const envPath = path.join(process.cwd(), '.env');
+      if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        envContent.split('\n').forEach((line) => {
+          const match = line.match(/^\s*([\w.-]+)\s*=\s*["']?([^"'\r\n]+)["']?/);
+          if (match && !process.env[match[1]]) {
+            process.env[match[1]] = match[2];
+          }
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+}
+loadEnvFile();
 
 // Configuration for Single Test User Safeguard
 export const TEST_TARGET_EMAIL = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com';
@@ -12,13 +44,16 @@ export interface SendMailOptions {
 }
 
 export async function sendMail({ to, subject, html, text }: SendMailOptions) {
+  const currentTestMode = process.env.EMAIL_TEST_MODE !== 'false';
+  const currentTestTarget = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com';
+
   // 1. Determine target recipients based on Test Mode
   let finalRecipients: string[] = [];
 
-  if (IS_TEST_MODE) {
+  if (currentTestMode) {
     console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Original recipient(s):`, to);
-    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Redirected strictly to: ${TEST_TARGET_EMAIL}`);
-    finalRecipients = [TEST_TARGET_EMAIL];
+    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Redirected strictly to: ${currentTestTarget}`);
+    finalRecipients = [currentTestTarget];
   } else {
     finalRecipients = Array.isArray(to) ? to : [to];
   }
@@ -56,15 +91,32 @@ export async function sendMail({ to, subject, html, text }: SendMailOptions) {
   }
 
   // 3. Create Nodemailer Transport
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-  });
+  const isGmail = smtpHost.includes('gmail') || smtpUser.includes('gmail');
+  const transporter = nodemailer.createTransport(
+    isGmail
+      ? {
+          host: '142.250.102.108', // Direct Gmail IPv4 to bypass Windows local DNS timeout
+          port: 465,
+          secure: true,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+          tls: {
+            servername: 'smtp.gmail.com',
+            rejectUnauthorized: false,
+          },
+        }
+      : {
+          host: smtpHost,
+          port: smtpPort,
+          secure: smtpPort === 465,
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        }
+  );
 
   try {
     const info = await transporter.sendMail({
