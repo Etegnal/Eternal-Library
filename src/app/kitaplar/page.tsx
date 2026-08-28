@@ -20,11 +20,12 @@ export default async function BooksPage() {
     ],
   });
 
-  // Map to VerifiedBook schema with displayYear
+  // Map to VerifiedBook schema with displayYear, id and createdAt
   const books = dbBooks.length >= 30 
     ? dbBooks.map((b) => {
         const verified = verifiedBooksData.find((vb) => vb.slug === b.slug);
         return {
+          id: b.id,
           slug: b.slug,
           title: b.title,
           author: b.author,
@@ -37,6 +38,7 @@ export default async function BooksPage() {
           isReadable: b.isReadable,
           coverUrl: b.coverUrl,
           fullPages: verified?.fullPages,
+          createdAt: b.createdAt.toISOString(),
         };
       })
     : verifiedBooksData;

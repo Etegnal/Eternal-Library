@@ -41,8 +41,12 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
       return b.rating - a.rating;
     }
     if (sortBy === 'newest') {
-      // Preserve DB createdAt desc order
-      return 0;
+      const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      if (timeA > 0 && timeB > 0) {
+        return timeB - timeA; // Latest created date first
+      }
+      return initialBooks.indexOf(b) - initialBooks.indexOf(a);
     }
     if (sortBy === 'year_asc') {
       return a.year - b.year;

@@ -1,4 +1,5 @@
 export interface VerifiedBook {
+  id?: string;
   slug: string;
   title: string;
   author: string;
@@ -11,6 +12,7 @@ export interface VerifiedBook {
   isReadable: boolean;
   coverUrl: string;
   fullPages?: string[]; // Full text multi-page chapter data
+  createdAt?: string;
 }
 
 export const verifiedBooksData: VerifiedBook[] = [
