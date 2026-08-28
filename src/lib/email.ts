@@ -32,9 +32,19 @@ function loadEnvFile() {
 }
 loadEnvFile();
 
-// Configuration for Single Test User Safeguard
-export const TEST_TARGET_EMAIL = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com';
+// Configuration for Test Users Safeguard
+export const DEFAULT_TEST_EMAILS = ['erenaoyunda@gmail.com', 'rahmik93@gmail.com'];
+export const TEST_TARGET_EMAIL = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com, rahmik93@gmail.com';
 export const IS_TEST_MODE = process.env.EMAIL_TEST_MODE !== 'false'; // Default TRUE for test safety
+
+export function getTestRecipients(): string[] {
+  const envTarget = process.env.TEST_EMAIL_RECIPIENT;
+  if (envTarget) {
+    const list = envTarget.split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+    return Array.from(new Set([...list, ...DEFAULT_TEST_EMAILS]));
+  }
+  return DEFAULT_TEST_EMAILS;
+}
 
 export interface SendMailOptions {
   to: string | string[];
@@ -45,15 +55,24 @@ export interface SendMailOptions {
 
 export async function sendMail({ to, subject, html, text }: SendMailOptions) {
   const currentTestMode = process.env.EMAIL_TEST_MODE !== 'false';
-  const currentTestTarget = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com';
+  const allowedTestUsers = getTestRecipients();
 
   // 1. Determine target recipients based on Test Mode
   let finalRecipients: string[] = [];
 
   if (currentTestMode) {
-    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Original recipient(s):`, to);
-    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Redirected strictly to: ${currentTestTarget}`);
-    finalRecipients = [currentTestTarget];
+    const requested = Array.isArray(to) ? to : [to];
+    // Filter requested recipients to allowed test users if specific recipient requested
+    const matchedTestUsers = requested.filter((e) => allowedTestUsers.includes(e.trim().toLowerCase()));
+
+    if (matchedTestUsers.length > 0) {
+      finalRecipients = matchedTestUsers;
+    } else {
+      finalRecipients = allowedTestUsers;
+    }
+
+    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Requested recipient(s):`, to);
+    console.log(`[EMAIL SYSTEM - TEST MODE ACTIVE] Filtered to test recipients: ${finalRecipients.join(', ')}`);
   } else {
     finalRecipients = Array.isArray(to) ? to : [to];
   }
