@@ -28,6 +28,7 @@ model User {
   updatedAt     DateTime     @updatedAt
   likeRecords   LikeRecord[]
   savedBooks    SavedBook[]
+  viewRecords   ViewRecord[]
 }
 
 model Post {
@@ -47,6 +48,21 @@ model Post {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   likeRecords LikeRecord[]
+  viewRecords ViewRecord[]
+}
+
+model ViewRecord {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String?
+  userEmail String?
+  userName  String?
+  postTitle String?
+  postType  PostType @default(YAZI)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  post Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model LikeRecord {

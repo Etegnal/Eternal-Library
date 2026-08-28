@@ -9,12 +9,12 @@ import UserPasswordViewer from '@/components/UserPasswordViewer';
 import DeleteLetterButton from '@/components/DeleteLetterButton';
 import LetterDetailViewer from '@/components/LetterDetailViewer';
 import LikedUsersViewer from '@/components/LikedUsersViewer';
-import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles } from 'lucide-react';
+import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles, Eye, Music } from 'lucide-react';
 
 import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
 import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
 import AdminBooksListManager from '@/components/AdminBooksListManager';
-import { Music } from 'lucide-react';
+import AdminReadingAnalytics from '@/components/AdminReadingAnalytics';
 
 interface LikedUserItem {
   id: string;
@@ -64,7 +64,7 @@ interface AdminDashboardViewProps {
 }
 
 export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
+  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
 
   const unreadCount = letters.filter(l => !l.isRead).length;
 
@@ -122,6 +122,19 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
             <Plus className="w-4 h-4 text-[#9A3412]" />
             <span>+ Eser Yükle</span>
           </Link>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('analytics')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'analytics'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <Eye className="w-4 h-4 text-amber-400" />
+            <span>Okuma Analitiği</span>
+          </button>
 
           <button
             type="button"
@@ -267,6 +280,13 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
               Henüz içerik bulunmuyor.
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB: READING ANALYTICS & STREAM */}
+      {activeTab === 'analytics' && (
+        <div className="bg-[#FFFDF9] rounded-2xl border border-[#E6D7BC] shadow-parchment p-6 sm:p-8">
+          <AdminReadingAnalytics />
         </div>
       )}
 
