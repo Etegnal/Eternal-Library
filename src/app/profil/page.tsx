@@ -47,7 +47,18 @@ export default async function ProfilePage() {
 
   const likedPosts: LikedPost[] = likedRecords.map((r) => r.post);
 
-  // 2. Fetch user's pending / submitted works from Letter table (type = 'ESER')
+  // 2. Fetch user's saved books from SavedBook table
+  const savedBookRecords = await prisma.savedBook.findMany({
+    where: { userId: user.id },
+    include: {
+      book: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const savedBooks = savedBookRecords.map((r) => r.book);
+
+  // 3. Fetch user's pending / submitted works from Letter table (type = 'ESER')
   const userLetters = await prisma.letter.findMany({
     where: {
       email: user.email.toLowerCase(),
@@ -56,7 +67,7 @@ export default async function ProfilePage() {
     orderBy: { createdAt: 'desc' },
   });
 
-  // 3. Fetch user's published works from Post table
+  // 4. Fetch user's published works from Post table
   const publishedPosts = await prisma.post.findMany({
     where: {
       OR: [
@@ -166,8 +177,8 @@ export default async function ProfilePage() {
       {/* 2. BENİM KALEMİMDEN (USER SUBMISSIONS & PUBLISHED WORKS SECTION) */}
       <UserSubmissionsSection submissions={userSubmissions} />
 
-      {/* 3. PERSONAL LIBRARY / LIKED WORKS SECTION */}
-      <UserPersonalLibrary likedPosts={likedPosts} />
+      {/* 3. PERSONAL LIBRARY / LIKED & SAVED WORKS SECTION */}
+      <UserPersonalLibrary likedPosts={likedPosts} savedBooks={savedBooks} />
 
     </div>
   );

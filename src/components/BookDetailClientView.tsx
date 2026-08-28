@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { BookOpen, Star, Calendar, FileText, Bookmark, Tag, ShoppingCart, ExternalLink } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
+import SaveBookButton from '@/components/SaveBookButton';
 
 interface BookDetailClientViewProps {
   book: {
@@ -40,6 +41,15 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
         <BookOpen className="w-4 h-4 text-amber-300 shrink-0" />
         <span>Kitap Özetini Oku</span>
       </button>
+
+      {/* Save Book to Personal Library Action Button */}
+      <SaveBookButton
+        bookId={book.slug}
+        bookSlug={book.slug}
+        bookTitle={book.title}
+        variant="button"
+        className="w-full py-2 sm:py-2.5"
+      />
 
       {/* Buy Book / Satın Al Fiyatı İncele Action Button */}
       <a

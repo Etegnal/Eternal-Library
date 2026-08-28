@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BookOpen, Star, Sparkles, Search, Filter, BookCheck, Eye, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
 import BookReaderModal from '@/components/BookReaderModal';
+import SaveBookButton from '@/components/SaveBookButton';
 import { VerifiedBook } from '@/lib/verifiedBooks';
 
 interface MutlakKitaplikCatalogProps {
@@ -312,7 +313,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
 
                 </div>
 
-                {/* UNIFIED ACTION: 'Kitabı İncele' */}
+                {/* UNIFIED ACTIONS: 'Kitabı İncele' & 'SaveBookButton' */}
                 <div className="pt-3 mt-3 border-t border-amber-200/60 flex items-center gap-2">
                   <Link
                     href={`/kitaplar/${book.slug}`}
@@ -321,6 +322,13 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                     <BookOpen className="w-3.5 h-3.5 text-amber-800" />
                     <span>Kitabı İncele</span>
                   </Link>
+
+                  <SaveBookButton
+                    bookId={book.id || book.slug}
+                    bookSlug={book.slug}
+                    bookTitle={book.title}
+                    variant="icon"
+                  />
                 </div>
 
               </div>
