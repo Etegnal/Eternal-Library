@@ -141,7 +141,7 @@ export async function sendMail({ to, subject, html, text }: SendMailOptions) {
     const info = await transporter.sendMail({
       from: emailFrom,
       to: finalRecipients.join(', '),
-      subject: IS_TEST_MODE ? `[TEST - ${TEST_TARGET_EMAIL}] ${subject}` : subject,
+      subject,
       html,
       text: text || subject,
     });
