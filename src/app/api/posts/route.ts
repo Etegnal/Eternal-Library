@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { slugify } from '@/lib/slug';
-import { sendMail, IS_TEST_MODE, TEST_TARGET_EMAIL } from '@/lib/email';
+import { sendMail, IS_TEST_MODE, TEST_TARGET_EMAIL, getTestRecipients } from '@/lib/email';
 import { generateNewPostEmailHtml } from '@/lib/emailTemplates';
 
 import { getSiteUrl } from '@/lib/siteUrl';
@@ -56,37 +56,37 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Trigger automated email notification (runs asynchronously)
-    (async () => {
-      try {
-        const siteUrl = getSiteUrl();
-        const emailHtml = generateNewPostEmailHtml(
-          {
-            title: newPost.title,
-            slug: newPost.slug,
-            excerpt: newPost.excerpt,
-            type: newPost.type,
-            author: newPost.author,
-            readingTime: newPost.readingTime,
-          },
-          siteUrl
-        );
+    // Trigger automated email notification (awaited for Serverless Function execution)
+    try {
+      const siteUrl = getSiteUrl();
+      const emailHtml = generateNewPostEmailHtml(
+        {
+          title: newPost.title,
+          slug: newPost.slug,
+          excerpt: newPost.excerpt,
+          type: newPost.type,
+          author: newPost.author,
+          readingTime: newPost.readingTime,
+        },
+        siteUrl
+      );
 
-        let recipients: string[] = [TEST_TARGET_EMAIL];
-        if (!IS_TEST_MODE) {
-          const allUsers = await prisma.user.findMany({ select: { email: true } });
-          recipients = allUsers.map((u) => u.email).filter(Boolean);
-        }
+      let recipients: string[] = getTestRecipients();
+      const isTestModeActive = process.env.EMAIL_TEST_MODE !== 'false';
 
-        await sendMail({
-          to: recipients,
-          subject: `[Eternal Library] Yeni ${newPost.type === 'SIIR' ? 'Şiir' : 'Yazı'}: "${newPost.title}"`,
-          html: emailHtml,
-        });
-      } catch (err) {
-        console.error('Automated email dispatch error:', err);
+      if (!isTestModeActive) {
+        const allUsers = await prisma.user.findMany({ select: { email: true } });
+        recipients = allUsers.map((u) => u.email).filter(Boolean);
       }
-    })();
+
+      await sendMail({
+        to: recipients,
+        subject: `[Eternal Library] Yeni ${newPost.type === 'SIIR' ? 'Şiir' : 'Yazı'}: "${newPost.title}"`,
+        html: emailHtml,
+      });
+    } catch (err) {
+      console.error('Automated email dispatch error:', err);
+    }
 
     return NextResponse.json(newPost, { status: 201 });
   } catch (error: any) {
