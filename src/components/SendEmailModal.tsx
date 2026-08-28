@@ -92,11 +92,11 @@ export default function SendEmailModal({
           </button>
         </div>
 
-        {/* TEST MODE SAFEGUARD BANNER */}
-        <div className="px-6 py-3 bg-amber-100/80 border-b border-amber-200 text-amber-900 text-xs flex items-center gap-2">
-          <ShieldAlert className="w-4 h-4 text-amber-800 shrink-0" />
+        {/* LIVE SYSTEM BANNER */}
+        <div className="px-6 py-3 bg-emerald-100/80 border-b border-emerald-200 text-emerald-950 text-xs flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-emerald-700 shrink-0" />
           <span>
-            <strong>Güvenlik & Test Modu Etkin:</strong> E-postalar sistem onaylanana kadar yalnızca <strong>erenaoyunda@gmail.com</strong> adresine yönlendirilir.
+            <strong>Canlı E-Posta Sistemi Aktif:</strong> E-postanız doğrudan seçilen alıcının (veya 'all' yazıldığında <strong>tüm kayıtlı kullanıcıların</strong>) e-posta adresine iletilecektir.
           </span>
         </div>
 

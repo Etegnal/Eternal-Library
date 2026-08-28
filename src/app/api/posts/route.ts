@@ -71,10 +71,12 @@ export async function POST(req: NextRequest) {
         siteUrl
       );
 
-      let recipients: string[] = getTestRecipients();
-      const isTestModeActive = process.env.EMAIL_TEST_MODE !== 'false';
+      let recipients: string[] = [];
+      const isTestModeActive = process.env.EMAIL_TEST_MODE === 'true';
 
-      if (!isTestModeActive) {
+      if (isTestModeActive) {
+        recipients = getTestRecipients();
+      } else {
         const allUsers = await prisma.user.findMany({ select: { email: true } });
         recipients = allUsers.map((u) => u.email).filter(Boolean);
       }

@@ -35,7 +35,7 @@ loadEnvFile();
 // Configuration for Test Users Safeguard
 export const DEFAULT_TEST_EMAILS = ['erenaoyunda@gmail.com', 'rahmik93@gmail.com'];
 export const TEST_TARGET_EMAIL = process.env.TEST_EMAIL_RECIPIENT || 'erenaoyunda@gmail.com, rahmik93@gmail.com';
-export const IS_TEST_MODE = process.env.EMAIL_TEST_MODE !== 'false'; // Default TRUE for test safety
+export const IS_TEST_MODE = process.env.EMAIL_TEST_MODE === 'true'; // Default FALSE for live production!
 
 export function getTestRecipients(): string[] {
   const envTarget = process.env.TEST_EMAIL_RECIPIENT;
@@ -54,7 +54,7 @@ export interface SendMailOptions {
 }
 
 export async function sendMail({ to, subject, html, text }: SendMailOptions) {
-  const currentTestMode = process.env.EMAIL_TEST_MODE !== 'false';
+  const currentTestMode = process.env.EMAIL_TEST_MODE === 'true'; // Test Mode OFF by default
   const allowedTestUsers = getTestRecipients();
 
   // 1. Determine target recipients based on Test Mode
