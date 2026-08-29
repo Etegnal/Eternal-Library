@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { verifiedBooksData } from '@/lib/verifiedBooks';
 import BookDetailClientView from '@/components/BookDetailClientView';
+import BookReviewsSection from '@/components/BookReviewsSection';
 import RecommendedBooksSection from '@/components/RecommendedBooksSection';
 import { ensureVerifiedBooksInDb } from '@/lib/syncBooks';
 
@@ -113,6 +114,9 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
 
       {/* ZERO-COMMERCE ESER DETAY KARTI */}
       <BookDetailClientView book={bookData} />
+
+      {/* OKUR İNCELEMELERİ & YORUMLARI SECTION */}
+      <BookReviewsSection bookSlug={bookData.slug} bookTitle={bookData.title} />
 
       {/* RECOMMENDED BOOKS (3 ESER) */}
       <RecommendedBooksSection books={recommendedBooks} />

@@ -28,6 +28,8 @@ model User {
   updatedAt     DateTime     @updatedAt
   likeRecords       LikeRecord[]
   savedBooks        SavedBook[]
+  readBooks         ReadBook[]
+  bookReviews       BookReview[]
   viewRecords       ViewRecord[]
   testResultRecords TestResultRecord[]
 }
@@ -109,6 +111,8 @@ model Book {
   updatedAt     DateTime    @updatedAt
   bookPages     BookPage[]
   savedBooks    SavedBook[]
+  readBooks     ReadBook[]
+  bookReviews   BookReview[]
 }
 
 model SavedBook {
@@ -120,6 +124,29 @@ model SavedBook {
   createdAt DateTime @default(now())
 
   @@unique([userId, bookId])
+}
+
+model ReadBook {
+  id        String   @id @default(uuid())
+  userId    String
+  bookId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, bookId])
+}
+
+model BookReview {
+  id        String   @id @default(uuid())
+  bookId    String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  rating    Int      @default(5)
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model BookPage {
