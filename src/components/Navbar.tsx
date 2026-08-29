@@ -19,7 +19,7 @@ export default function Navbar() {
     { href: '/kitaplar', label: 'KİTAPLAR' },
     { href: '/yazilar', label: 'YAZILAR' },
     { href: '/siirler', label: 'ŞİİRLER' },
-    { href: '/gunun-sozu', label: 'GÜNÜN SÖZÜ' },
+    { href: '/testler', label: 'TESTLER' },
     { href: '/iletisim', label: 'İLETİŞİM' },
   ];
 

@@ -9,7 +9,7 @@ import UserPasswordViewer from '@/components/UserPasswordViewer';
 import DeleteLetterButton from '@/components/DeleteLetterButton';
 import LetterDetailViewer from '@/components/LetterDetailViewer';
 import LikedUsersViewer from '@/components/LikedUsersViewer';
-import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles, Eye, Music, Send } from 'lucide-react';
+import { Plus, Feather, BookOpen, Edit, ShieldCheck, Users, FileText, User, Mail, Calendar, Sparkles, Eye, Music, Send, Brain } from 'lucide-react';
 
 import AdminMasterPoetsManager, { MasterPoetItem } from '@/components/AdminMasterPoetsManager';
 import AdminTracksManager, { TrackItem } from '@/components/AdminTracksManager';
@@ -17,6 +17,7 @@ import AdminBooksListManager from '@/components/AdminBooksListManager';
 import AdminReadingAnalytics from '@/components/AdminReadingAnalytics';
 import UserActivityModal from '@/components/UserActivityModal';
 import SendEmailModal from '@/components/SendEmailModal';
+import AdminTestsManager from '@/components/AdminTestsManager';
 
 interface LikedUserItem {
   id: string;
@@ -196,6 +197,19 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
 
           <button
             type="button"
+            onClick={() => setActiveTab('tests')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'tests'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md'
+                : 'bg-amber-100/50 text-[#5C4033] hover:bg-amber-100 border-amber-200'
+            }`}
+          >
+            <Brain className="w-4 h-4 text-amber-400" />
+            <span>Psikolojik Testler</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab('letters')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border relative ${
               activeTab === 'letters'
@@ -211,6 +225,9 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
           </button>
         </div>
       </div>
+
+      {/* TAB: PSYCHOLOGICAL TESTS */}
+      {activeTab === 'tests' && <AdminTestsManager />}
 
       {/* TAB 1: POSTS MANAGEMENT */}
       {activeTab === 'posts' && (

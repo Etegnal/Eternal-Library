@@ -168,3 +168,38 @@ model Track {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+model PsychologicalTest {
+  id          String         @id @default(uuid())
+  title       String
+  slug        String         @unique
+  description String         @db.Text
+  coverImage  String?
+  category    String?        @default("Psikolojik Test")
+  order       Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  questions   TestQuestion[]
+}
+
+model TestQuestion {
+  id           String            @id @default(uuid())
+  testId       String
+  test         PsychologicalTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  questionText String            @db.Text
+  order        Int               @default(0)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  options      TestOption[]
+}
+
+model TestOption {
+  id                  String       @id @default(uuid())
+  questionId          String
+  question            TestQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  optionText          String       @db.Text
+  metaphorExplanation String       @db.Text
+  order               Int          @default(0)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}

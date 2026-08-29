@@ -97,9 +97,14 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
             <div className="relative z-10 space-y-4 sm:space-y-5">
               {/* TOP HEADER BAR */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium tracking-widest text-amber-400 uppercase">
-                  Günün Sözü
-                </span>
+                <Link
+                  href="/gunun-sozu"
+                  className="text-xs font-medium tracking-widest text-amber-400 hover:text-amber-200 uppercase flex items-center gap-1.5 transition-colors group/quote"
+                  title="Günün Sözü Sayfasına Git"
+                >
+                  <span>Günün Sözü</span>
+                  <span className="text-[10px] text-amber-400/70 group-hover/quote:text-amber-200 transition-colors">↗</span>
+                </Link>
 
                 {/* MINIMAL ARROW NAVIGATION CONTROLS */}
                 <div className="flex items-center gap-1 text-amber-300/80">
