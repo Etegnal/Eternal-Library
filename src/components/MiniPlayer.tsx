@@ -294,17 +294,17 @@ export default function MiniPlayer() {
         <button
           type="button"
           onClick={() => setIsCollapsed(true)}
-          className="p-1 -ml-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/20 transition-all shrink-0 hover:scale-110"
+          className="p-1.5 -ml-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/20 transition-all shrink-0 hover:scale-110"
           title="Müzik Çaları Küçült"
           aria-label="Müzik Çaları Küçült"
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
         </button>
 
         {/* CLICKABLE DISC & TITLE CONTAINER -> /muzikler */}
         <Link
           href="/muzikler"
-          className="flex items-center gap-2.5 sm:gap-3 hover:opacity-90 transition-opacity group/disc cursor-pointer min-w-0 flex-1"
+          className="flex items-center gap-2.5 sm:gap-3.5 hover:opacity-90 transition-opacity group/disc cursor-pointer min-w-0 flex-1"
           title="Nadir Plaklar Seçkisine Git"
         >
           {/* Vinyl Record Disc (Larger & Roomier) */}
@@ -355,29 +355,29 @@ export default function MiniPlayer() {
         </Link>
 
         {/* Controls Row */}
-        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           
           {/* Previous Track */}
           <button
             type="button"
             onClick={prevTrack}
-            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors shrink-0"
+            className="w-8.5 h-8.5 sm:w-9.5 sm:h-9.5 rounded-full hover:bg-amber-500/20 text-stone-300 hover:text-amber-200 flex items-center justify-center transition-colors shrink-0"
             title="Önceki Şarkı"
           >
-            <SkipBack className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <SkipBack className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
           </button>
 
           {/* Play / Pause */}
           <button
             type="button"
             onClick={togglePlay}
-            className="w-8.5 h-8.5 sm:w-9.5 sm:h-9.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 flex items-center justify-center transition-colors shrink-0 shadow-sm"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-amber-500/25 hover:bg-amber-500/35 border border-amber-500/40 text-amber-300 flex items-center justify-center transition-transform hover:scale-105 shrink-0 shadow-md"
             title={isPlaying ? "Duraklat" : "Oynat"}
           >
             {isPlaying ? (
-              <Pause className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-amber-300" />
+              <Pause className="w-5 h-5 sm:w-5.5 sm:h-5.5 fill-amber-300" />
             ) : (
-              <Play className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-amber-300 ml-0.5" />
+              <Play className="w-5 h-5 sm:w-5.5 sm:h-5.5 fill-amber-300 ml-0.5" />
             )}
           </button>
 
@@ -385,10 +385,10 @@ export default function MiniPlayer() {
           <button
             type="button"
             onClick={nextTrack}
-            className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-full hover:bg-amber-500/20 text-stone-400 hover:text-amber-200 flex items-center justify-center transition-colors shrink-0"
+            className="w-8.5 h-8.5 sm:w-9.5 sm:h-9.5 rounded-full hover:bg-amber-500/20 text-stone-300 hover:text-amber-200 flex items-center justify-center transition-colors shrink-0"
             title="Sonraki Şarkı"
           >
-            <SkipForward className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <SkipForward className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
           </button>
 
           {/* Volume Control Button & Slider Toggle */}
@@ -402,13 +402,13 @@ export default function MiniPlayer() {
                   setShowVolumeSlider(!showVolumeSlider);
                 }
               }}
-              className="p-1.5 sm:p-2 text-stone-400 hover:text-amber-300 transition-colors rounded-full shrink-0"
+              className="p-2 sm:p-2.5 text-stone-300 hover:text-amber-300 transition-colors rounded-full shrink-0"
               title="Ses Seviyesi"
             >
               {isMuted || volume === 0 ? (
-                <VolumeX className="w-4 h-4 text-red-400" />
+                <VolumeX className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-red-400" />
               ) : (
-                <Volume2 className="w-4 h-4 text-amber-300" />
+                <Volume2 className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-amber-300" />
               )}
             </button>
 
@@ -440,10 +440,10 @@ export default function MiniPlayer() {
               href={currentTrack.spotifyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 text-stone-400 hover:text-[#1DB954] transition-colors flex items-center justify-center shrink-0"
+              className="p-2 sm:p-2.5 text-stone-300 hover:text-[#1DB954] transition-colors flex items-center justify-center shrink-0"
               title="Spotify'da Dinle"
             >
-              <SpotifyIcon className="w-4 h-4" />
+              <SpotifyIcon className="w-5 h-5 sm:w-5.5 sm:h-5.5" />
             </a>
           )}
 
