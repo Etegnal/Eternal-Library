@@ -25,6 +25,7 @@ export default async function ProfilePage() {
       id: true,
       name: true,
       email: true,
+      image: true,
       role: true,
       createdAt: true,
     },
@@ -120,8 +121,12 @@ export default async function ProfilePage() {
 
         {/* Profile Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 border-b border-[#E6D7BC]">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-serif text-3xl font-bold shadow-fire border-2 border-amber-500/50 shrink-0">
-            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#78350F] to-[#9A3412] text-amber-100 flex items-center justify-center font-serif text-3xl font-bold shadow-fire border-2 border-amber-500/50 shrink-0 overflow-hidden">
+            {user.image ? (
+              <img src={user.image} alt={user.name || 'User'} className="w-full h-full object-cover" />
+            ) : (
+              <span>{user.name ? user.name.charAt(0).toUpperCase() : 'U'}</span>
+            )}
           </div>
 
           <div className="space-y-2 text-center sm:text-left flex-1">

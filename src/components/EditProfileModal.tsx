@@ -9,6 +9,7 @@ interface EditProfileModalProps {
     id: string;
     name: string | null;
     email: string;
+    image?: string | null;
   };
 }
 
@@ -16,6 +17,7 @@ export default function EditProfileModal({ user }: EditProfileModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(user.name || '');
   const [email, setEmail] = useState(user.email || '');
+  const [image, setImage] = useState(user.image || '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,11 +28,27 @@ export default function EditProfileModal({ user }: EditProfileModalProps) {
   const handleOpen = () => {
     setName(user.name || '');
     setEmail(user.email || '');
+    setImage(user.image || '');
     setCurrentPassword('');
     setNewPassword('');
     setError('');
     setSuccessMsg('');
     setIsOpen(true);
+  };
+
+  const handleImageFile = (file: File) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Profil fotoğrafı 5 MB\'tan küçük olmalıdır.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        setImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,6 +64,7 @@ export default function EditProfileModal({ user }: EditProfileModalProps) {
         body: JSON.stringify({
           name,
           email,
+          image,
           currentPassword: currentPassword || undefined,
           newPassword: newPassword || undefined,
         }),
@@ -123,6 +142,46 @@ export default function EditProfileModal({ user }: EditProfileModalProps) {
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               
+              {/* Profile Photo Uploader */}
+              <div>
+                <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1 flex items-center gap-1">
+                  <User className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Profil Fotoğrafı</span>
+                </label>
+                <div className="flex items-center gap-4 bg-amber-50/50 p-3 rounded-2xl border border-amber-200">
+                  <div className="w-14 h-14 rounded-full bg-amber-800 text-amber-100 flex items-center justify-center font-serif text-lg font-bold overflow-hidden border border-amber-600 shrink-0">
+                    {image ? (
+                      <img src={image} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span>{name ? name.charAt(0).toUpperCase() : 'U'}</span>
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <label className="inline-block px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold border border-amber-300 cursor-pointer transition-colors">
+                      <span>Fotoğraf Seç</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleImageFile(file);
+                        }}
+                      />
+                    </label>
+                    {image && (
+                      <button
+                        type="button"
+                        onClick={() => setImage('')}
+                        className="block text-[11px] font-bold text-red-600 hover:underline cursor-pointer"
+                      >
+                        Fotoğrafı Kaldır
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* Name */}
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1 flex items-center gap-1">

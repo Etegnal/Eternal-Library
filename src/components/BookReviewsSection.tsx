@@ -133,7 +133,73 @@ export default function BookReviewsSection({ bookSlug, bookTitle }: BookReviewsS
         </span>
       </div>
 
-      {/* NEW REVIEW FORM / LOGIN PROMPT */}
+      {/* REVIEWS LIST (Rendered FIRST) */}
+      <div className="space-y-4">
+        {isLoading ? (
+          <div className="text-center py-8 text-stone-400 text-xs sm:text-sm font-serif italic animate-pulse">
+            İncelemeler yükleniyor...
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="p-6 text-center bg-amber-50/40 rounded-xl border border-amber-200/50 space-y-1">
+            <p className="text-xs sm:text-sm font-bold text-[#78350F] font-serif">
+              Henüz Bu Kitap İçin İnceleme Yazılmamış
+            </p>
+            <p className="text-xs text-stone-500 font-serif italic">
+              Aşağıdaki formu kullanarak düşüncelerini ilk paylaşan okur sen ol!
+            </p>
+          </div>
+        ) : (
+          reviews.map((rev) => (
+            <div
+              key={rev.id}
+              className="p-4 sm:p-5 rounded-2xl bg-white border border-amber-200/70 shadow-xs space-y-3 transition-all hover:border-amber-300"
+            >
+              {/* USER HEADER & RATING */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  {/* AVATAR IMAGE / INITIALS */}
+                  <div className="w-9 h-9 rounded-full bg-amber-800 text-amber-100 font-serif font-bold text-xs flex items-center justify-center border border-amber-600 shadow-xs shrink-0 overflow-hidden">
+                    {rev.user.image ? (
+                      <img src={rev.user.image} alt={rev.user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span>{getInitials(rev.user.name)}</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-xs sm:text-sm text-[#362215]">
+                      {rev.user.name}
+                    </h4>
+                    <span className="text-[10px] text-stone-400 font-sans block">
+                      {formatDate(rev.createdAt)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* STARS DISPLAY */}
+                <div className="flex items-center gap-0.5 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star
+                      key={s}
+                      className={`w-3.5 h-3.5 ${
+                        rev.rating >= s
+                          ? 'fill-amber-500 text-amber-500'
+                          : 'text-stone-300 fill-transparent'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* REVIEW CONTENT */}
+              <p className="text-xs sm:text-sm text-[#5C4033] leading-relaxed font-sans whitespace-pre-line pl-1 sm:pl-12">
+                {rev.comment}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* NEW REVIEW FORM / LOGIN PROMPT (Rendered SECOND below comments) */}
       <div className="bg-amber-50/70 p-4 sm:p-6 rounded-2xl border border-amber-200/80 space-y-4">
         {session ? (
           <form onSubmit={handleSubmitReview} className="space-y-4">
@@ -220,68 +286,6 @@ export default function BookReviewsSection({ bookSlug, bookTitle }: BookReviewsS
               <span>Giriş Yap veya Kaydol</span>
             </Link>
           </div>
-        )}
-      </div>
-
-      {/* REVIEWS LIST */}
-      <div className="space-y-4">
-        {isLoading ? (
-          <div className="text-center py-8 text-stone-400 text-xs sm:text-sm font-serif italic animate-pulse">
-            İncelemeler yükleniyor...
-          </div>
-        ) : reviews.length === 0 ? (
-          <div className="p-6 text-center bg-amber-50/40 rounded-xl border border-amber-200/50 space-y-1">
-            <p className="text-xs sm:text-sm font-bold text-[#78350F] font-serif">
-              Henüz Bu Kitap İçin İnceleme Yazılmamış
-            </p>
-            <p className="text-xs text-stone-500 font-serif italic">
-              Düşüncelerini ilk paylaşan okur sen ol!
-            </p>
-          </div>
-        ) : (
-          reviews.map((rev) => (
-            <div
-              key={rev.id}
-              className="p-4 sm:p-5 rounded-2xl bg-white border border-amber-200/70 shadow-xs space-y-3 transition-all hover:border-amber-300"
-            >
-              {/* USER HEADER & RATING */}
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  {/* AVATAR INITIALS */}
-                  <div className="w-9 h-9 rounded-full bg-amber-800 text-amber-100 font-serif font-bold text-xs flex items-center justify-center border border-amber-600 shadow-xs shrink-0">
-                    {getInitials(rev.user.name)}
-                  </div>
-                  <div>
-                    <h4 className="font-serif font-bold text-xs sm:text-sm text-[#362215]">
-                      {rev.user.name}
-                    </h4>
-                    <span className="text-[10px] text-stone-400 font-sans block">
-                      {formatDate(rev.createdAt)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* STARS DISPLAY */}
-                <div className="flex items-center gap-0.5 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <Star
-                      key={s}
-                      className={`w-3.5 h-3.5 ${
-                        rev.rating >= s
-                          ? 'fill-amber-500 text-amber-500'
-                          : 'text-stone-300 fill-transparent'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* REVIEW CONTENT */}
-              <p className="text-xs sm:text-sm text-[#5C4033] leading-relaxed font-sans whitespace-pre-line pl-1 sm:pl-12">
-                {rev.comment}
-              </p>
-            </div>
-          ))
         )}
       </div>
 

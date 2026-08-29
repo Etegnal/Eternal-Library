@@ -242,8 +242,12 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
                   key={reader.id}
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-[#78350F] text-xs font-bold border border-amber-200 shadow-xs"
                 >
-                  <div className="w-5 h-5 rounded-full bg-amber-800 text-amber-100 text-[10px] font-mono flex items-center justify-center font-bold shrink-0">
-                    {reader.name.slice(0, 1).toUpperCase()}
+                  <div className="w-5 h-5 rounded-full bg-amber-800 text-amber-100 text-[10px] font-mono flex items-center justify-center font-bold shrink-0 overflow-hidden border border-amber-600">
+                    {reader.image ? (
+                      <img src={reader.image} alt={reader.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span>{reader.name.slice(0, 1).toUpperCase()}</span>
+                    )}
                   </div>
                   <span>{reader.name}</span>
                 </div>

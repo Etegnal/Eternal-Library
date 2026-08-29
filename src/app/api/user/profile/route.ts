@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { name, email, currentPassword, newPassword } = body;
+    const { name, email, currentPassword, newPassword, image } = body;
 
     const currentUser = await prisma.user.findUnique({
       where: { email: session.user.email },
@@ -27,6 +27,10 @@ export async function PATCH(req: NextRequest) {
 
     if (name && name.trim()) {
       updateData.name = name.trim();
+    }
+
+    if (image !== undefined) {
+      updateData.image = image;
     }
 
     if (email && email.trim() && email.trim().toLowerCase() !== currentUser.email) {
