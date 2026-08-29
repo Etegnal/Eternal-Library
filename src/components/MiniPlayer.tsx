@@ -288,13 +288,13 @@ export default function MiniPlayer() {
       )}
 
       {/* Glassmorphism Container */}
-      <div className="w-full sm:w-auto flex items-center justify-between gap-2 sm:gap-3 p-2 sm:p-2.5 px-3 bg-[#120e0b]/95 backdrop-blur-md border border-amber-500/30 hover:border-amber-500/50 rounded-2xl shadow-2xl shadow-black/80 transition-all duration-300 group overflow-hidden">
+      <div className="w-full sm:w-auto flex items-center justify-between gap-1.5 sm:gap-2.5 p-1.5 sm:p-2 pl-2 sm:pl-2.5 pr-3 bg-[#120e0b]/95 backdrop-blur-md border border-amber-500/30 hover:border-amber-500/50 rounded-2xl shadow-2xl shadow-black/80 transition-all duration-300 group overflow-hidden">
         
-        {/* Collapse Arrow Button */}
+        {/* Flush Left Collapse Arrow Button */}
         <button
           type="button"
           onClick={() => setIsCollapsed(true)}
-          className="p-1 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/10 transition-colors shrink-0"
+          className="p-1 -ml-0.5 rounded-lg text-stone-400 hover:text-amber-200 hover:bg-amber-500/20 transition-all shrink-0 hover:scale-110"
           title="Müzik Çaları Küçült"
           aria-label="Müzik Çaları Küçült"
         >
@@ -307,7 +307,7 @@ export default function MiniPlayer() {
           className="flex items-center gap-2 sm:gap-2.5 hover:opacity-90 transition-opacity group/disc cursor-pointer min-w-0 flex-1"
           title="Nadir Plaklar Seçkisine Git"
         >
-          {/* Vinyl Record Disc */}
+          {/* Vinyl Record Disc (Shifted Further Left) */}
           <div className="relative w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner group-hover/disc:scale-105 transition-transform">
             {coverUrl ? (
               <Image
@@ -328,9 +328,9 @@ export default function MiniPlayer() {
             )}
           </div>
 
-          {/* Track Title & Artist */}
-          <div className="min-w-0 flex-1 sm:max-w-[130px] space-y-0.5 pr-1">
-            <div className="flex items-center gap-1">
+          {/* Track Title & Artist (Expanded Area) */}
+          <div className="min-w-0 flex-1 sm:max-w-[180px] space-y-0.5 pr-1">
+            <div className="flex items-center gap-1.5">
               <h4 className="text-xs font-serif font-medium text-amber-100 group-hover/disc:text-amber-300 transition-colors truncate flex-1">
                 {currentTrack.title}
               </h4>
