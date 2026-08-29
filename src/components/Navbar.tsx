@@ -21,7 +21,7 @@ export default function Navbar() {
     { href: '/yazilar', label: 'YAZILAR' },
     { href: '/siirler', label: 'ŞİİRLER' },
     { href: '/testler', label: 'TESTLER' },
-    { href: '/muzikler', label: 'PLAKLAR' },
+    { href: '/muzikler', label: 'PLAKLAR', hideOnDesktop: true },
     { href: '/iletisim', label: 'İLETİŞİM' },
   ];
 
@@ -101,7 +101,7 @@ export default function Navbar() {
 
         {/* DESKTOP NAVIGATION BAR (>= md) */}
         <nav className="hidden md:flex items-center gap-1.5 bg-[#23120A]/85 backdrop-blur-md px-5 py-2 rounded-full border border-amber-700/40 shadow-2xl">
-          {navLinks.map((link) => {
+          {navLinks.filter(l => !l.hideOnDesktop).map((link) => {
             const active = isActive(link.href);
             return (
               <Link

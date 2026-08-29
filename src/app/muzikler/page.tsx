@@ -40,11 +40,11 @@ export default async function MusicPlaylistCatalogPage() {
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200 shadow-sm">
           <Disc className="w-4 h-4 text-cozy-amber animate-spin-slow" />
-          <span>Nadir Plak Antolojisi</span>
+          <span>Plak Antolojisi</span>
         </div>
 
         <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee tracking-tight">
-          Nostaljik Sesler & Plak Koleksiyonu
+          Nadide Plaklar Seçkisi
         </h1>
 
         <p className="text-cozy-coffee-light text-sm sm:text-base leading-relaxed font-serif italic">
