@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Music, Plus, Trash2, Edit3, Save, X, ExternalLink, CheckCircle2, AlertCircle, Play } from 'lucide-react';
+import { Music, Plus, Trash2, Edit3, Save, X, ExternalLink, CheckCircle2, AlertCircle, Play, Upload, Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { getYouTubeId } from '@/lib/playlist';
 
@@ -33,8 +33,46 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
   const [spotifyUrl, setSpotifyUrl] = useState('');
   const [order, setOrder] = useState('');
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const router = useRouter();
+
+  const processImageFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setMsg({ type: 'error', text: 'Lütfen geçerli bir resim dosyası seçin (PNG, JPG, WEBP).' });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setCover(e.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      processImageFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      processImageFile(e.target.files[0]);
+    }
+  };
 
   const fetchTracks = async () => {
     try {
@@ -229,26 +267,91 @@ export default function AdminTracksManager({ initialTracks = [] }: AdminTracksMa
               />
             </div>
 
-          </div>
+          {/* Cover Image Drag and Drop Zone */}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold uppercase text-[#5C4033]">
+              Kapak Görseli (Sürükle & Bırak veya Yükle)
+            </label>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            
-            {/* Cover Image */}
-            <div>
-              <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1">
-                Kapak Görseli URL (Spotify / Web)
-              </label>
-              <input
-                type="text"
-                placeholder="Örn: https://i.scdn.co/image/... (Boşsa YouTube resmi alınır)"
-                value={cover}
-                onChange={(e) => setCover(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:border-cozy-amber bg-amber-50/50 text-[#362215] font-mono text-xs"
-              />
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`relative border-2 border-dashed rounded-2xl p-4 transition-all duration-200 text-center ${
+                isDragging
+                  ? 'border-cozy-amber bg-amber-100/60 scale-[1.01]'
+                  : 'border-amber-200 bg-amber-50/40 hover:border-amber-300'
+              }`}
+            >
+              {cover ? (
+                <div className="flex items-center gap-4 text-left">
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-amber-300 shadow-md shrink-0 bg-amber-950">
+                    <img
+                      src={cover}
+                      alt="Kapak Önizleme"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0 space-y-0.5">
+                    <p className="text-xs font-bold text-[#362215] truncate">
+                      Kapak Görseli Yüklendi
+                    </p>
+                    <p className="text-[11px] text-[#634832] truncate font-mono">
+                      {cover.startsWith('data:') ? 'Bilgisayardan dosya seçildi' : cover}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setCover('')}
+                    className="px-3 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold transition-colors flex items-center gap-1 shrink-0"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Kaldır</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="py-2 flex flex-col items-center justify-center space-y-1.5">
+                  <div className="w-9 h-9 rounded-full bg-amber-100/80 flex items-center justify-center text-cozy-amber">
+                    <Upload className="w-4 h-4" />
+                  </div>
+
+                  <div className="text-xs space-y-0.5">
+                    <span className="font-bold text-[#362215]">
+                      Kapak görselini buraya sürükleyip bırakın
+                    </span>
+                    <span className="text-stone-500 block">
+                      veya bilgisayarınızdan seçmek için{' '}
+                      <label className="text-cozy-amber hover:underline font-bold cursor-pointer">
+                        göz atın
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileInputChange}
+                          className="hidden"
+                        />
+                      </label>
+                    </span>
+                  </div>
+
+                  <span className="text-[10px] text-stone-400">
+                    PNG, JPG, WEBP • Boş bırakılırsa YouTube otomatik kapağı kullanılır.
+                  </span>
+                </div>
+              )}
             </div>
 
-            {/* Spotify Link */}
-            <div>
+            <input
+              type="text"
+              placeholder="Veya doğrudan Kapak Görseli URL'si yapıştırın (https://...)"
+              value={cover}
+              onChange={(e) => setCover(e.target.value)}
+              className="w-full px-4 py-2 rounded-xl border border-amber-200 text-xs focus:outline-none focus:border-cozy-amber bg-amber-50/30 text-[#362215] font-mono"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className="block text-xs font-bold uppercase text-[#5C4033] mb-1">
                 Spotify Bağlantı Linki (Opsiyonel)
               </label>
