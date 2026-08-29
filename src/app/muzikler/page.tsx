@@ -135,31 +135,31 @@ export default async function MusicPlaylistCatalogPage() {
 
                   {/* RIGHT: PLATFORM ICON BUTTONS (SPOTIFY & YOUTUBE) */}
                   <div className="w-24 sm:w-32 flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
-                    {/* SPOTIFY ICON BUTTON */}
+                    {/* SPOTIFY ICON BUTTON - COZY THEME */}
                     {track.spotifyUrl ? (
                       <a
                         href={track.spotifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#1DB954] hover:bg-[#1ed760] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100/80 hover:bg-[#1DB954] border border-amber-200/90 hover:border-emerald-500 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/spot"
                         title="Spotify'da Dinle"
                         aria-label="Spotify'da Dinle"
                       >
-                        <SpotifyIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                        <SpotifyIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5C4033] group-hover/spot:text-white transition-colors" />
                       </a>
                     ) : null}
 
-                    {/* YOUTUBE ICON BUTTON */}
+                    {/* YOUTUBE ICON BUTTON - COZY THEME */}
                     {track.src ? (
                       <a
                         href={track.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FF0000] hover:bg-[#cc0000] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100/80 hover:bg-[#C4302B] border border-amber-200/90 hover:border-red-700 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/yt"
                         title="YouTube'da İzle / Dinle"
                         aria-label="YouTube'da İzle / Dinle"
                       >
-                        <YouTubeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+                        <YouTubeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5C4033] group-hover/yt:text-white transition-colors" />
                       </a>
                     ) : null}
                   </div>
