@@ -21,6 +21,7 @@ export default function Navbar() {
     { href: '/yazilar', label: 'YAZILAR' },
     { href: '/siirler', label: 'ŞİİRLER' },
     { href: '/testler', label: 'TESTLER' },
+    { href: '/muzikler', label: 'MÜZİKLER' },
     { href: '/iletisim', label: 'İLETİŞİM' },
   ];
 
@@ -153,64 +154,69 @@ export default function Navbar() {
 
       </div>
 
-      {/* MOBILE DRAWER */}
+      {/* MOBILE COMPACT GLASSMORPHISM FLOATING MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden mt-3 mx-2 p-4 rounded-2xl bg-[#1C0E07]/95 backdrop-blur-xl border border-amber-700/50 shadow-2xl space-y-2"
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden absolute top-16 right-4 sm:right-8 w-60 sm:w-64 p-3 rounded-2xl bg-[#140A04]/85 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-black/90 space-y-1.5 z-50 text-left"
           >
-            {navLinks.map((link) => {
-              const active = isActive(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block text-center py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all ${
-                    active
-                      ? 'bg-[#9A3412] text-[#FEF3C7] border border-amber-500/50'
-                      : 'text-amber-200/80 hover:bg-amber-900/40'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+            <div className="space-y-1">
+              {navLinks.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-3.5 py-2 rounded-xl text-xs font-bold font-serif tracking-wider uppercase transition-all duration-200 ${
+                      active
+                        ? 'bg-gradient-to-r from-[#9A3412] to-[#78350F] text-[#FEF3C7] shadow-md border border-amber-500/40'
+                        : 'text-amber-200/80 hover:text-amber-100 hover:bg-amber-900/30'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
 
             {session ? (
-              <div className="space-y-2 pt-1 border-t border-amber-900/40">
+              <div className="space-y-1.5 pt-2 border-t border-amber-900/50">
                 <Link
                   href="/profil"
                   onClick={() => setIsOpen(false)}
-                  className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
+                  className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/70 hover:bg-amber-900/80 border border-amber-600/40 flex items-center justify-between transition-colors"
                 >
-                  <User className="w-4 h-4 text-amber-400" />
-                  <span>Profilim ({session.user?.name || 'Kullanıcı'})</span>
+                  <span className="truncate">Profilim</span>
+                  <User className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 </Link>
 
                 {(session.user as any)?.role === 'ADMIN' && (
                   <Link
                     href="/admin"
                     onClick={() => setIsOpen(false)}
-                    className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-200 bg-gradient-to-r from-[#9A3412] to-[#78350F] border border-amber-500/60 flex items-center justify-center gap-1.5"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-200 bg-gradient-to-r from-[#9A3412] to-[#78350F] hover:from-[#78350F] hover:to-[#9A3412] border border-amber-500/50 flex items-center justify-between transition-all shadow-md"
                   >
-                    <ShieldCheck className="w-4 h-4 text-amber-400" />
-                    <span>Yönetici Paneli (Admin)</span>
+                    <span>Yönetici Paneli</span>
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                   </Link>
                 )}
               </div>
             ) : (
-              <Link
-                href="/giris"
-                onClick={() => setIsOpen(false)}
-                className="block text-center py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-600/50 flex items-center justify-center gap-1.5"
-              >
-                <LogIn className="w-4 h-4 text-amber-400" />
-                <span>Giriş Yap / Kayıt Ol</span>
-              </Link>
+              <div className="pt-2 border-t border-amber-900/50">
+                <Link
+                  href="/giris"
+                  onClick={() => setIsOpen(false)}
+                  className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-300 bg-amber-950/70 hover:bg-amber-900/80 border border-amber-600/40 flex items-center justify-between transition-colors"
+                >
+                  <span>Giriş / Kayıt</span>
+                  <LogIn className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                </Link>
+              </div>
             )}
           </motion.div>
         )}
