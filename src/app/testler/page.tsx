@@ -1,7 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import { Brain, HelpCircle, ArrowRight, Sparkles, Layers } from 'lucide-react';
 
@@ -25,8 +23,6 @@ export default async function PsychologicalTestsCatalogPage() {
 
   return (
     <div className="relative min-h-screen bg-[#1C0E07] text-amber-100 flex flex-col font-sans">
-      <Navbar />
-
       {/* HERO SECTION */}
       <section className="relative pt-36 pb-12 px-4 sm:px-8 bg-gradient-to-b from-[#190B05] via-[#241108] to-[#1C0E07] text-amber-100 overflow-hidden">
         <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10">
@@ -124,8 +120,6 @@ export default async function PsychologicalTestsCatalogPage() {
           </div>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 }

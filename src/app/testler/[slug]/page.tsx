@@ -1,7 +1,5 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { prisma } from '@/lib/prisma';
 import TestRunnerClientView from '@/components/TestRunnerClientView';
 
@@ -42,13 +40,9 @@ export default async function PsychologicalTestDetailPage({ params }: Props) {
 
   return (
     <div className="relative min-h-screen bg-[#1C0E07] text-amber-100 flex flex-col font-sans">
-      <Navbar />
-
       <main className="flex-grow pt-28 sm:pt-36 pb-16 px-4 sm:px-8 w-full">
         <TestRunnerClientView test={test} />
       </main>
-
-      <Footer />
     </div>
   );
 }
