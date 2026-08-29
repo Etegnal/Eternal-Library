@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Play, Pause, SkipForward, SkipBack, Music, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import { Track } from '@/lib/playlist';
 
@@ -149,6 +150,20 @@ export default function MiniPlayer() {
     };
   }, [currentIndex, playlist, hasUserPaused]);
 
+  // Auto-resume playback on tab switch return (PC background audio retention)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && !isHomepage && !hasUserPaused && playlist.length > 0) {
+        playAudioEngine();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [hasUserPaused, isHomepage, currentIndex, playlist]);
+
   const playAudioEngine = () => {
     if (isHomepage || !currentTrack) return;
     setIsPlaying(true);
@@ -294,51 +309,58 @@ export default function MiniPlayer() {
           <ChevronRight className="w-4 h-4" />
         </button>
 
-        {/* Vinyl Record Disc */}
-        <div className="relative w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner">
-          {coverUrl ? (
-            <Image
-              src={coverUrl}
-              alt={currentTrack.title}
-              fill
-              unoptimized
-              className={`object-cover ${isPlaying ? 'animate-vinyl-spin' : 'animate-vinyl-spin-paused'}`}
-            />
-          ) : (
-            <div
-              className={`w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200 ${
-                isPlaying ? 'animate-[spin_10s_linear_infinite]' : ''
-              }`}
-            >
-              <Music className="w-5 h-5 text-amber-300" />
-            </div>
-          )}
-        </div>
-
-        {/* Track Title & Artist */}
-        <div className="min-w-0 max-w-[85px] sm:max-w-[125px] flex-1 space-y-0.5 pr-1">
-          <div className="flex items-center gap-1">
-            <h4 className="text-xs font-serif font-medium text-amber-100 truncate flex-1">
-              {currentTrack.title}
-            </h4>
-
-            {/* Equalizer Barmeter */}
-            <div
-              className={`flex items-end gap-[2px] h-3 w-3 shrink-0 transition-opacity duration-200 ${
-                isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }`}
-              title="Çalıyor"
-            >
-              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.8s_ease-in-out_infinite]' : 'h-1'}`} />
-              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.6s_ease-in-out_0.2s_infinite]' : 'h-1'}`} />
-              <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.9s_ease-in-out_0.4s_infinite]' : 'h-1'}`} />
-            </div>
+        {/* CLICKABLE DISC & TITLE CONTAINER -> /muzikler */}
+        <Link
+          href="/muzikler"
+          className="flex items-center gap-2 sm:gap-2.5 hover:opacity-90 transition-opacity group/disc cursor-pointer"
+          title="Müzik Seçkisi Sayfasına Git"
+        >
+          {/* Vinyl Record Disc */}
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] sm:min-w-[44px] sm:min-h-[44px] rounded-full overflow-hidden border border-amber-900/40 shrink-0 aspect-square bg-amber-950 flex items-center justify-center shadow-inner group-hover/disc:scale-105 transition-transform">
+            {coverUrl ? (
+              <Image
+                src={coverUrl}
+                alt={currentTrack.title}
+                fill
+                unoptimized
+                className={`object-cover ${isPlaying ? 'animate-vinyl-spin' : 'animate-vinyl-spin-paused'}`}
+              />
+            ) : (
+              <div
+                className={`w-full h-full bg-gradient-to-br from-amber-900 to-amber-950 flex items-center justify-center text-amber-200 ${
+                  isPlaying ? 'animate-[spin_10s_linear_infinite]' : ''
+                }`}
+              >
+                <Music className="w-5 h-5 text-amber-300" />
+              </div>
+            )}
           </div>
 
-          <span className="text-[10px] text-stone-400 truncate block font-sans">
-            {currentTrack.artist}
-          </span>
-        </div>
+          {/* Track Title & Artist */}
+          <div className="min-w-0 max-w-[85px] sm:max-w-[125px] flex-1 space-y-0.5 pr-1">
+            <div className="flex items-center gap-1">
+              <h4 className="text-xs font-serif font-medium text-amber-100 group-hover/disc:text-amber-300 transition-colors truncate flex-1">
+                {currentTrack.title}
+              </h4>
+
+              {/* Equalizer Barmeter */}
+              <div
+                className={`flex items-end gap-[2px] h-3 w-3 shrink-0 transition-opacity duration-200 ${
+                  isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                }`}
+                title="Çalıyor"
+              >
+                <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.8s_ease-in-out_infinite]' : 'h-1'}`} />
+                <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.6s_ease-in-out_0.2s_infinite]' : 'h-1'}`} />
+                <span className={`w-[2px] bg-amber-400 rounded-full ${isPlaying ? 'animate-[bounce_0.9s_ease-in-out_0.4s_infinite]' : 'h-1'}`} />
+              </div>
+            </div>
+
+            <span className="text-[10px] text-stone-400 truncate block font-sans">
+              {currentTrack.artist}
+            </span>
+          </div>
+        </Link>
 
         {/* Controls Row */}
         <div className="flex items-center gap-1 shrink-0">
