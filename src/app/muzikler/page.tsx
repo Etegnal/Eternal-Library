@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { Music, Headphones, Radio } from 'lucide-react';
+import { Music, Headphones, Disc } from 'lucide-react';
 import { getYouTubeId } from '@/lib/playlist';
 
 export const dynamic = 'force-dynamic';
@@ -34,50 +34,38 @@ export default async function MusicPlaylistCatalogPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-28 sm:pb-20 space-y-8 sm:space-y-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-28 sm:pb-20 space-y-10">
       
-      {/* HEADER MATCHING ŞİİRLER PAGE */}
+      {/* VINYL COLLECTION HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200 shadow-sm">
-          <Radio className="w-4 h-4 text-cozy-amber" />
-          <span>Müzik Antolojisi</span>
+          <Disc className="w-4 h-4 text-cozy-amber animate-spin-slow" />
+          <span>Nadir Plak Antolojisi</span>
         </div>
 
-        <h1 className="font-serif font-bold text-2xl sm:text-4xl text-cozy-coffee tracking-tight">
-          Ruhun Derinliklerine Dokunan Melodiler
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee tracking-tight">
+          Nostaljik Sesler & Plak Koleksiyonu
         </h1>
 
-        <p className="text-cozy-coffee-light text-xs sm:text-base leading-relaxed font-serif italic">
-          "Ruhun şarkı söylerse, hayat seni dansa kaldırır."
+        <p className="text-cozy-coffee-light text-sm sm:text-base leading-relaxed font-serif italic">
+          "Plağın iğneyle buluştuğu o ilk an, zamanın durduğu andır."
         </p>
       </div>
 
-      {/* TRACKS VERTICAL PLAYLIST TABLE */}
+      {/* VINYL COLLECTION CARDS */}
       <main className="w-full">
         {tracks.length === 0 ? (
           <div className="p-8 sm:p-12 text-center bg-white rounded-2xl border border-cozy-parchment-border shadow-sm space-y-3 max-w-xl mx-auto">
-            <Music className="w-8 h-8 text-cozy-amber mx-auto opacity-80" />
+            <Disc className="w-10 h-10 text-cozy-amber mx-auto opacity-80 animate-spin-slow" />
             <p className="text-cozy-coffee font-serif font-bold text-base sm:text-lg">
-              Henüz Müzik Eklenmedi
+              Koleksiyonda Henüz Plak Bulunmuyor
             </p>
             <p className="text-cozy-coffee-light text-xs sm:text-sm font-serif italic">
-              Müzik listemiz hazırlanma aşamasındadır. Çok yakında seçkin parçalar burada yayınlanacaktır.
+              Kütüphane plak arşivimiz hazırlanma aşamasındadır. Yakında nadide eserler burada sergilenecektir.
             </p>
           </div>
         ) : (
-          <div className="rounded-2xl bg-white border border-cozy-parchment-border shadow-md overflow-hidden divide-y divide-amber-100/70">
-            
-            {/* TABLE HEADER BAR */}
-            <div className="px-3 sm:px-6 py-3 bg-[#FAF6EE] flex items-center justify-between text-[11px] sm:text-xs font-bold text-cozy-coffee uppercase tracking-wider border-b border-cozy-parchment-border">
-              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
-                <span className="w-4 sm:w-6 text-center text-cozy-coffee-light/60 shrink-0">#</span>
-                <span className="truncate">Şarkı & Sanatçı</span>
-              </div>
-              <div className="hidden sm:block w-48 sm:w-56 text-left pl-2 font-bold shrink-0">Sanatçı</div>
-              <div className="w-24 sm:w-32 text-right pr-1 font-bold shrink-0">Platformlar</div>
-            </div>
-
-            {/* TRACK ROWS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {tracks.map((track, index) => {
               const youtubeId = getYouTubeId(track.src);
               const coverUrl = track.cover
@@ -89,80 +77,105 @@ export default async function MusicPlaylistCatalogPage() {
               return (
                 <div
                   key={track.id}
-                  className="px-3 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-2.5 sm:gap-4 hover:bg-[#FAF6EE]/80 transition-colors group"
+                  className="group relative rounded-2xl bg-white border border-cozy-parchment-border p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between gap-4 overflow-hidden"
                 >
-                  {/* LEFT: NUMBER & THUMBNAIL & TITLE (WITH ARTIST SUBTITLE ON MOBILE) */}
-                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
-                    <span className="w-4 sm:w-6 text-center text-cozy-coffee-light/60 font-mono text-xs sm:text-sm font-bold shrink-0">
-                      {index + 1}
-                    </span>
+                  {/* VINYL SLEEVE & SPINNING VINYL DISK ASSEMBLY */}
+                  <div className="relative flex items-center shrink-0 w-28 sm:w-36 h-24 sm:h-28 my-auto">
+                    
+                    {/* PHYSICAL VINYL RECORD (SLIDES OUT ON HOVER) */}
+                    <div className="absolute left-6 sm:left-8 top-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-stone-950 via-zinc-900 to-stone-800 border-4 border-zinc-950 shadow-2xl flex items-center justify-center transition-all duration-500 ease-out group-hover:translate-x-6 sm:group-hover:translate-x-8 group-hover:rotate-[180deg] z-0">
+                      {/* VINYL GROOVES */}
+                      <div className="absolute inset-1 rounded-full border border-zinc-700/30" />
+                      <div className="absolute inset-2.5 rounded-full border border-zinc-700/20" />
+                      <div className="absolute inset-4 rounded-full border border-zinc-700/20" />
+                      
+                      {/* SHINE REFLECTION */}
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
 
-                    {/* COVER THUMBNAIL */}
-                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-amber-100 border border-amber-200 shrink-0 shadow-sm">
+                      {/* VINYL CENTER LABEL STICKER */}
+                      <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-800 border-2 border-amber-600/60 overflow-hidden flex items-center justify-center shadow-inner shrink-0">
+                        {coverUrl ? (
+                          <img src={coverUrl} alt="Label" className="w-full h-full object-cover opacity-80" />
+                        ) : (
+                          <Disc className="w-3 h-3 text-amber-200" />
+                        )}
+                        {/* CENTER SPINDLE HOLE */}
+                        <div className="absolute w-2 h-2 rounded-full bg-zinc-950 border border-zinc-800" />
+                      </div>
+                    </div>
+
+                    {/* ALBUM JACKET / VINYL SLEEVE COVER */}
+                    <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 border-amber-900/30 bg-[#1C0E07] shadow-md shadow-amber-950/20 shrink-0 group-hover:shadow-lg transition-all duration-300">
                       {coverUrl ? (
                         <img
                           src={coverUrl}
                           alt={track.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-cozy-amber">
-                          <Music className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <div className="w-full h-full flex items-center justify-center text-cozy-amber bg-[#1F0F07]">
+                          <Music className="w-6 h-6 opacity-70" />
                         </div>
                       )}
+                      
+                      {/* VINTAGE SHEEN OVERLAY */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/15 pointer-events-none" />
+                      
+                      {/* VINYL BADGE CORNER */}
+                      <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-mono font-bold text-amber-200 backdrop-blur-xs border border-amber-500/30">
+                        33⅓ RPM
+                      </div>
                     </div>
 
-                    {/* SONG TITLE & MOBILE ARTIST */}
-                    <div className="min-w-0 flex-1 space-y-0.5">
-                      <h4 className="font-serif font-bold text-xs sm:text-base text-cozy-coffee group-hover:text-cozy-amber transition-colors truncate leading-tight">
-                        {track.title}
-                      </h4>
-                      {/* ARTIST ON MOBILE */}
-                      <p className="sm:hidden text-[11px] text-cozy-coffee-light font-serif flex items-center gap-1 truncate">
-                        <Headphones className="w-3 h-3 text-cozy-amber shrink-0" />
-                        <span className="truncate">{track.artist}</span>
-                      </p>
-                    </div>
                   </div>
 
-                  {/* MIDDLE: DESKTOP ARTIST NAME */}
-                  <div className="hidden sm:flex w-48 sm:w-56 text-left pl-2 shrink-0 min-w-0">
-                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif font-medium truncate flex items-center gap-1.5">
+                  {/* TRACK DETAILS */}
+                  <div className="min-w-0 flex-1 space-y-1 sm:space-y-1.5 pr-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] sm:text-xs font-mono font-bold text-cozy-amber-dark uppercase tracking-widest bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-200 shrink-0">
+                        Plak #{String(index + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-cozy-coffee group-hover:text-cozy-amber transition-colors line-clamp-1 leading-snug">
+                      {track.title}
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif flex items-center gap-1.5 truncate">
                       <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0" />
                       <span className="truncate">{track.artist}</span>
                     </p>
                   </div>
 
-                  {/* RIGHT: PLATFORM ICON BUTTONS (SPOTIFY & YOUTUBE) */}
-                  <div className="w-24 sm:w-32 flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
-                    {/* SPOTIFY ICON BUTTON - COZY THEME */}
-                    {track.spotifyUrl ? (
+                  {/* PLATFORM ICON BUTTONS */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    {track.spotifyUrl && (
                       <a
                         href={track.spotifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100/80 hover:bg-[#1DB954] border border-amber-200/90 hover:border-emerald-500 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/spot"
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 hover:bg-[#1DB954] border border-amber-200/90 hover:border-emerald-500 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/spot"
                         title="Spotify'da Dinle"
                         aria-label="Spotify'da Dinle"
                       >
-                        <SpotifyIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5C4033] group-hover/spot:text-white transition-colors" />
+                        <SpotifyIcon className="w-4 h-4 text-[#5C4033] group-hover/spot:text-white transition-colors" />
                       </a>
-                    ) : null}
+                    )}
 
-                    {/* YOUTUBE ICON BUTTON - COZY THEME */}
-                    {track.src ? (
+                    {track.src && (
                       <a
                         href={track.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100/80 hover:bg-[#C4302B] border border-amber-200/90 hover:border-red-700 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/yt"
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 hover:bg-[#C4302B] border border-amber-200/90 hover:border-red-700 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/yt"
                         title="YouTube'da İzle / Dinle"
                         aria-label="YouTube'da İzle / Dinle"
                       >
-                        <YouTubeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5C4033] group-hover/yt:text-white transition-colors" />
+                        <YouTubeIcon className="w-4 h-4 text-[#5C4033] group-hover/yt:text-white transition-colors" />
                       </a>
-                    ) : null}
+                    )}
                   </div>
+
                 </div>
               );
             })}

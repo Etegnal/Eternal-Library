@@ -21,7 +21,7 @@ export default function Navbar() {
     { href: '/yazilar', label: 'YAZILAR' },
     { href: '/siirler', label: 'ŞİİRLER' },
     { href: '/testler', label: 'TESTLER' },
-    { href: '/muzikler', label: 'MÜZİKLER' },
+    { href: '/muzikler', label: 'PLAKLAR' },
     { href: '/iletisim', label: 'İLETİŞİM' },
   ];
 
