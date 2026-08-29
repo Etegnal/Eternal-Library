@@ -44,12 +44,16 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
     }
   };
 
-  const handlePrev = () => {
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const prevDay = ((currentQuote.dayOfYear - 2 + 365) % 365) + 1;
     fetchQuoteByDay(prevDay);
   };
 
-  const handleNext = () => {
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const nextDay = (currentQuote.dayOfYear % 365) + 1;
     fetchQuoteByDay(nextDay);
   };
@@ -92,19 +96,19 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-8 w-full pt-36 sm:pt-44 mb-auto pb-6 sm:pb-12">
         <div className="max-w-md space-y-4 sm:space-y-6 text-left">
           
-          {/* GÜNÜN SÖZÜ CARD - MINIMAL GLASSMORPHISM */}
-          <div className="relative p-5 sm:p-8 rounded-2xl text-amber-100 shadow-2xl bg-black/30 backdrop-blur-md border border-white/5">
+          {/* GÜNÜN SÖZÜ CARD - ENTIRE CARD CLICKABLE TO /gunun-sozu */}
+          <Link
+            href="/gunun-sozu"
+            className="block relative p-5 sm:p-8 rounded-2xl text-amber-100 shadow-2xl bg-black/30 backdrop-blur-md border border-white/10 hover:border-amber-500/40 hover:bg-black/40 transition-all cursor-pointer group/card"
+            title="Günün Sözü Sayfasına Git"
+          >
             <div className="relative z-10 space-y-4 sm:space-y-5">
               {/* TOP HEADER BAR */}
               <div className="flex items-center justify-between">
-                <Link
-                  href="/gunun-sozu"
-                  className="text-xs font-medium tracking-widest text-amber-400 hover:text-amber-200 uppercase flex items-center gap-1.5 transition-colors group/quote"
-                  title="Günün Sözü Sayfasına Git"
-                >
+                <div className="text-xs font-medium tracking-widest text-amber-400 group-hover/card:text-amber-200 uppercase flex items-center gap-1.5 transition-colors">
                   <span>Günün Sözü</span>
-                  <span className="text-[10px] text-amber-400/70 group-hover/quote:text-amber-200 transition-colors">↗</span>
-                </Link>
+                  <span className="text-[10px] text-amber-400/70 group-hover/card:text-amber-200 transition-colors">↗</span>
+                </div>
 
                 {/* MINIMAL ARROW NAVIGATION CONTROLS */}
                 <div className="flex items-center gap-1 text-amber-300/80">
@@ -133,7 +137,7 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
               </div>
 
               {/* QUOTE TEXT */}
-              <p className="font-serif italic text-base sm:text-xl text-amber-100 leading-relaxed font-normal">
+              <p className="font-serif italic text-base sm:text-xl text-amber-100 leading-relaxed font-normal group-hover/card:text-white transition-colors">
                 "{quoteText}"
               </p>
 
@@ -148,7 +152,7 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* HERO CTA BUTTONS */}
           <div className="space-y-2.5 pt-1 sm:pt-2 w-full max-w-md">
