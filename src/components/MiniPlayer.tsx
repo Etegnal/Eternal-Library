@@ -84,6 +84,7 @@ export default function MiniPlayer() {
       stopAudioEngine();
     } else {
       if (hasLoadedPlaylist && playlist.length > 0 && !hasUserPaused) {
+        setIsPlaying(true);
         playAudioEngine();
       }
     }
@@ -118,12 +119,21 @@ export default function MiniPlayer() {
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
         if (data) {
+          const playerState =
+            data.info?.playerState !== undefined
+              ? data.info.playerState
+              : typeof data.info === 'number'
+              ? data.info
+              : null;
+
           // YouTube API State: 1 = PLAYING, 2 = PAUSED, 0 = ENDED
-          if (data.info === 1 || (data.event === 'onStateChange' && data.info === 1)) {
+          if (playerState === 1) {
             setIsPlaying(true);
-          } else if (data.info === 2 || (data.event === 'onStateChange' && data.info === 2)) {
-            setIsPlaying(false);
-          } else if (data.info === 0 || (data.event === 'onStateChange' && data.info === 0)) {
+          } else if (playerState === 2) {
+            if (hasUserPaused) {
+              setIsPlaying(false);
+            }
+          } else if (playerState === 0) {
             setIsPlaying(false);
             nextTrack();
           }
@@ -137,10 +147,11 @@ export default function MiniPlayer() {
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [currentIndex, playlist]);
+  }, [currentIndex, playlist, hasUserPaused]);
 
   const playAudioEngine = () => {
     if (isHomepage || !currentTrack) return;
+    setIsPlaying(true);
 
     if (youtubeId) {
       if (iframeRef.current && iframeRef.current.contentWindow) {
@@ -148,7 +159,6 @@ export default function MiniPlayer() {
         iframeRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
         setTimeout(() => syncYoutubeVolume(volume), 400);
       }
-      setIsPlaying(true);
     } else if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
       audioRef.current
@@ -163,13 +173,13 @@ export default function MiniPlayer() {
   };
 
   const stopAudioEngine = () => {
+    setIsPlaying(false);
     if (youtubeId && iframeRef.current && iframeRef.current.contentWindow) {
       iframeRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    setIsPlaying(false);
   };
 
   const togglePlay = () => {
@@ -223,7 +233,7 @@ export default function MiniPlayer() {
           <iframe
             ref={iframeRef}
             className="absolute w-0 h-0 opacity-0 pointer-events-none"
-            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&controls=0`}
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=${hasUserPaused ? 0 : 1}&controls=0`}
             allow="autoplay"
           />
         )}
@@ -265,7 +275,7 @@ export default function MiniPlayer() {
         <iframe
           ref={iframeRef}
           className="absolute w-0 h-0 opacity-0 pointer-events-none"
-          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&controls=0`}
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}?enablejsapi=1&autoplay=${hasUserPaused ? 0 : 1}&controls=0`}
           allow="autoplay"
         />
       )}
