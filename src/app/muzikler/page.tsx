@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { Music, ExternalLink, Headphones, Radio } from 'lucide-react';
+import { Music, Headphones, Radio } from 'lucide-react';
 import { getYouTubeId } from '@/lib/playlist';
 
 export const dynamic = 'force-dynamic';
@@ -34,7 +34,7 @@ export default async function MusicPlaylistCatalogPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 space-y-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-28 sm:pb-20 space-y-8 sm:space-y-10">
       
       {/* HEADER MATCHING ŞİİRLER PAGE */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -43,11 +43,11 @@ export default async function MusicPlaylistCatalogPage() {
           <span>Müzik Antolojisi</span>
         </div>
 
-        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee tracking-tight">
+        <h1 className="font-serif font-bold text-2xl sm:text-4xl text-cozy-coffee tracking-tight">
           Ruhun Derinliklerine Dokunan Melodiler
         </h1>
 
-        <p className="text-cozy-coffee-light text-sm sm:text-base leading-relaxed font-serif italic">
+        <p className="text-cozy-coffee-light text-xs sm:text-base leading-relaxed font-serif italic">
           "Ruhun şarkı söylerse, hayat seni dansa kaldırır."
         </p>
       </div>
@@ -55,12 +55,12 @@ export default async function MusicPlaylistCatalogPage() {
       {/* TRACKS VERTICAL PLAYLIST TABLE */}
       <main className="w-full">
         {tracks.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-2xl border border-cozy-parchment-border shadow-sm space-y-3 max-w-xl mx-auto">
+          <div className="p-8 sm:p-12 text-center bg-white rounded-2xl border border-cozy-parchment-border shadow-sm space-y-3 max-w-xl mx-auto">
             <Music className="w-8 h-8 text-cozy-amber mx-auto opacity-80" />
-            <p className="text-cozy-coffee font-serif font-bold text-lg">
+            <p className="text-cozy-coffee font-serif font-bold text-base sm:text-lg">
               Henüz Müzik Eklenmedi
             </p>
-            <p className="text-cozy-coffee-light text-sm font-serif italic">
+            <p className="text-cozy-coffee-light text-xs sm:text-sm font-serif italic">
               Müzik listemiz hazırlanma aşamasındadır. Çok yakında seçkin parçalar burada yayınlanacaktır.
             </p>
           </div>
@@ -68,13 +68,13 @@ export default async function MusicPlaylistCatalogPage() {
           <div className="rounded-2xl bg-white border border-cozy-parchment-border shadow-md overflow-hidden divide-y divide-amber-100/70">
             
             {/* TABLE HEADER BAR */}
-            <div className="px-4 sm:px-6 py-3.5 bg-[#FAF6EE] flex items-center justify-between text-xs font-bold text-cozy-coffee uppercase tracking-wider border-b border-cozy-parchment-border">
-              <div className="flex items-center gap-4 flex-1">
-                <span className="w-6 text-center text-cozy-coffee-light/60">#</span>
-                <span>Şarkı İsmi</span>
+            <div className="px-3 sm:px-6 py-3 bg-[#FAF6EE] flex items-center justify-between text-[11px] sm:text-xs font-bold text-cozy-coffee uppercase tracking-wider border-b border-cozy-parchment-border">
+              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+                <span className="w-4 sm:w-6 text-center text-cozy-coffee-light/60 shrink-0">#</span>
+                <span className="truncate">Şarkı & Sanatçı</span>
               </div>
-              <div className="w-48 sm:w-56 text-left pl-2 font-bold">Sanatçı</div>
-              <div className="w-28 sm:w-32 text-right pr-2 font-bold">Platformlar</div>
+              <div className="hidden sm:block w-48 sm:w-56 text-left pl-2 font-bold shrink-0">Sanatçı</div>
+              <div className="w-24 sm:w-32 text-right pr-1 font-bold shrink-0">Platformlar</div>
             </div>
 
             {/* TRACK ROWS */}
@@ -89,16 +89,16 @@ export default async function MusicPlaylistCatalogPage() {
               return (
                 <div
                   key={track.id}
-                  className="px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4 hover:bg-[#FAF6EE]/80 transition-colors group"
+                  className="px-3 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-2.5 sm:gap-4 hover:bg-[#FAF6EE]/80 transition-colors group"
                 >
-                  {/* LEFT: NUMBER & THUMBNAIL & TITLE ONLY */}
-                  <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                    <span className="w-6 text-center text-cozy-coffee-light/60 font-mono text-xs sm:text-sm font-bold shrink-0">
+                  {/* LEFT: NUMBER & THUMBNAIL & TITLE (WITH ARTIST SUBTITLE ON MOBILE) */}
+                  <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
+                    <span className="w-4 sm:w-6 text-center text-cozy-coffee-light/60 font-mono text-xs sm:text-sm font-bold shrink-0">
                       {index + 1}
                     </span>
 
                     {/* COVER THUMBNAIL */}
-                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-amber-100 border border-amber-200 shrink-0 shadow-sm">
+                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-amber-100 border border-amber-200 shrink-0 shadow-sm">
                       {coverUrl ? (
                         <img
                           src={coverUrl}
@@ -107,21 +107,26 @@ export default async function MusicPlaylistCatalogPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-cozy-amber">
-                          <Music className="w-5 h-5" />
+                          <Music className="w-4 h-4 sm:w-5 sm:h-5" />
                         </div>
                       )}
                     </div>
 
-                    {/* SONG TITLE ONLY */}
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-serif font-bold text-sm sm:text-base text-cozy-coffee group-hover:text-cozy-amber transition-colors truncate">
+                    {/* SONG TITLE & MOBILE ARTIST */}
+                    <div className="min-w-0 flex-1 space-y-0.5">
+                      <h4 className="font-serif font-bold text-xs sm:text-base text-cozy-coffee group-hover:text-cozy-amber transition-colors truncate leading-tight">
                         {track.title}
                       </h4>
+                      {/* ARTIST ON MOBILE */}
+                      <p className="sm:hidden text-[11px] text-cozy-coffee-light font-serif flex items-center gap-1 truncate">
+                        <Headphones className="w-3 h-3 text-cozy-amber shrink-0" />
+                        <span className="truncate">{track.artist}</span>
+                      </p>
                     </div>
                   </div>
 
-                  {/* MIDDLE: ARTIST NAME */}
-                  <div className="w-48 sm:w-56 text-left pl-2 shrink-0 min-w-0">
+                  {/* MIDDLE: DESKTOP ARTIST NAME */}
+                  <div className="hidden sm:flex w-48 sm:w-56 text-left pl-2 shrink-0 min-w-0">
                     <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif font-medium truncate flex items-center gap-1.5">
                       <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0" />
                       <span className="truncate">{track.artist}</span>
@@ -129,18 +134,18 @@ export default async function MusicPlaylistCatalogPage() {
                   </div>
 
                   {/* RIGHT: PLATFORM ICON BUTTONS (SPOTIFY & YOUTUBE) */}
-                  <div className="w-28 sm:w-32 flex items-center justify-end gap-2 shrink-0 pr-1">
+                  <div className="w-24 sm:w-32 flex items-center justify-end gap-1.5 sm:gap-2 shrink-0">
                     {/* SPOTIFY ICON BUTTON */}
                     {track.spotifyUrl ? (
                       <a
                         href={track.spotifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 rounded-full bg-[#1DB954] hover:bg-[#1ed760] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#1DB954] hover:bg-[#1ed760] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
                         title="Spotify'da Dinle"
                         aria-label="Spotify'da Dinle"
                       >
-                        <SpotifyIcon className="w-4 h-4 text-white" />
+                        <SpotifyIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                       </a>
                     ) : null}
 
@@ -150,11 +155,11 @@ export default async function MusicPlaylistCatalogPage() {
                         href={track.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 rounded-full bg-[#FF0000] hover:bg-[#cc0000] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
+                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FF0000] hover:bg-[#cc0000] text-white flex items-center justify-center transition-all shadow-sm hover:scale-110 shrink-0"
                         title="YouTube'da İzle / Dinle"
                         aria-label="YouTube'da İzle / Dinle"
                       >
-                        <YouTubeIcon className="w-4 h-4 text-white" />
+                        <YouTubeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                       </a>
                     ) : null}
                   </div>
