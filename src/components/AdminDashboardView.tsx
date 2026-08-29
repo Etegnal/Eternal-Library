@@ -67,7 +67,7 @@ interface AdminDashboardViewProps {
 }
 
 export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks'>('posts');
+  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks' | 'tests'>('posts');
   const [selectedUserForModal, setSelectedUserForModal] = useState<{
     id: string;
     name?: string | null;
