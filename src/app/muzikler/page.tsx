@@ -26,53 +26,47 @@ export default async function MusicPlaylistCatalogPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#1C0E07] text-amber-100 flex flex-col font-sans">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 space-y-10">
       
-      {/* HERO HEADER */}
-      <section className="relative pt-36 pb-10 px-4 sm:px-8 bg-gradient-to-b from-[#190B05] via-[#241108] to-[#1C0E07] text-amber-100 overflow-hidden">
-        <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest shadow-sm">
-            <Radio className="w-4 h-4 text-amber-400" />
-            <span>Müzik & Ambiyans Seçkisi</span>
-          </div>
-
-          <h1 className="font-serif font-bold text-3xl sm:text-5xl text-white tracking-tight leading-tight drop-shadow-md">
-            Ruhun Derinliklerine Dokunan Melodiler
-          </h1>
-
-          <p className="text-sm sm:text-base text-amber-200/90 max-w-2xl mx-auto font-serif italic leading-relaxed">
-            Kitap okurken, denemelerimizi incelerken veya gece huzurla dinlenirken sizlere eşlik edecek özel mûsıkî parçaları ve film müzikleri.
-          </p>
+      {/* HEADER MATCHING ŞİİRLER PAGE */}
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200 shadow-sm">
+          <Radio className="w-4 h-4 text-cozy-amber" />
+          <span>Müzik Antolojisi</span>
         </div>
-      </section>
+
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee tracking-tight">
+          Ruhun Derinliklerine Dokunan Melodiler
+        </h1>
+
+        <p className="text-cozy-coffee-light text-sm sm:text-base leading-relaxed font-serif italic">
+          "Ruhun şarkı söylerse, hayat seni dansa kaldırır."
+        </p>
+      </div>
 
       {/* TRACKS VERTICAL PLAYLIST TABLE */}
-      <main className="flex-grow max-w-5xl mx-auto px-4 sm:px-8 py-8 w-full">
+      <main className="w-full">
         {tracks.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl bg-[#2A160A]/80 border border-dashed border-amber-800/60 shadow-2xl space-y-4 max-w-2xl mx-auto">
-            <div className="w-16 h-16 rounded-full bg-amber-950/80 flex items-center justify-center mx-auto text-amber-300 border border-amber-600/40 shadow-sm">
-              <Music className="w-8 h-8 text-amber-400" />
-            </div>
-
-            <h3 className="font-serif font-bold text-2xl text-white">
+          <div className="p-12 text-center bg-white rounded-2xl border border-cozy-parchment-border shadow-sm space-y-3 max-w-xl mx-auto">
+            <Music className="w-8 h-8 text-cozy-amber mx-auto opacity-80" />
+            <p className="text-cozy-coffee font-serif font-bold text-lg">
               Henüz Müzik Eklenmedi
-            </h3>
-
-            <p className="text-sm text-amber-200/80 font-serif italic leading-relaxed">
-              Müzik listemiz hazırlanma aşamasındadır. Çok yakında yönetici paneli üzerinden eklenen seçkin parçalar burada yayınlanacaktır.
+            </p>
+            <p className="text-cozy-coffee-light text-sm font-serif italic">
+              Müzik listemiz hazırlanma aşamasındadır. Çok yakında seçkin parçalar burada yayınlanacaktır.
             </p>
           </div>
         ) : (
-          <div className="rounded-3xl bg-[#2A160A]/95 border border-amber-800/50 shadow-2xl overflow-hidden divide-y divide-amber-900/40">
+          <div className="rounded-2xl bg-white border border-cozy-parchment-border shadow-md overflow-hidden divide-y divide-amber-100/70">
             
             {/* TABLE HEADER BAR */}
-            <div className="px-4 sm:px-6 py-3.5 bg-[#190B05]/95 flex items-center justify-between text-xs font-bold text-amber-400 uppercase tracking-wider border-b border-amber-800/50">
+            <div className="px-4 sm:px-6 py-3.5 bg-[#FAF6EE] flex items-center justify-between text-xs font-bold text-cozy-coffee uppercase tracking-wider border-b border-cozy-parchment-border">
               <div className="flex items-center gap-4 flex-1">
-                <span className="w-6 text-center text-amber-400/60">#</span>
-                <span>Şarkı & Sanatçı</span>
+                <span className="w-6 text-center text-cozy-coffee-light/60">#</span>
+                <span>Şarkı İsmi</span>
               </div>
-              <div className="hidden md:block w-40 text-center">Kategori</div>
-              <div className="w-36 text-right pr-2">Spotify Linki</div>
+              <div className="w-48 sm:w-56 text-left pl-2 font-bold">Sanatçı</div>
+              <div className="w-32 sm:w-36 text-right pr-2 font-bold">Spotify Linki</div>
             </div>
 
             {/* TRACK ROWS */}
@@ -87,64 +81,61 @@ export default async function MusicPlaylistCatalogPage() {
               return (
                 <div
                   key={track.id}
-                  className="px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4 hover:bg-[#341B0D]/80 transition-colors group"
+                  className="px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4 hover:bg-[#FAF6EE]/80 transition-colors group"
                 >
-                  {/* LEFT: NUMBER & THUMBNAIL & INFO */}
+                  {/* LEFT: NUMBER & THUMBNAIL & TITLE ONLY */}
                   <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                    <span className="w-6 text-center text-amber-300/60 font-mono text-xs sm:text-sm font-bold shrink-0">
+                    <span className="w-6 text-center text-cozy-coffee-light/60 font-mono text-xs sm:text-sm font-bold shrink-0">
                       {index + 1}
                     </span>
 
                     {/* COVER THUMBNAIL */}
-                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-amber-950 border border-amber-800/50 shrink-0 shadow-md">
+                    <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden bg-amber-100 border border-amber-200 shrink-0 shadow-sm">
                       {coverUrl ? (
                         <img
                           src={coverUrl}
                           alt={track.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-amber-400">
+                        <div className="w-full h-full flex items-center justify-center text-cozy-amber">
                           <Music className="w-5 h-5" />
                         </div>
                       )}
                     </div>
 
-                    {/* TITLE & ARTIST */}
+                    {/* SONG TITLE ONLY */}
                     <div className="min-w-0 flex-1">
-                      <h4 className="font-serif font-bold text-sm sm:text-base text-white group-hover:text-amber-300 transition-colors truncate">
+                      <h4 className="font-serif font-bold text-sm sm:text-base text-cozy-coffee group-hover:text-cozy-amber transition-colors truncate">
                         {track.title}
                       </h4>
-                      <p className="text-xs text-amber-200/70 truncate flex items-center gap-1 mt-0.5">
-                        <Headphones className="w-3 h-3 text-amber-400 shrink-0" />
-                        <span>{track.artist}</span>
-                      </p>
                     </div>
                   </div>
 
-                  {/* MIDDLE: CATEGORY BADGE */}
-                  <div className="hidden md:flex w-40 justify-center shrink-0">
-                    <span className="text-[11px] font-bold tracking-wider uppercase px-3 py-1 rounded-full bg-amber-950/80 text-amber-300 border border-amber-800/50">
-                      {track.category || 'Müzik Seçkisi'}
-                    </span>
+                  {/* MIDDLE: ARTIST NAME */}
+                  <div className="w-48 sm:w-56 text-left pl-2 shrink-0 min-w-0">
+                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif font-medium truncate flex items-center gap-1.5">
+                      <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0" />
+                      <span className="truncate">{track.artist}</span>
+                    </p>
                   </div>
 
                   {/* RIGHT: SPOTIFY LINK BUTTON */}
-                  <div className="w-36 flex justify-end shrink-0">
+                  <div className="w-32 sm:w-36 flex justify-end shrink-0">
                     {track.spotifyUrl ? (
                       <a
                         href={track.spotifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3.5 py-1.5 rounded-full bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 text-xs font-bold border border-emerald-600/50 transition-all flex items-center gap-1.5 shadow-sm group/spot hover:scale-105"
+                        className="px-3 py-1.5 rounded-full bg-[#1DB954] hover:bg-[#1ed760] text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:scale-105"
                         title="Spotify'da Aç"
                       >
-                        <SpotifyIcon className="w-4 h-4 text-[#1DB954] group-hover/spot:scale-110 transition-transform" />
+                        <SpotifyIcon className="w-3.5 h-3.5 text-white shrink-0" />
                         <span className="hidden sm:inline">Spotify</span>
-                        <ExternalLink className="w-3 h-3 text-emerald-400/80" />
+                        <ExternalLink className="w-3 h-3 text-white/90 shrink-0" />
                       </a>
                     ) : (
-                      <span className="text-[11px] text-amber-200/50 italic pr-2">
+                      <span className="text-[11px] text-cozy-coffee-light/50 italic pr-2">
                         Bağlantı Yok
                       </span>
                     )}
