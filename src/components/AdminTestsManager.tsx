@@ -14,6 +14,12 @@ import {
   Layers,
   FileText,
   AlertCircle,
+  UploadCloud,
+  Image as ImageIcon,
+  BarChart2,
+  User,
+  Calendar,
+  Eye,
 } from 'lucide-react';
 
 interface OptionInput {
@@ -60,6 +66,65 @@ export default function AdminTestsManager() {
   const [description, setDescription] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [category, setCategory] = useState('Psikolojik Test');
+  const [isDragging, setIsDragging] = useState(false);
+
+  const processImageFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Lütfen geçerli bir görsel dosyası (PNG, JPG, WEBP) yükleyin.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setCoverImage(e.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      processImageFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      processImageFile(e.target.files[0]);
+    }
+  };
+
+  const [showResultsModal, setShowResultsModal] = useState(false);
+  const [resultsList, setResultsList] = useState<any[]>([]);
+  const [loadingResults, setLoadingResults] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
+
+  const openResultsModal = async () => {
+    setShowResultsModal(true);
+    setLoadingResults(true);
+    try {
+      const res = await fetch('/api/admin/tests/results');
+      if (res.ok) {
+        const data = await res.json();
+        setResultsList(data);
+      }
+    } catch (e) {
+      console.error('Error fetching test results:', e);
+    } finally {
+      setLoadingResults(false);
+    }
+  };
   const [questions, setQuestions] = useState<QuestionInput[]>([
     {
       questionText: '',
@@ -275,13 +340,23 @@ export default function AdminTestsManager() {
           </div>
         </div>
 
-        <button
-          onClick={openNewTestModal}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#9A3412] to-[#78350F] text-[#FEF3C7] text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:opacity-95 shadow-md transition-all shrink-0 border border-amber-500/50"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Yeni Test Ekle</span>
-        </button>
+        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+          <button
+            onClick={openResultsModal}
+            className="px-4 py-2.5 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-amber-900 text-xs font-bold border border-amber-300 transition-all flex items-center gap-2 shadow-sm"
+          >
+            <BarChart2 className="w-4 h-4 text-amber-800" />
+            <span>Kullanıcı Seçimleri & Test Sonuçları</span>
+          </button>
+
+          <button
+            onClick={openNewTestModal}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#9A3412] to-[#78350F] text-[#FEF3C7] text-xs font-bold uppercase tracking-wider flex items-center gap-2 hover:opacity-95 shadow-md transition-all shrink-0 border border-amber-500/50"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Yeni Test Ekle</span>
+          </button>
+        </div>
       </div>
 
       {/* TESTS GRID / TABLE */}
@@ -458,17 +533,73 @@ export default function AdminTestsManager() {
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-xs font-bold text-[#78350F]">
-                    Kapak Görseli URL (Opsiyonel)
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="https://..."
-                    value={coverImage}
-                    onChange={(e) => setCoverImage(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-lg bg-[#FFFDF9] border border-[#E6D7BC] text-xs text-[#362215] focus:outline-none focus:border-amber-600"
-                  />
+                {/* DRAG & DROP COVER IMAGE PICKER */}
+                <div className="space-y-2">
+                  <div className="text-xs font-bold text-[#78350F] flex items-center justify-between">
+                    <span>Kapak Görseli (Sürükle & Bırak veya Yükle)</span>
+                    {coverImage && (
+                      <button
+                        type="button"
+                        onClick={() => setCoverImage('')}
+                        className="text-[11px] font-bold text-rose-700 hover:underline"
+                      >
+                        Görseli Kaldır
+                      </button>
+                    )}
+                  </div>
+
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`relative p-4 rounded-xl border-2 border-dashed transition-all text-center flex flex-col items-center justify-center gap-2 ${
+                      isDragging
+                        ? 'border-amber-600 bg-amber-100/80 scale-[1.01]'
+                        : coverImage
+                        ? 'border-amber-400 bg-amber-50/50'
+                        : 'border-[#E6D7BC] bg-[#FFFDF9] hover:border-amber-500'
+                    }`}
+                  >
+                    {coverImage ? (
+                      <div className="relative w-full h-36 rounded-lg overflow-hidden border border-[#E6D7BC] group">
+                        <img
+                          src={coverImage}
+                          alt="Test Kapak Önizleme"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
+                          Görseli Değiştirmek İçin Yeni Dosya Sürükleyin
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="py-2 space-y-1">
+                        <UploadCloud className="w-8 h-8 text-amber-700 mx-auto" />
+                        <p className="text-xs font-bold text-[#362215]">
+                          Görseli Buraya Sürükleyip Bırakın
+                        </p>
+                        <p className="text-[11px] text-stone-500">
+                          veya bilgisayarınızdan seçmek için tıklayın (PNG, JPG, WEBP)
+                        </p>
+                      </div>
+                    )}
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileInputChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                  </div>
+
+                  <div className="space-y-1 pt-1">
+                    <input
+                      type="text"
+                      placeholder="veya direkt görsel URL adresi yapıştırın (https://...)"
+                      value={coverImage}
+                      onChange={(e) => setCoverImage(e.target.value)}
+                      className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E6D7BC] text-xs text-[#362215] focus:outline-none focus:border-amber-600"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -619,6 +750,134 @@ export default function AdminTestsManager() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* USER TEST ATTEMPTS & CHOICES INSPECTION MODAL */}
+      {showResultsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-2xl space-y-6 p-6 sm:p-8 my-8 text-[#362215]">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E6D7BC]">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center border border-amber-300">
+                  <BarChart2 className="w-5 h-5 text-amber-800" />
+                </div>
+                <div>
+                  <h3 className="font-serif font-bold text-xl text-[#362215]">
+                    Kullanıcı Seçimleri & Test Tamamlama Kayıtları
+                  </h3>
+                  <p className="text-xs text-[#78350F]">
+                    Hangi kullanıcının hangi testi çözdüğünü ve soru bazlı hangi şıkları seçtiğini inceleyin.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowResultsModal(false);
+                  setSelectedRecord(null);
+                }}
+                className="p-2 rounded-xl text-stone-500 hover:text-amber-900 hover:bg-amber-100 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {loadingResults ? (
+              <div className="text-center py-12 text-stone-500 font-serif text-sm">
+                Kullanıcı seçim kayıtları yükleniyor...
+              </div>
+            ) : resultsList.length === 0 ? (
+              <div className="p-8 text-center rounded-xl bg-amber-50/50 border border-dashed border-amber-300 text-stone-600 font-serif text-xs">
+                Henüz tamamlanmış bir psikolojik test kaydı bulunmuyor.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                {/* LIST OF ATTEMPTS */}
+                <div className="md:col-span-5 space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                  {resultsList.map((rec) => {
+                    const isSelected = selectedRecord?.id === rec.id;
+                    return (
+                      <button
+                        key={rec.id}
+                        onClick={() => setSelectedRecord(rec)}
+                        className={`w-full text-left p-3.5 rounded-xl border transition-all space-y-1.5 ${
+                          isSelected
+                            ? 'bg-amber-100 border-amber-600 shadow-sm'
+                            : 'bg-white border-[#E6D7BC] hover:bg-amber-50'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-bold text-[#362215] line-clamp-1">
+                            {rec.testTitle}
+                          </span>
+                          <span className="text-[10px] text-stone-400 font-mono shrink-0">
+                            {new Date(rec.createdAt).toLocaleDateString('tr-TR')}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-[11px] text-[#78350F]">
+                          <User className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                          <span className="truncate font-medium">
+                            {rec.userEmail || rec.userName || 'Ziyaretçi (Kayıtsız)'}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* SELECTED ATTEMPT DETAIL */}
+                <div className="md:col-span-7 p-5 rounded-xl bg-amber-50/60 border border-amber-200 space-y-4 max-h-[60vh] overflow-y-auto">
+                  {selectedRecord ? (
+                    <div className="space-y-4">
+                      <div className="pb-3 border-b border-amber-200/80 space-y-1">
+                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">
+                          Test Seçim Detayı
+                        </span>
+                        <h4 className="font-serif font-bold text-base text-[#362215]">
+                          {selectedRecord.testTitle}
+                        </h4>
+                        <div className="flex items-center gap-3 text-xs text-[#5C4033] pt-1">
+                          <span>👤 {selectedRecord.userEmail || selectedRecord.userName || 'Ziyaretçi'}</span>
+                          <span>📅 {new Date(selectedRecord.createdAt).toLocaleString('tr-TR')}</span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        {(() => {
+                          try {
+                            const answers = JSON.parse(selectedRecord.answersJson);
+                            return answers.map((ans: any, idx: number) => (
+                              <div key={idx} className="p-3.5 rounded-lg bg-[#FFFDF9] border border-[#E6D7BC] space-y-1.5 text-xs">
+                                <p className="font-bold text-[#78350F]">
+                                  {idx + 1}. Soru: {ans.questionText}
+                                </p>
+                                <p className="text-[#362215] font-semibold bg-amber-100/70 p-2 rounded border border-amber-200">
+                                  ✅ Seçilen Şık: {ans.selectedOptionText}
+                                </p>
+                                {ans.metaphorExplanation && (
+                                  <p className="text-stone-600 italic font-serif text-[11px] pt-1">
+                                    💡 Metafor: "{ans.metaphorExplanation}"
+                                  </p>
+                                )}
+                              </div>
+                            ));
+                          } catch (e) {
+                            return <p className="text-xs text-stone-500">Detay okunamadı.</p>;
+                          }
+                        })()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 text-stone-500 text-xs font-serif italic">
+                      Detaylarını ve seçtiği şıkları görmek için sol listeden bir kullanıcı testi seçin.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

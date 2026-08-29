@@ -24,40 +24,40 @@ export default async function PsychologicalTestsCatalogPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#FEF8EC] text-[#362215] flex flex-col font-sans">
+    <div className="relative min-h-screen bg-[#1C0E07] text-amber-100 flex flex-col font-sans">
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="relative pt-32 pb-16 px-4 sm:px-8 bg-gradient-to-b from-[#1F0F07] via-[#2A160A] to-[#FEF8EC] text-amber-100 overflow-hidden">
+      <section className="relative pt-36 pb-12 px-4 sm:px-8 bg-gradient-to-b from-[#190B05] via-[#241108] to-[#1C0E07] text-amber-100 overflow-hidden">
         <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest shadow-sm">
             <Brain className="w-4 h-4 text-amber-400" />
             <span>Felsefi & Psikolojik Testler</span>
           </div>
 
-          <h1 className="font-serif font-bold text-3xl sm:text-5xl text-amber-100 tracking-tight leading-tight">
+          <h1 className="font-serif font-bold text-3xl sm:text-5xl text-white tracking-tight leading-tight drop-shadow-md">
             Ruhunun Derinliklerine Bir Yolculuk
           </h1>
 
-          <p className="text-sm sm:text-base text-amber-200/80 max-w-2xl mx-auto font-serif italic leading-relaxed">
+          <p className="text-sm sm:text-base text-amber-200/90 max-w-2xl mx-auto font-serif italic leading-relaxed">
             Seçimlerinizin arkasındaki bilinçaltı sembolleri keşfedin. Her soru iç dünyanızdan bir parçayı aydınlatır, her şık gizli bir metafor taşır.
           </p>
         </div>
       </section>
 
       {/* MAIN CONTENT / TESTS GRID */}
-      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-8 py-12 w-full space-y-12">
+      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-8 py-10 w-full space-y-12">
         {tests.length === 0 ? (
-          <div className="p-12 text-center rounded-3xl bg-[#FFFDF9] border border-dashed border-[#E6D7BC] shadow-parchment space-y-4 max-w-2xl mx-auto">
-            <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto text-amber-900 border border-amber-300 shadow-sm">
-              <Brain className="w-8 h-8 text-amber-800" />
+          <div className="p-12 text-center rounded-3xl bg-[#2A160A]/80 border border-dashed border-amber-800/60 shadow-2xl space-y-4 max-w-2xl mx-auto">
+            <div className="w-16 h-16 rounded-full bg-amber-950/80 flex items-center justify-center mx-auto text-amber-300 border border-amber-600/40 shadow-sm">
+              <Brain className="w-8 h-8 text-amber-400" />
             </div>
 
-            <h3 className="font-serif font-bold text-2xl text-[#362215]">
+            <h3 className="font-serif font-bold text-2xl text-white">
               Henüz Test Eklenmedi
             </h3>
 
-            <p className="text-sm text-[#5C4033] font-serif italic leading-relaxed">
+            <p className="text-sm text-amber-200/80 font-serif italic leading-relaxed">
               Kütüphanemizin psikolojik testler seçkisi şu an hazırlanma aşamasındadır. Çok yakında yeni testler burada yayınlanacaktır.
             </p>
           </div>
@@ -66,15 +66,15 @@ export default async function PsychologicalTestsCatalogPage() {
             {tests.map((test) => (
               <div
                 key={test.id}
-                className="group relative rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1"
+                className="group relative rounded-3xl bg-[#2A160A]/90 border border-amber-800/50 shadow-2xl hover:border-amber-500/50 transition-all duration-300 flex flex-col justify-between overflow-hidden hover:-translate-y-1"
               >
                 {/* COVER OR DECORATIVE BANNER */}
-                <div className="relative h-44 w-full bg-gradient-to-br from-[#23120A] to-[#45210E] overflow-hidden flex items-center justify-center p-6 text-center">
+                <div className="relative h-44 w-full bg-gradient-to-br from-[#190B05] to-[#36190B] overflow-hidden flex items-center justify-center p-6 text-center">
                   {test.coverImage ? (
                     <img
                       src={test.coverImage}
                       alt={test.title}
-                      className="absolute inset-0 w-full h-full object-cover filter brightness-[0.8] group-hover:scale-105 transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover filter brightness-[0.75] group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <div className="relative z-10 space-y-2">
@@ -86,7 +86,7 @@ export default async function PsychologicalTestsCatalogPage() {
                   )}
 
                   <div className="absolute top-3 left-3 z-20">
-                    <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-[#1F0F07]/90 text-amber-300 border border-amber-500/40 backdrop-blur-md shadow-sm">
+                    <span className="text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-[#190B05]/90 text-amber-300 border border-amber-500/40 backdrop-blur-md shadow-sm">
                       {test.category || 'Psikolojik Test'}
                     </span>
                   </div>
@@ -95,18 +95,18 @@ export default async function PsychologicalTestsCatalogPage() {
                 {/* CARD BODY */}
                 <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
-                    <h3 className="font-serif font-bold text-xl text-[#362215] group-hover:text-[#9A3412] transition-colors leading-snug">
+                    <h3 className="font-serif font-bold text-xl text-white group-hover:text-amber-300 transition-colors leading-snug">
                       {test.title}
                     </h3>
 
-                    <p className="text-xs text-[#5C4033] line-clamp-3 leading-relaxed font-sans">
+                    <p className="text-xs text-amber-200/80 line-clamp-3 leading-relaxed font-sans">
                       {test.description}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#E6D7BC]/70 flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#8B4513] flex items-center gap-1.5">
-                      <HelpCircle className="w-4 h-4 text-amber-700" />
+                  <div className="pt-4 border-t border-amber-900/40 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-amber-300/90 flex items-center gap-1.5">
+                      <HelpCircle className="w-4 h-4 text-amber-400" />
                       <span>{test._count?.questions || 0} Soru</span>
                     </span>
 

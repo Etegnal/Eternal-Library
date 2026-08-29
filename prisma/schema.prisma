@@ -26,9 +26,10 @@ model User {
   image         String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  likeRecords   LikeRecord[]
-  savedBooks    SavedBook[]
-  viewRecords   ViewRecord[]
+  likeRecords       LikeRecord[]
+  savedBooks        SavedBook[]
+  viewRecords       ViewRecord[]
+  testResultRecords TestResultRecord[]
 }
 
 model Post {
@@ -170,16 +171,17 @@ model Track {
 }
 
 model PsychologicalTest {
-  id          String         @id @default(uuid())
+  id          String             @id @default(uuid())
   title       String
-  slug        String         @unique
-  description String         @db.Text
+  slug        String             @unique
+  description String             @db.Text
   coverImage  String?
-  category    String?        @default("Psikolojik Test")
-  order       Int            @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  category    String?            @default("Psikolojik Test")
+  order       Int                @default(0)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   questions   TestQuestion[]
+  results     TestResultRecord[]
 }
 
 model TestQuestion {
@@ -202,4 +204,18 @@ model TestOption {
   order               Int          @default(0)
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+}
+
+model TestResultRecord {
+  id          String            @id @default(uuid())
+  testId      String
+  test        PsychologicalTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  userId      String?
+  userEmail   String?
+  userName    String?
+  testTitle   String
+  answersJson String            @db.Text
+  createdAt   DateTime          @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

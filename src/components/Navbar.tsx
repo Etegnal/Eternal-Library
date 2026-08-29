@@ -13,6 +13,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const isHomePage = pathname === '/';
+  const isDarkHeader = isHomePage || pathname.startsWith('/testler');
 
   const navLinks = [
     { href: '/', label: 'ANASAYFA' },
@@ -46,7 +47,7 @@ export default function Navbar() {
               />
             </div>
             <span className={`font-cinzel font-bold text-base tracking-[0.15em] uppercase transition-colors ${
-              isHomePage
+              isDarkHeader
                 ? 'text-amber-200 drop-shadow-md group-hover:text-amber-400'
                 : 'text-[#362215] group-hover:text-amber-900'
             }`}>
@@ -77,7 +78,7 @@ export default function Navbar() {
         <div className="md:hidden absolute left-12 right-12 top-1/2 -translate-y-1/2 text-center pointer-events-none">
           <Link href="/" className="pointer-events-auto inline-block">
             <span className={`font-cinzel font-bold text-xs tracking-[0.12em] uppercase transition-colors ${
-              isHomePage
+              isDarkHeader
                 ? 'text-amber-200 drop-shadow-md'
                 : 'text-[#362215]'
             }`}>
