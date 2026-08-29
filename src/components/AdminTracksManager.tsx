@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Music, Plus, Trash2, Edit3, Save, X, ExternalLink, CheckCircle2, AlertCircle, Play } from 'lucide-react';
 import Image from 'next/image';
-import { getYouTubeId } from '@/components/MiniPlayer';
+import { getYouTubeId } from '@/lib/playlist';
 
 export interface TrackItem {
   id: string | number;

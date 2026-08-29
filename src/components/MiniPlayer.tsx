@@ -5,15 +5,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Play, Pause, SkipForward, SkipBack, Music, ChevronRight, Volume2, VolumeX } from 'lucide-react';
-import { Track } from '@/lib/playlist';
-
-// Helper to extract YouTube video ID from various YouTube URL formats
-export function getYouTubeId(url: string): string | null {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-}
+import { Track, getYouTubeId } from '@/lib/playlist';
 
 function SpotifyIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (

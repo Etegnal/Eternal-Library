@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { Music, Play, Sparkles, ExternalLink, Headphones, Radio } from 'lucide-react';
-import { getYouTubeId } from '@/components/MiniPlayer';
+import { getYouTubeId } from '@/lib/playlist';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
