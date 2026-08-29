@@ -120,30 +120,19 @@ export default async function MusicPlaylistCatalogPage() {
                       
                       {/* VINTAGE SHEEN OVERLAY */}
                       <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/15 pointer-events-none" />
-                      
-                      {/* VINYL BADGE CORNER */}
-                      <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-mono font-bold text-amber-200 backdrop-blur-xs border border-amber-500/30">
-                        33⅓ RPM
-                      </div>
                     </div>
 
                   </div>
 
                   {/* TRACK DETAILS */}
                   <div className="min-w-0 flex-1 space-y-1 sm:space-y-1.5 pr-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] sm:text-xs font-mono font-bold text-cozy-amber-dark uppercase tracking-widest bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-200 shrink-0">
-                        Plak #{String(index + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    <h3 className="font-serif font-bold text-base sm:text-lg text-cozy-coffee group-hover:text-cozy-amber transition-colors line-clamp-1 leading-snug">
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-cozy-coffee group-hover:text-cozy-amber transition-colors leading-snug break-words">
                       {track.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif flex items-center gap-1.5 truncate">
-                      <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0" />
-                      <span className="truncate">{track.artist}</span>
+                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif flex items-start sm:items-center gap-1.5 leading-tight break-words">
+                      <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0 mt-0.5 sm:mt-0" />
+                      <span>{track.artist}</span>
                     </p>
                   </div>
 
