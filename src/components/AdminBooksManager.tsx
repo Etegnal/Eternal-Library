@@ -19,8 +19,23 @@ export default function AdminBooksManager() {
     buyUrl: '',
   });
 
+  const [availableCategories, setAvailableCategories] = useState<string[]>(DEFAULT_BOOK_CATEGORIES);
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
+
+  // Fetch unique categories from DB to enrich the category pool
+  React.useEffect(() => {
+    fetch('/api/admin/books')
+      .then((res) => res.json())
+      .then((books) => {
+        if (Array.isArray(books)) {
+          const dbCats = books.map((b: any) => b.category).filter(Boolean);
+          const combined = Array.from(new Set([...DEFAULT_BOOK_CATEGORIES, ...dbCats]));
+          setAvailableCategories(combined);
+        }
+      })
+      .catch((err) => console.error('Error fetching categories:', err));
+  }, []);
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
@@ -81,6 +96,9 @@ export default function AdminBooksManager() {
         throw new Error(json.error || 'Kitap kaydedilirken hata oluştu.');
       }
 
+      // Add finalCategory to available categories pool dynamically
+      setAvailableCategories((prev) => Array.from(new Set([...prev, finalCategory])));
+
       setStatusMessage({ type: 'success', text: `"${formData.title}" kitabı ve kapağı başarıyla kaydedildi!` });
 
       // Reset form
@@ -89,13 +107,15 @@ export default function AdminBooksManager() {
         author: '',
         year: '1900',
         pages: '100',
-        category: 'Klasikler',
+        category: finalCategory,
         summary: '',
         rating: '4.8',
         isReadable: false,
         content: '',
         buyUrl: '',
       });
+      setIsCustomCategory(false);
+      setCustomCategory('');
       setCoverFile(null);
       setCoverPreview(null);
     } catch (err: any) {
@@ -246,7 +266,7 @@ export default function AdminBooksManager() {
               }}
               className="w-full p-2.5 rounded-xl bg-amber-50/60 border border-amber-200 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-600 cursor-pointer"
             >
-              {DEFAULT_BOOK_CATEGORIES.map((cat) => (
+              {availableCategories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
