@@ -233,7 +233,7 @@ export default function AdminBooksManager() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori / Tür (Zorunlu)</label>
+            <label className="block text-xs font-bold text-[#8B4513] mb-1">Kategori / Tür (Standart Havuz) *</label>
             <select
               value={isCustomCategory ? 'CUSTOM' : formData.category}
               onChange={(e) => {
@@ -251,7 +251,7 @@ export default function AdminBooksManager() {
                   {cat}
                 </option>
               ))}
-              <option value="CUSTOM">+ Yeni Tür/Kategori Ekle...</option>
+              <option value="CUSTOM">+ Özel Kategori / Tür Gir...</option>
             </select>
 
             {isCustomCategory && (
@@ -259,7 +259,7 @@ export default function AdminBooksManager() {
                 type="text"
                 value={customCategory}
                 onChange={(e) => setCustomCategory(e.target.value)}
-                placeholder="Yeni Kategori Adı Girin (Örn: Korku & Gerilim)..."
+                placeholder="Özel Kategori Adı (Örn: Tarih & Roman)..."
                 className="w-full mt-2 p-2.5 rounded-xl bg-amber-100/80 border border-amber-400 text-xs font-bold text-[#362215] focus:outline-none focus:border-amber-700 animate-fadeIn"
               />
             )}
