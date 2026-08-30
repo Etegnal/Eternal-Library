@@ -13,8 +13,6 @@ import {
   Sparkles,
   User,
   BookOpen,
-  Globe,
-  ExternalLink,
 } from 'lucide-react';
 
 // Custom Brand Icon Helpers
@@ -49,14 +47,6 @@ function GitHubIcon({ className }: { className?: string }) {
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
     </svg>
-  );
-}
-
-function ThousandKitapIcon({ className }: { className?: string }) {
-  return (
-    <div className={`font-serif font-black flex items-center justify-center rounded-lg bg-[#381e11] text-amber-300 text-xs px-1 py-0.5 border border-amber-500/40 shrink-0 ${className}`}>
-      1K
-    </div>
   );
 }
 
@@ -122,44 +112,32 @@ export default function ContactAndAboutPage() {
     {
       name: 'X (Twitter)',
       url: 'https://x.com/erenalchn',
-      handle: '@erenalchn',
       icon: TwitterXIcon,
-      color: 'bg-black text-white hover:bg-neutral-800 border-neutral-700',
     },
     {
       name: 'Instagram',
       url: 'https://www.instagram.com/erenalchn/',
-      handle: '@erenalchn',
       icon: InstagramIcon,
-      color: 'bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 text-white hover:opacity-90 border-pink-400/40',
     },
     {
       name: 'YouTube',
       url: 'https://www.youtube.com/@yasineren23/featured',
-      handle: '@yasineren23',
       icon: YouTubeIcon,
-      color: 'bg-[#FF0000] text-white hover:bg-red-700 border-red-500/50',
     },
     {
-      name: 'Kendi Web Sitem',
+      name: 'Kendi Web Sitem (erenalacahan.com.tr)',
       url: 'https://erenalacahan.com.tr/',
-      handle: 'erenalacahan.com.tr',
       customLogo: '/assets/eternal-corp-logo.png',
-      color: 'bg-[#140A04] text-amber-200 hover:bg-[#251308] border-amber-600/50',
     },
     {
       name: '1000Kitap',
       url: 'https://1000kitap.com/ErenAlacahan',
-      handle: 'ErenAlacahan',
-      icon: ThousandKitapIcon,
-      color: 'bg-[#3E2314] text-amber-200 hover:bg-[#522E1A] border-amber-700/50',
+      customLogo: '/assets/1k-logo.png',
     },
     {
       name: 'GitHub',
       url: 'https://github.com/Etegnal',
-      handle: '@Etegnal',
       icon: GitHubIcon,
-      color: 'bg-[#181717] text-white hover:bg-neutral-800 border-neutral-700',
     },
   ];
 
@@ -182,7 +160,7 @@ export default function ContactAndAboutPage() {
         </p>
       </div>
 
-      {/* 1. YAZAR & KÜTÜPHANECİ PROFİL KARTI */}
+      {/* 1. YAZAR & KÜTÜPHANECİ PROFİL KARTI (DİJİTAL BAĞLANTI İKONLARI ALTINDA BİRLEŞİK) */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center p-8 sm:p-10 rounded-3xl bg-[#FFFDF9] dark:bg-[#23120A] border-2 border-[#E6D7BC] dark:border-[#3D2214] shadow-parchment transition-all">
         <div className="md:col-span-4 relative aspect-square rounded-2xl overflow-hidden shadow-fire border-2 border-amber-500/40 bg-[#1F0F07]">
           <Image
@@ -198,64 +176,43 @@ export default function ContactAndAboutPage() {
           <h2 className="font-serif font-bold text-2xl sm:text-3xl text-[#362215] dark:text-amber-200">
             Merhaba, Ben Kütüphane Yazarınız
           </h2>
+          
           <p className="text-base sm:text-lg leading-relaxed text-[#362215]/90 dark:text-amber-100/90 font-sans">
             Eternal Library (Kütüphane-i Ahsen), kendi kişisel yazılarımı, kafam dolu olduğu anlarda karaladıklarımı ve hislerimin dışavurumlarını topladığım bir sanal kütüphane. Sizin yazılarınızı ve edebi ürünlerinizi de paylaşmak istiyorum tabi ki gerçek bir kütüphane olması gerekir. Yayınlamak isterseniz benimle iletişime geçebilirsiniz.
           </p>
+
+          {/* DİJİTAL SOSYAL MEDYA İKONLARI (TEK SIRA HİZALANMIŞ, BAŞLIKSIZ, TEMA RENKLERİYLE) */}
+          <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-amber-200/70 dark:border-amber-900/60">
+            {socialLinks.map((link) => {
+              const IconComp = link.icon;
+              return (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={link.name}
+                  aria-label={link.name}
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-amber-100/90 dark:bg-[#1A0D06] hover:bg-amber-200 dark:hover:bg-[#2A150C] border border-amber-300/80 dark:border-amber-900/60 text-[#78350F] dark:text-amber-200 flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-110 shrink-0 group"
+                >
+                  {link.customLogo ? (
+                    <img
+                      src={link.customLogo}
+                      alt={link.name}
+                      className="w-6 h-6 object-contain filter dark:brightness-125 transition-transform group-hover:scale-110"
+                    />
+                  ) : IconComp ? (
+                    <IconComp className="w-5 h-5 text-[#78350F] dark:text-amber-300 group-hover:text-amber-900 dark:group-hover:text-amber-100 transition-colors" />
+                  ) : null}
+                </a>
+              );
+            })}
+          </div>
+
         </div>
       </div>
 
-      {/* 2. SOSYAL MEDYA VE DİJİTAL BAĞLANTILAR SEÇKİSİ */}
-      <div className="space-y-6">
-        <div className="border-b border-[#E6D7BC] dark:border-amber-900/60 pb-3 flex items-center justify-between">
-          <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#362215] dark:text-amber-200 flex items-center gap-2">
-            <Globe className="w-5 h-5 text-amber-700 dark:text-amber-400" />
-            <span>Dijital Kanallar & Bağlantılar</span>
-          </h3>
-          <span className="text-xs text-[#785438] dark:text-amber-300/80 font-mono">@erenalchn</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {socialLinks.map((link) => {
-            const IconComp = link.icon;
-            return (
-              <a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`group p-4 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-between gap-3 ${link.color}`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden bg-black/20 p-1.5 border border-white/20">
-                    {link.customLogo ? (
-                      <img
-                        src={link.customLogo}
-                        alt={link.name}
-                        className="w-full h-full object-contain filter drop-shadow"
-                      />
-                    ) : IconComp ? (
-                      <IconComp className="w-5 h-5" />
-                    ) : null}
-                  </div>
-
-                  <div className="min-w-0">
-                    <span className="block text-xs font-bold font-serif tracking-wide truncate">
-                      {link.name}
-                    </span>
-                    <span className="block text-[11px] opacity-80 truncate font-mono">
-                      {link.handle}
-                    </span>
-                  </div>
-                </div>
-
-                <ExternalLink className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </a>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 3. BAŞUCU KİTAPLIĞIMDAN SEÇMELER */}
+      {/* 2. BAŞUCU KİTAPLIĞIMDAN SEÇMELER */}
       <div className="space-y-6">
         <div className="border-b border-[#E6D7BC] dark:border-amber-900/60 pb-3">
           <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#362215] dark:text-amber-200 flex items-center gap-2">
@@ -285,7 +242,7 @@ export default function ContactAndAboutPage() {
         </div>
       </div>
 
-      {/* 4. FORM SECTION: İLETİŞİM MEKTUBU & EDEBİ ESER GÖNDERİMİ */}
+      {/* 3. FORM SECTION: İLETİŞİM MEKTUBU & EDEBİ ESER GÖNDERİMİ */}
       <div className="space-y-6 pt-4">
         <div className="border-b border-[#E6D7BC] dark:border-amber-900/60 pb-3">
           <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#362215] dark:text-amber-200 flex items-center gap-2">
