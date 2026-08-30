@@ -18,6 +18,7 @@ import AdminReadingAnalytics from '@/components/AdminReadingAnalytics';
 import UserActivityModal from '@/components/UserActivityModal';
 import SendEmailModal from '@/components/SendEmailModal';
 import AdminTestsManager from '@/components/AdminTestsManager';
+import AdminDraftsManager from '@/components/AdminDraftsManager';
 
 interface LikedUserItem {
   id: string;
@@ -67,7 +68,7 @@ interface AdminDashboardViewProps {
 }
 
 export default function AdminDashboardView({ userEmail, posts, users, letters, masterPoets = [], tracks = [] }: AdminDashboardViewProps) {
-  const [activeTab, setActiveTab] = useState<'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks' | 'tests'>('posts');
+  const [activeTab, setActiveTab] = useState<'drafts' | 'posts' | 'books' | 'analytics' | 'users' | 'letters' | 'masterPoets' | 'tracks' | 'tests'>('drafts');
   const [selectedUserForModal, setSelectedUserForModal] = useState<{
     id: string;
     name?: string | null;
@@ -99,6 +100,20 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
 
         {/* Tab Selection Buttons */}
         <div className="flex flex-wrap items-center gap-2">
+          
+          <button
+            type="button"
+            onClick={() => setActiveTab('drafts')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+              activeTab === 'drafts'
+                ? 'bg-[#78350F] text-amber-100 border-amber-600 shadow-md ring-2 ring-amber-400/50'
+                : 'bg-amber-100/90 text-[#78350F] hover:bg-amber-200 border-amber-300 shadow-sm'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span>✨ Yayına Hazır Taslaklar (14)</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setActiveTab('posts')}
@@ -225,6 +240,9 @@ export default function AdminDashboardView({ userEmail, posts, users, letters, m
           </button>
         </div>
       </div>
+
+      {/* TAB: DRAFTS REVIEW & PUBLISH */}
+      {activeTab === 'drafts' && <AdminDraftsManager />}
 
       {/* TAB: PSYCHOLOGICAL TESTS */}
       {activeTab === 'tests' && <AdminTestsManager />}
