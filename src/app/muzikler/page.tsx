@@ -38,16 +38,16 @@ export default async function MusicPlaylistCatalogPage() {
       
       {/* VINYL COLLECTION HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200 shadow-sm">
-          <Disc className="w-4 h-4 text-cozy-amber animate-spin-slow" />
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark dark:text-amber-300 uppercase tracking-wider bg-amber-100/80 dark:bg-amber-950/80 px-3.5 py-1 rounded-full border border-amber-200 dark:border-amber-800/60 shadow-sm">
+          <Disc className="w-4 h-4 text-cozy-amber dark:text-amber-400 animate-spin-slow" />
           <span>Plak Antolojisi</span>
         </div>
 
-        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee tracking-tight">
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-cozy-coffee dark:text-amber-200 drop-shadow-md tracking-tight">
           Nadide Plaklar Seçkisi
         </h1>
 
-        <p className="text-cozy-coffee-light text-sm sm:text-base leading-relaxed font-serif italic">
+        <p className="text-cozy-coffee-light dark:text-white text-sm sm:text-base leading-relaxed font-serif italic">
           "Plağın iğneyle buluştuğu o ilk an, zamanın durduğu andır."
         </p>
       </div>
@@ -55,12 +55,12 @@ export default async function MusicPlaylistCatalogPage() {
       {/* VINYL COLLECTION CARDS */}
       <main className="w-full">
         {tracks.length === 0 ? (
-          <div className="p-8 sm:p-12 text-center bg-white rounded-2xl border border-cozy-parchment-border shadow-sm space-y-3 max-w-xl mx-auto">
-            <Disc className="w-10 h-10 text-cozy-amber mx-auto opacity-80 animate-spin-slow" />
-            <p className="text-cozy-coffee font-serif font-bold text-base sm:text-lg">
+          <div className="p-8 sm:p-12 text-center bg-white dark:bg-[#23120A] rounded-2xl border border-cozy-parchment-border dark:border-[#3D2214] shadow-sm space-y-3 max-w-xl mx-auto">
+            <Disc className="w-10 h-10 text-cozy-amber dark:text-amber-400 mx-auto opacity-80 animate-spin-slow" />
+            <p className="text-cozy-coffee dark:text-amber-200 font-serif font-bold text-base sm:text-lg">
               Koleksiyonda Henüz Plak Bulunmuyor
             </p>
-            <p className="text-cozy-coffee-light text-xs sm:text-sm font-serif italic">
+            <p className="text-cozy-coffee-light dark:text-amber-100/80 text-xs sm:text-sm font-serif italic">
               Kütüphane plak arşivimiz hazırlanma aşamasındadır. Yakında nadide eserler burada sergilenecektir.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default async function MusicPlaylistCatalogPage() {
               return (
                 <div
                   key={track.id}
-                  className="group relative rounded-2xl bg-white border border-cozy-parchment-border p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between gap-4 overflow-hidden"
+                  className="group relative rounded-2xl bg-white dark:bg-[#23120A] border border-cozy-parchment-border dark:border-[#3D2214] hover:border-amber-700/60 p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between gap-4 overflow-hidden"
                 >
                   {/* VINYL SLEEVE & SPINNING VINYL DISK ASSEMBLY */}
                   <div className="relative flex items-center shrink-0 w-28 sm:w-36 h-24 sm:h-28 my-auto">
@@ -126,12 +126,12 @@ export default async function MusicPlaylistCatalogPage() {
 
                   {/* TRACK DETAILS */}
                   <div className="min-w-0 flex-1 space-y-1 sm:space-y-1.5 pr-1">
-                    <h3 className="font-serif font-bold text-base sm:text-lg text-cozy-coffee group-hover:text-cozy-amber transition-colors leading-snug break-words">
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-cozy-coffee dark:text-amber-100 group-hover:text-cozy-amber dark:group-hover:text-amber-300 transition-colors leading-snug break-words">
                       {track.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-cozy-coffee-light font-serif flex items-start sm:items-center gap-1.5 leading-tight break-words">
-                      <Headphones className="w-3.5 h-3.5 text-cozy-amber shrink-0 mt-0.5 sm:mt-0" />
+                    <p className="text-xs sm:text-sm text-cozy-coffee-light dark:text-amber-200/80 font-serif flex items-start sm:items-center gap-1.5 leading-tight break-words">
+                      <Headphones className="w-3.5 h-3.5 text-cozy-amber dark:text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
                       <span>{track.artist}</span>
                     </p>
                   </div>
@@ -143,11 +143,11 @@ export default async function MusicPlaylistCatalogPage() {
                         href={track.spotifyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 hover:bg-[#1DB954] border border-amber-200/90 hover:border-emerald-500 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/spot"
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 dark:bg-[#1A0D06] hover:bg-[#1DB954] border border-amber-200/90 dark:border-amber-900/60 hover:border-emerald-500 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/spot"
                         title="Spotify'da Dinle"
                         aria-label="Spotify'da Dinle"
                       >
-                        <SpotifyIcon className="w-4 h-4 text-[#5C4033] group-hover/spot:text-white transition-colors" />
+                        <SpotifyIcon className="w-4 h-4 text-[#5C4033] dark:text-amber-300 group-hover/spot:text-white transition-colors" />
                       </a>
                     )}
 
@@ -156,11 +156,11 @@ export default async function MusicPlaylistCatalogPage() {
                         href={track.src}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 hover:bg-[#C4302B] border border-amber-200/90 hover:border-red-700 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/yt"
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-100/80 dark:bg-[#1A0D06] hover:bg-[#C4302B] border border-amber-200/90 dark:border-amber-900/60 hover:border-red-700 text-cozy-coffee hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 shrink-0 group/yt"
                         title="YouTube'da İzle / Dinle"
                         aria-label="YouTube'da İzle / Dinle"
                       >
-                        <YouTubeIcon className="w-4 h-4 text-[#5C4033] group-hover/yt:text-white transition-colors" />
+                        <YouTubeIcon className="w-4 h-4 text-[#5C4033] dark:text-amber-300 group-hover/yt:text-white transition-colors" />
                       </a>
                     )}
                   </div>
