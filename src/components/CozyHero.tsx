@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AmbientAudio from '@/components/AmbientAudio';
-import { Feather, BookOpen, Library, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Feather, BookOpen, Library, ChevronLeft, ChevronRight, GraduationCap } from 'lucide-react';
 import { getDateStringForDay } from '@/lib/quotes';
 
 interface CozyHeroProps {
@@ -154,7 +154,7 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
             </div>
           </Link>
 
-          {/* HERO CTA BUTTONS */}
+          {/* HERO CTA BUTTONS (4'lü 2x2 Düzen) */}
           <div className="space-y-2.5 pt-1 sm:pt-2 w-full max-w-md">
             {/* ROW 1: YAZILAR & ŞİİRLER SIDE BY SIDE */}
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
@@ -175,14 +175,24 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
               </Link>
             </div>
 
-            {/* ROW 2: CENTERED KITAPLAR BUTTON UNDERNEATH */}
-            <Link
-              href="/kitaplar"
-              className="w-full px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
-            >
-              <Library className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Mutlak Kitaplık</span>
-            </Link>
+            {/* ROW 2: MUTLAK KİTAPLIK & EDEBİYAT TESTLERİ SIDE BY SIDE */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+              <Link
+                href="/kitaplar"
+                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              >
+                <Library className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Mutlak Kitaplık</span>
+              </Link>
+
+              <Link
+                href="/testler"
+                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
+              >
+                <GraduationCap className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Edebiyat Testleri</span>
+              </Link>
+            </div>
           </div>
 
         </div>
