@@ -113,38 +113,6 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
   return (
     <div className="p-4 sm:p-10 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start relative">
       
-      {/* TOP-RIGHT OKUDUM (READ) TOGGLE BUTTON (Inside Card Top Right) */}
-      <div className="absolute top-3 right-3 sm:top-6 sm:right-6 z-20 flex flex-col items-end">
-        <button
-          onClick={handleToggleRead}
-          disabled={isTogglingRead}
-          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer border ${
-            isRead
-              ? 'bg-gradient-to-r from-amber-800 to-amber-900 text-amber-100 border-amber-600 shadow-amber-950/20'
-              : 'bg-amber-100/90 hover:bg-amber-200 text-[#78350F] border-amber-300/90'
-          }`}
-          title={isRead ? "Okudum olarak işaretlediniz (Kaldırmak için tıklayın)" : "Bu kitabı okudum olarak işaretleyin"}
-        >
-          {isRead ? (
-            <>
-              <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0" />
-              <span>Okudum</span>
-            </>
-          ) : (
-            <>
-              <BookCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 shrink-0" />
-              <span>Okudum</span>
-            </>
-          )}
-        </button>
-
-        {readPrompt && (
-          <div className="mt-1.5 p-2 rounded-xl bg-amber-900/95 text-amber-100 text-[11px] font-medium border border-amber-600 shadow-xl max-w-[210px] text-right animate-fadeIn">
-            {readPrompt}
-          </div>
-        )}
-      </div>
-
       {/* LEFT SIDE: COVER IMAGE & DESKTOP ACTIONS */}
       <div className="md:col-span-4 flex flex-col items-center space-y-3 sm:space-y-4">
         
@@ -169,12 +137,46 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
       {/* RIGHT SIDE: METADATA, SUMMARY & MOBILE ACTIONS */}
       <div className="md:col-span-8 space-y-4 sm:space-y-6 text-[#362215]">
         
-        {/* Category & Title */}
-        <div className="space-y-1.5 sm:space-y-2 border-b border-amber-200/80 pb-3 sm:pb-4 pr-20 sm:pr-24">
-          <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8B4513] bg-amber-100/80 px-3 py-0.5 sm:py-1 rounded-full border border-amber-200">
-            <Tag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700" />
-            <span>{book.category}</span>
-          </span>
+        {/* Category & Okudum Button Header Row & Title */}
+        <div className="space-y-1.5 sm:space-y-2 border-b border-amber-200/80 pb-3 sm:pb-4">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8B4513] bg-amber-100/80 px-3 py-0.5 sm:py-1 rounded-full border border-amber-200">
+              <Tag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700" />
+              <span>{book.category}</span>
+            </span>
+
+            {/* OKUDUM (READ) TOGGLE BUTTON (Positioned next to Category Tag) */}
+            <div className="relative flex flex-col items-end">
+              <button
+                onClick={handleToggleRead}
+                disabled={isTogglingRead}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer border ${
+                  isRead
+                    ? 'bg-gradient-to-r from-amber-800 to-amber-900 text-amber-100 border-amber-600 shadow-amber-950/20'
+                    : 'bg-amber-100/90 hover:bg-amber-200 text-[#78350F] border-amber-300/90'
+                }`}
+                title={isRead ? "Okudum olarak işaretlediniz (Kaldırmak için tıklayın)" : "Bu kitabı okudum olarak işaretleyin"}
+              >
+                {isRead ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0" />
+                    <span>Okudum</span>
+                  </>
+                ) : (
+                  <>
+                    <BookCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 shrink-0" />
+                    <span>Okudum</span>
+                  </>
+                )}
+              </button>
+
+              {readPrompt && (
+                <div className="absolute top-full right-0 mt-1.5 z-30 p-2 rounded-xl bg-amber-900/95 text-amber-100 text-[11px] font-medium border border-amber-600 shadow-xl max-w-[210px] text-right animate-fadeIn">
+                  {readPrompt}
+                </div>
+              )}
+            </div>
+          </div>
 
           <h1 className="font-serif font-bold text-2xl sm:text-4xl text-[#362215] leading-tight">
             {book.title}
@@ -182,7 +184,7 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
 
           <p className="text-sm sm:text-base font-bold text-[#8B4513] pt-0.5 flex items-center gap-2 font-serif italic">
             <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700" />
-            <span>Yazar: {book.author}</span>
+            <span>{book.author}</span>
           </p>
         </div>
 
