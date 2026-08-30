@@ -172,6 +172,14 @@ export default async function ProfilePage() {
                 <span>Yönetici Paneline Git</span>
               </Link>
             )}
+
+            <Link
+              href="/iletisim"
+              className="px-4 py-2.5 rounded-xl bg-amber-100/90 dark:bg-[#78350F] hover:bg-amber-200 dark:hover:bg-[#9A3412] text-[#78350F] dark:text-amber-100 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 border border-amber-300/80 dark:border-amber-600/50 cursor-pointer"
+            >
+              <Mail className="w-4 h-4 text-amber-700 dark:text-amber-300" />
+              <span>Admin'e Ulaş</span>
+            </Link>
           </div>
 
           <SignOutButton />
