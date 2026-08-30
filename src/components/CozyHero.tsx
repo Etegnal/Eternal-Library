@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import AmbientAudio from '@/components/AmbientAudio';
-import { Feather, BookOpen, Library, ChevronLeft, ChevronRight, GraduationCap } from 'lucide-react';
+import { Feather, BookOpen, Library, ChevronLeft, ChevronRight, Brain } from 'lucide-react';
 import { getDateStringForDay } from '@/lib/quotes';
 
 interface CozyHeroProps {
@@ -189,8 +189,8 @@ export default function CozyHero({ initialQuote }: CozyHeroProps) {
                 href="/testler"
                 className="px-4 py-3 rounded-xl bg-white/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/30 font-medium text-xs sm:text-sm transition-all flex items-center justify-center gap-2 text-center"
               >
-                <GraduationCap className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Edebiyat Testleri</span>
+                <Brain className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Psikolojik Testler</span>
               </Link>
             </div>
           </div>
