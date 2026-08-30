@@ -16,10 +16,10 @@ export default async function DailyQuotePage() {
           <Sparkles className="w-4 h-4 text-amber-600" />
           <span>Günün Sözü</span>
         </div>
-        <h1 className="font-serif font-bold text-4xl text-[#362215]">
+        <h1 className="font-serif font-bold text-4xl text-[#362215] dark:text-amber-200 drop-shadow-md">
           Her Gün Yeni Bir İlham
         </h1>
-        <p className="text-[#5C4033] text-base leading-relaxed">
+        <p className="text-[#5C4033] dark:text-white text-base leading-relaxed">
           Yılın 365 günü için özenle derlenmiş Stoacı felsefe ve edebi özdeyişler.
         </p>
       </div>

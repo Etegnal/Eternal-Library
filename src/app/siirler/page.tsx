@@ -28,14 +28,14 @@ export default async function PoemsPage() {
       {/* Header & Main Poems List */}
       <div className="space-y-10">
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200">
-            <Feather className="w-4 h-4 text-cozy-amber" />
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark dark:text-amber-300 uppercase tracking-wider bg-amber-100/80 dark:bg-amber-950/80 px-3.5 py-1 rounded-full border border-amber-200 dark:border-amber-800/60">
+            <Feather className="w-4 h-4 text-cozy-amber dark:text-amber-400" />
             <span>Şiir Antolojisi</span>
           </div>
-          <h1 className="font-serif font-bold text-4xl text-cozy-coffee">
+          <h1 className="font-serif font-bold text-4xl text-cozy-coffee dark:text-amber-200 drop-shadow-md">
             Öne Çıkan Şiirler
           </h1>
-          <p className="text-cozy-coffee-light text-base leading-relaxed font-serif italic">
+          <p className="text-cozy-coffee-light dark:text-white text-base leading-relaxed font-serif italic">
             "Ruhun şarkı söylerse, hayat seni dansa kaldırır."
           </p>
         </div>

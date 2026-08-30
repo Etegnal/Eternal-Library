@@ -111,7 +111,7 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
   );
 
   return (
-    <div className="p-4 sm:p-10 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-parchment grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start relative">
+    <div className="p-4 sm:p-10 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] dark:bg-[#23120A] border border-[#E6D7BC] dark:border-[#3D2214] shadow-parchment grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start relative">
       
       {/* LEFT SIDE: COVER IMAGE & DESKTOP ACTIONS */}
       <div className="md:col-span-4 flex flex-col items-center space-y-3 sm:space-y-4">
@@ -178,71 +178,71 @@ export default function BookDetailClientView({ book }: BookDetailClientViewProps
             </div>
           </div>
 
-          <h1 className="font-serif font-bold text-2xl sm:text-4xl text-[#362215] leading-tight">
+          <h1 className="font-serif font-bold text-2xl sm:text-4xl text-[#362215] dark:text-amber-200 drop-shadow-md leading-tight">
             {book.title}
           </h1>
 
-          <p className="text-sm sm:text-base font-bold text-[#8B4513] pt-0.5 flex items-center gap-2 font-serif italic">
-            <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700" />
+          <p className="text-sm sm:text-base font-bold text-[#8B4513] dark:text-amber-300 pt-0.5 flex items-center gap-2 font-serif italic">
+            <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700 dark:text-amber-400" />
             <span>{book.author}</span>
           </p>
         </div>
 
         {/* Detailed Metadata Grid (3 compact boxes: Yıl, Sayfa, Değerlendirme) */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 text-xs font-medium text-[#5C4033]">
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 p-2 sm:p-3 rounded-xl border border-amber-200/80">
-            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 shrink-0" />
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 text-xs font-medium text-[#5C4033] dark:text-amber-200/80">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 dark:bg-[#1A0D06] p-2 sm:p-3 rounded-xl border border-amber-200/80 dark:border-amber-900/60">
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 dark:text-amber-400 shrink-0" />
             <div className="min-w-0">
-              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] uppercase font-bold truncate">Yayın Yılı</span>
-              <span className="font-mono font-bold text-[#362215] text-xs sm:text-sm block">{book.displayYear}</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] dark:text-amber-400 uppercase font-bold truncate">Yayın Yılı</span>
+              <span className="font-mono font-bold text-[#362215] dark:text-amber-100 text-xs sm:text-sm block">{book.displayYear}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 p-2 sm:p-3 rounded-xl border border-amber-200/80">
-            <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 shrink-0" />
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 dark:bg-[#1A0D06] p-2 sm:p-3 rounded-xl border border-amber-200/80 dark:border-amber-900/60">
+            <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700 dark:text-amber-400 shrink-0" />
             <div className="min-w-0">
-              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] uppercase font-bold truncate">Sayfa</span>
-              <span className="font-mono font-bold text-[#362215] text-xs sm:text-sm block">{book.pages}</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] dark:text-amber-400 uppercase font-bold truncate">Sayfa</span>
+              <span className="font-mono font-bold text-[#362215] dark:text-amber-100 text-xs sm:text-sm block">{book.pages}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 p-2 sm:p-3 rounded-xl border border-amber-200/80">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-amber-50/80 dark:bg-[#1A0D06] p-2 sm:p-3 rounded-xl border border-amber-200/80 dark:border-amber-900/60">
             <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 fill-amber-500 shrink-0" />
             <div className="min-w-0">
-              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] uppercase font-bold truncate">Puan</span>
-              <span className="font-mono font-bold text-[#362215] text-xs sm:text-sm block">{book.rating.toFixed(1)}</span>
+              <span className="block text-[9px] sm:text-[10px] text-[#8B4513] dark:text-amber-400 uppercase font-bold truncate">Puan</span>
+              <span className="font-mono font-bold text-[#362215] dark:text-amber-100 text-xs sm:text-sm block">{book.rating.toFixed(1)}</span>
             </div>
           </div>
         </div>
 
         {/* Editör İncelemesi */}
         <div className="space-y-2 sm:space-y-3 pt-1 sm:pt-2">
-          <h2 className="font-serif font-bold text-lg sm:text-xl text-[#362215] flex items-center gap-2 border-b border-amber-200/80 pb-2">
-            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700" />
+          <h2 className="font-serif font-bold text-lg sm:text-xl text-[#362215] dark:text-amber-200 flex items-center gap-2 border-b border-amber-200/80 dark:border-amber-900/60 pb-2">
+            <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700 dark:text-amber-400" />
             <span>Editör İncelemesi</span>
           </h2>
-          <p className="text-xs sm:text-base text-[#5C4033] leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-200/60 shadow-inner">
+          <p className="text-xs sm:text-base text-[#5C4033] dark:text-white leading-relaxed font-sans whitespace-pre-line bg-amber-50/60 dark:bg-[#1A0D06] p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-200/60 dark:border-amber-900/60 shadow-inner">
             {book.summary}
           </p>
         </div>
 
         {/* BU KİTABI OKUYANLAR SECTION (Directly under Editör İncelemesi) */}
         <div className="space-y-2 sm:space-y-3 pt-2">
-          <h3 className="font-serif font-bold text-base sm:text-lg text-[#362215] flex items-center gap-2 border-b border-amber-200/80 pb-2">
-            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700" />
+          <h3 className="font-serif font-bold text-base sm:text-lg text-[#362215] dark:text-amber-200 flex items-center gap-2 border-b border-amber-200/80 dark:border-amber-900/60 pb-2">
+            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-amber-700 dark:text-amber-400" />
             <span>Bu Kitabı Okuyan Okurlarımız ({readers.length})</span>
           </h3>
 
           {readers.length === 0 ? (
-            <p className="text-xs sm:text-sm text-stone-500 font-serif italic bg-amber-50/40 p-3.5 sm:p-4 rounded-xl border border-amber-200/40">
+            <p className="text-xs sm:text-sm text-stone-500 dark:text-amber-200/70 font-serif italic bg-amber-50/40 dark:bg-[#1A0D06]/60 p-3.5 sm:p-4 rounded-xl border border-amber-200/40 dark:border-amber-900/40">
               Henüz kayıtlı okurlarımızdan kimse bu kitabı okudum olarak işaretlemedi. İlk işaretleyen sen ol!
             </p>
           ) : (
-            <div className="flex flex-wrap gap-2 pt-1 bg-amber-50/60 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-amber-200/60">
+            <div className="flex flex-wrap gap-2 pt-1 bg-amber-50/60 dark:bg-[#1A0D06] p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-amber-200/60 dark:border-amber-900/60">
               {readers.map((reader) => (
                 <div
                   key={reader.id}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-[#78350F] text-xs font-bold border border-amber-200 shadow-xs"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-[#23120A] text-[#78350F] dark:text-amber-200 text-xs font-bold border border-amber-200 dark:border-amber-800/60 shadow-xs"
                 >
                   <div className="w-5 h-5 rounded-full bg-amber-800 text-amber-100 text-[10px] font-mono flex items-center justify-center font-bold shrink-0 overflow-hidden border border-amber-600">
                     {reader.image ? (

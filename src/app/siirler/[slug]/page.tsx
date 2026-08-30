@@ -150,10 +150,10 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-[#362215]">
+          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-[#362215] dark:text-amber-200 drop-shadow-md">
             {poem.title}
           </h1>
-          <p className="text-xs text-[#785438] font-sans font-medium">
+          <p className="text-xs text-[#785438] dark:text-white font-sans font-medium">
             {poem.author ? `Şair: ${poem.author}` : ''}
             {displayYear ? ` • ${displayYear}` : ` • ${dateStr}`}
           </p>

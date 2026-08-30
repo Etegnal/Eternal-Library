@@ -49,16 +49,16 @@ export default async function BooksPage() {
       
       {/* HEADER SECTION */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#8B4513] uppercase tracking-widest bg-amber-100/80 px-4 py-1.5 rounded-full border border-amber-200 shadow-sm">
-          <Library className="w-4 h-4 text-amber-700" />
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#8B4513] dark:text-amber-300 uppercase tracking-widest bg-amber-100/80 dark:bg-amber-950/80 px-4 py-1.5 rounded-full border border-amber-200 dark:border-amber-800/60 shadow-sm">
+          <Library className="w-4 h-4 text-amber-700 dark:text-amber-400" />
           <span>Zamansız Eserler Antolojisi</span>
         </div>
 
-        <h1 className="font-serif font-bold text-4xl sm:text-5xl text-[#362215]">
+        <h1 className="font-serif font-bold text-4xl sm:text-5xl text-[#362215] dark:text-amber-200 drop-shadow-md">
           Mutlak Kitaplık
         </h1>
 
-        <p className="text-[#5C4033] text-base leading-relaxed font-serif italic max-w-xl mx-auto">
+        <p className="text-[#5C4033] dark:text-white text-base leading-relaxed font-serif italic max-w-xl mx-auto">
           "Her zihnin ve kitaplığın başköşesinde yer alması gereken zamansız başyapıtlar."
         </p>
       </div>

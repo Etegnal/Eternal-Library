@@ -16,14 +16,14 @@ export default async function ArticlesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 space-y-10">
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark uppercase tracking-wider bg-amber-100/80 px-3.5 py-1 rounded-full border border-amber-200">
-          <Feather className="w-4 h-4 text-cozy-amber" />
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-cozy-amber-dark dark:text-amber-300 uppercase tracking-wider bg-amber-100/80 dark:bg-amber-950/80 px-3.5 py-1 rounded-full border border-amber-200 dark:border-amber-800/60">
+          <Feather className="w-4 h-4 text-cozy-amber dark:text-amber-400" />
           <span>Yazı Seçkisi</span>
         </div>
-        <h1 className="font-serif font-bold text-4xl text-cozy-coffee">
+        <h1 className="font-serif font-bold text-4xl text-cozy-coffee dark:text-amber-200 drop-shadow-md">
           Denemeler ve Yazılar
         </h1>
-        <p className="text-[#5C4033] text-base leading-relaxed font-serif italic max-w-xl mx-auto">
+        <p className="text-[#5C4033] dark:text-white text-base leading-relaxed font-serif italic max-w-xl mx-auto">
           "Zamanın yavaşladığı, sessizliğin düşünceye dönüştüğü anlardan süzülen edebiyat, felsefe ve hayat notları."
         </p>
       </div>

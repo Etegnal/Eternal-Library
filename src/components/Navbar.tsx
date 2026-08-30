@@ -90,21 +90,8 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 3. Mobile Right Buttons (Theme Toggle + Hamburger) */}
-        <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none flex items-center justify-center cursor-pointer"
-            aria-label="Temayı Değiştir"
-            title={theme === 'dark' ? 'Gündüz Moduna Geç' : 'Gece Moduna Geç'}
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-5 h-5 text-amber-400" />
-            ) : (
-              <Moon className="w-5 h-5 text-amber-300" />
-            )}
-          </button>
-
+        {/* 3. Mobile Hamburger Button (Far Right) */}
+        <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none"
@@ -248,6 +235,24 @@ export default function Navbar() {
                 </Link>
               </div>
             )}
+
+            {/* Mobile Theme Toggle Button inside drawer */}
+            <div className="pt-2 border-t border-amber-900/50">
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setIsOpen(false);
+                }}
+                className="w-full px-3.5 py-2 rounded-xl text-xs font-bold text-amber-200 bg-amber-950/70 hover:bg-amber-900/80 border border-amber-600/40 flex items-center justify-between transition-colors cursor-pointer"
+              >
+                <span>{theme === 'dark' ? 'Gündüz Moduna Geç (Açık)' : 'Gece Moduna Geç (Koyu)'}</span>
+                {theme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-amber-300" />
+                )}
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
