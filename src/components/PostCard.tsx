@@ -26,17 +26,17 @@ export default function PostCard({ post }: PostCardProps) {
   });
 
   return (
-    <article className="relative group flex flex-col justify-between bg-[#FFFDF9] hover:bg-white rounded-2xl border border-[#E6D7BC] hover:border-[#8B4513]/40 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full">
+    <article className="relative group flex flex-col justify-between bg-[#FFFDF9] dark:bg-[#23120A] hover:bg-white dark:hover:bg-[#2A150C] border border-[#E6D7BC] dark:border-[#3D2214] hover:border-[#8B4513]/40 dark:hover:border-amber-700/60 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full">
       <div>
         {/* Metadata Row */}
-        <div className="flex items-center justify-between gap-2 border-b border-amber-200/60 pb-3 mb-3 text-xs text-cozy-coffee-light">
+        <div className="flex items-center justify-between gap-2 border-b border-amber-200/60 dark:border-amber-900/60 pb-3 mb-3 text-xs text-cozy-coffee-light dark:text-amber-200/70">
           <div className="flex items-center gap-2.5 shrink-0 min-w-0">
-            <div className="flex items-center gap-1 text-[#8B4513] text-[11px]">
+            <div className="flex items-center gap-1 text-[#8B4513] dark:text-amber-400 text-[11px]">
               <Calendar className="w-3.5 h-3.5" />
               <span>{dateStr}</span>
             </div>
             {post.readingTime && (
-              <div className="flex items-center gap-1 text-[#8B4513] text-[11px]">
+              <div className="flex items-center gap-1 text-[#8B4513] dark:text-amber-400 text-[11px]">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{post.readingTime}</span>
               </div>
@@ -47,26 +47,26 @@ export default function PostCard({ post }: PostCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] group-hover:text-[#8B4513] transition-colors line-clamp-2 mb-2 leading-snug">
+        <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] dark:text-amber-100 group-hover:text-[#8B4513] dark:group-hover:text-amber-300 transition-colors line-clamp-2 mb-2 leading-snug">
           <Link href={`/yazilar/${post.slug}`}>
             {post.title}
           </Link>
         </h3>
 
         {/* Excerpt */}
-        <p className="text-[#5C4033] text-xs sm:text-sm leading-relaxed line-clamp-3 mb-3 font-sans">
+        <p className="text-[#5C4033] dark:text-stone-300 text-xs sm:text-sm leading-relaxed line-clamp-3 mb-3 font-sans">
           {post.excerpt}
         </p>
       </div>
 
       {/* Read More Footer Link */}
-      <div className="pt-3 border-t border-amber-200/60 flex items-center justify-between gap-2 mt-auto">
-        <span className="text-xs text-[#5C4033] italic font-serif truncate min-w-0 flex-1">
+      <div className="pt-3 border-t border-amber-200/60 dark:border-amber-900/60 flex items-center justify-between gap-2 mt-auto">
+        <span className="text-xs text-[#5C4033] dark:text-amber-200/70 italic font-serif truncate min-w-0 flex-1">
           {post.author ? `— ${post.author}` : '— Eternal'}
         </span>
         <Link
           href={`/yazilar/${post.slug}`}
-          className="inline-flex items-center gap-1 text-xs font-bold text-[#8B4513] group-hover:text-amber-800 transition-colors shrink-0"
+          className="inline-flex items-center gap-1 text-xs font-bold text-[#8B4513] dark:text-amber-300 group-hover:text-amber-800 dark:group-hover:text-amber-200 transition-colors shrink-0"
         >
           <span>Devamını Oku</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

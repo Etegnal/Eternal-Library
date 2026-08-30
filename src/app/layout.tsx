@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body className="min-h-screen flex flex-col bg-[#FAF6EE] text-[#362215] antialiased">
+      <body className="min-h-screen flex flex-col bg-[#FAF6EE] dark:bg-[#120A05] text-[#362215] dark:text-[#FEF3C7] antialiased transition-colors duration-300">
         <Providers>
           <Navbar />
           <main className="flex-1">{children}</main>

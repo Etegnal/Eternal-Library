@@ -5,15 +5,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Menu, X, ShieldCheck, User, LogIn } from 'lucide-react';
+import { Menu, X, ShieldCheck, User, LogIn, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { theme, toggleTheme } = useTheme();
   const isHomePage = pathname === '/';
-  const isDarkHeader = isHomePage || pathname.startsWith('/testler');
+  const isDarkHeader = isHomePage || pathname.startsWith('/testler') || theme === 'dark';
 
   const navLinks = [
     { href: '/', label: 'ANASAYFA' },
@@ -50,7 +52,7 @@ export default function Navbar() {
             <span className={`font-cinzel font-bold text-base tracking-[0.15em] uppercase transition-colors ${
               isDarkHeader
                 ? 'text-amber-200 drop-shadow-md group-hover:text-amber-400'
-                : 'text-[#362215] group-hover:text-amber-900'
+                : 'text-[#362215] dark:text-amber-200 group-hover:text-amber-900'
             }`}>
               ETERNAL LIBRARY
             </span>
@@ -76,20 +78,33 @@ export default function Navbar() {
         </Link>
 
         {/* 2. Mobile Title Text (Exact Center) */}
-        <div className="md:hidden absolute left-12 right-12 top-1/2 -translate-y-1/2 text-center pointer-events-none">
+        <div className="md:hidden absolute left-12 right-16 top-1/2 -translate-y-1/2 text-center pointer-events-none">
           <Link href="/" className="pointer-events-auto inline-block">
             <span className={`font-cinzel font-bold text-xs tracking-[0.12em] uppercase transition-colors ${
               isDarkHeader
                 ? 'text-amber-200 drop-shadow-md'
-                : 'text-[#362215]'
+                : 'text-[#362215] dark:text-amber-200'
             }`}>
               ETERNAL LIBRARY
             </span>
           </Link>
         </div>
 
-        {/* 3. Mobile Hamburger Button (Far Right) */}
-        <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex items-center">
+        {/* 3. Mobile Right Buttons (Theme Toggle + Hamburger) */}
+        <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none flex items-center justify-center cursor-pointer"
+            aria-label="Temayı Değiştir"
+            title={theme === 'dark' ? 'Gündüz Moduna Geç' : 'Gece Moduna Geç'}
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-5 h-5 text-amber-400" />
+            ) : (
+              <Moon className="w-5 h-5 text-amber-300" />
+            )}
+          </button>
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-xl bg-[#23120A]/85 text-amber-100 border border-amber-700/40 focus:outline-none"
@@ -150,6 +165,21 @@ export default function Navbar() {
               <span>Giriş / Kayıt</span>
             </Link>
           )}
+
+          {/* DESKTOP THEME TOGGLE ICON BUTTON */}
+          <button
+            onClick={toggleTheme}
+            className="ml-2 p-1.5 rounded-full text-amber-200 hover:text-amber-100 hover:bg-amber-900/60 border border-amber-600/50 transition-all cursor-pointer flex items-center justify-center shrink-0"
+            title={theme === 'dark' ? 'Gündüz Moduna Geç (Açık)' : 'Gece Moduna Geç (Koyu)'}
+            aria-label="Temayı Değiştir"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 text-amber-400 animate-pulse" />
+            ) : (
+              <Moon className="w-4 h-4 text-amber-300" />
+            )}
+          </button>
+
         </nav>
 
       </div>

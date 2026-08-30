@@ -64,18 +64,18 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
     <div className="space-y-8">
       
       {/* DESKTOP CONTROL BAR (hidden sm:block) */}
-      <div className="hidden sm:block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#E6D7BC] shadow-sm space-y-3">
+      <div className="hidden sm:block p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] dark:bg-[#23120A] border border-[#E6D7BC] dark:border-[#3D2214] shadow-sm space-y-3">
         <div className="flex items-center gap-3">
           
           {/* Search Input */}
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-amber-800/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-amber-800/60 dark:text-amber-400/70 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Eser adı, yazar veya konu ara..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 border border-amber-200/80 text-xs sm:text-sm text-[#362215] placeholder:text-stone-400 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-amber-50/60 dark:bg-[#1A0D06] border border-amber-200/80 dark:border-amber-900/60 text-xs sm:text-sm text-[#362215] dark:text-amber-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600 transition-all"
             />
           </div>
 
@@ -84,7 +84,7 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
-              className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
+              className="px-3.5 py-2.5 rounded-xl text-xs font-bold bg-amber-100/80 dark:bg-[#1A0D06] hover:bg-amber-200 text-[#78350F] dark:text-amber-200 border border-amber-300/80 dark:border-amber-900/60 focus:outline-none focus:border-amber-600 cursor-pointer transition-all"
             >
               <option value="rating_desc">En Yüksek Puanlılar</option>
               <option value="newest">En Son Eklenenler</option>
@@ -99,8 +99,8 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
             onClick={() => setIsFilterOpen(!isFilterOpen)}
             className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-2 cursor-pointer ${
               selectedCategory !== 'all' || isFilterOpen
-                ? 'bg-[#8B4513] text-amber-100 border-[#5C2E0B] shadow-sm'
-                : 'bg-amber-100/80 hover:bg-amber-200 text-[#78350F] border-amber-300/80'
+                ? 'bg-[#8B4513] dark:bg-[#9A3412] text-amber-100 border-[#5C2E0B] dark:border-amber-600 shadow-sm'
+                : 'bg-amber-100/80 dark:bg-[#1A0D06] hover:bg-amber-200 dark:hover:bg-[#2A150C] text-[#78350F] dark:text-amber-200 border-amber-300/80 dark:border-amber-900/60'
             }`}
           >
             <SlidersHorizontal className="w-4 h-4 text-amber-300" />
@@ -260,11 +260,11 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
           {sortedBooks.map((book) => (
             <article
               key={book.slug}
-              className="group relative p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] hover:bg-white border border-[#E6D7BC] hover:border-[#8B4513]/40 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 sm:gap-5"
+              className="group relative p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] dark:bg-[#23120A] hover:bg-white dark:hover:bg-[#2A150C] border border-[#E6D7BC] dark:border-[#3D2214] hover:border-[#8B4513]/40 dark:hover:border-amber-700/60 shadow-sm hover:shadow-md transition-all duration-300 flex gap-4 sm:gap-5"
             >
               
               {/* LEFT SIDE: COVER IMAGE (Self-stretching to fill full card height) */}
-              <div className="relative w-32 sm:w-44 self-stretch min-h-[200px] sm:min-h-[260px] rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 shadow-md">
+              <div className="relative w-32 sm:w-44 self-stretch min-h-[200px] sm:min-h-[260px] rounded-xl overflow-hidden shrink-0 bg-amber-950 border border-amber-200/60 dark:border-amber-900/60 shadow-md">
                 <Image
                   src={book.coverUrl}
                   alt={book.title}
@@ -279,51 +279,51 @@ export default function MutlakKitaplikCatalog({ initialBooks }: MutlakKitaplikCa
                 <div className="space-y-1.5">
                   
                   {/* Category & Year */}
-                  <div className="flex items-center justify-between text-[11px] text-[#8B4513]">
+                  <div className="flex items-center justify-between text-[11px] text-[#8B4513] dark:text-amber-400">
                     <span className="font-bold uppercase tracking-wider font-mono">
                       {book.category}
                     </span>
-                    <span className="font-mono text-stone-500 bg-amber-100/60 px-2 py-0.5 rounded-full border border-amber-200">
+                    <span className="font-mono text-stone-500 dark:text-amber-300 bg-amber-100/60 dark:bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800/60">
                       {book.displayYear}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] group-hover:text-[#8B4513] transition-colors leading-snug break-words">
+                  <h3 className="font-serif font-bold text-lg sm:text-xl text-[#362215] dark:text-amber-100 group-hover:text-[#8B4513] dark:group-hover:text-amber-300 transition-colors leading-snug break-words">
                     <Link href={`/kitaplar/${book.slug}`}>
                       {book.title}
                     </Link>
                   </h3>
 
                   {/* Author */}
-                  <p className="text-xs font-serif italic text-[#785438]">
+                  <p className="text-xs font-serif italic text-[#785438] dark:text-amber-200/80">
                     {book.author}
                   </p>
 
                   {/* Rating Stars & Pages */}
-                  <div className="flex items-center gap-3 text-xs text-stone-600 pt-0.5">
-                    <div className="flex items-center gap-1 text-amber-600 font-bold text-xs">
+                  <div className="flex items-center gap-3 text-xs text-stone-600 dark:text-stone-300 pt-0.5">
+                    <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold text-xs">
                       <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                       <span>{book.rating.toFixed(1)}</span>
                     </div>
-                    <span className="text-stone-300">•</span>
-                    <span className="text-xs text-[#5C4033] font-mono">{book.pages} Sayfa</span>
+                    <span className="text-stone-300 dark:text-stone-600">•</span>
+                    <span className="text-xs text-[#5C4033] dark:text-amber-200/70 font-mono">{book.pages} Sayfa</span>
                   </div>
 
                   {/* Summary */}
-                  <p className="text-xs text-[#5C4033] line-clamp-3 font-sans leading-relaxed pt-1">
+                  <p className="text-xs text-[#5C4033] dark:text-stone-300 line-clamp-3 font-sans leading-relaxed pt-1">
                     {book.summary}
                   </p>
 
                 </div>
 
                 {/* UNIFIED ACTIONS: 'Kitabı İncele' & 'SaveBookButton' */}
-                <div className="pt-3 mt-3 border-t border-amber-200/60 flex items-center gap-2">
+                <div className="pt-3 mt-3 border-t border-amber-200/60 dark:border-amber-900/60 flex items-center gap-2">
                   <Link
                     href={`/kitaplar/${book.slug}`}
-                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-amber-100/90 hover:bg-amber-200 text-[#78350F] border border-amber-300/80 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-amber-100/90 dark:bg-[#78350F] hover:bg-amber-200 dark:hover:bg-[#9A3412] text-[#78350F] dark:text-amber-100 border border-amber-300/80 dark:border-amber-600/50 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <BookOpen className="w-3.5 h-3.5 text-amber-800" />
+                    <BookOpen className="w-3.5 h-3.5 text-amber-800 dark:text-amber-300" />
                     <span>Kitabı İncele</span>
                   </Link>
 
