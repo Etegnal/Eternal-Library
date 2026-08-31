@@ -203,7 +203,7 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || session.user?.role !== 'ADMIN') {
+    if (!session || (session.user as any)?.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Yetkisiz erişim.' }, { status: 401 });
     }
 
