@@ -83,12 +83,13 @@ export default function AdminBooksManager() {
         if (match) numericRating = match[1];
       }
 
-      // Build structured summary string
+      // Build structured summary string (clean, no --- separators)
       const fullSummary = `Orijinal Adı: ${data.original_title || data.title}
 Yayıncı: ${data.publisher || 'Belirtilmedi'} (Türkiye Basım Yılı: ${data.original_publish_year || '2020'})
 Sayfa Sayısı: ${data.page_count || '300'} sayfa
 Platform & Okur Puanı: ${data.rating || '4.8 / 5'}
 
+Özet:
 ${data.summary}
 
 Editör Yorumu:
@@ -103,8 +104,8 @@ ${data.editor_review}`;
         category: data.genre || 'Klasikler',
         summary: fullSummary,
         rating: numericRating,
-        isReadable: false,
-        content: '',
+        isReadable: true,
+        content: data.summary,
         buyUrl: data.product_url || '',
       });
 
