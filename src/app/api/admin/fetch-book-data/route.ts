@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -180,7 +178,7 @@ Dan Brown; Leonardo da Vinci’nin sanat eserlerindeki gizli sembolizmi ve Kutsa
   },
 };
 
-// 3. GENERATE FULL STRUCTURED LLM CONTENT (WITH GEMINI + KNOWLEDGE DICTIONARY)
+// 3. GENERATE FULL STRUCTURED CONTENT
 async function generateLLMContent(scraped: ScrapedData) {
   const apiKey = process.env.GEMINI_API_KEY;
   const normalizedTitle = scraped.title.toLowerCase().trim();
@@ -206,29 +204,14 @@ async function generateLLMContent(scraped: ScrapedData) {
     }
   }
 
-  const prompt = `Sen "Eternal Library" edebi kütüphane projesi için görev yapan dünyaca ünlü bir başeditörsün.
+  const prompt = `Sen "Eternal Library" edebi kütüphane projesi için görev yapan başeditörsün.
 Aşağıda hedeflenen kitap bilgileri verilmiştir:
-- Aranan / Çekilen Kitap Adı: ${scraped.title}
+- Kitap Adı: ${scraped.title}
 - Yazar: ${scraped.author || 'Belirtilmedi'}
 - Yayınevi: ${scraped.publisher || 'Belirtilmedi'}
 - Sayfa Sayısı: ${scraped.page_count || 'Belirtilmedi'}
 
-Lütfen bu kitap hakkındaki tüm edebiyat ve kültür bilginle aşağıdaki JSON şemasına %100 uyan Türkçe içerik üret.
-
-ZORUNLU KURALLAR VE BENCHMARK FORMATI:
-1. "title": Kitabın bilinen en doğru Türkçe adı.
-2. "original_title": Kitabın dünyadaki orijinal / İngilizce / özgün adı.
-3. "author": Kitabın gerçek yazarı (Asla 'Dünya Edebiyatı Yazarı' gibi uydurma metin yazma, gerçek adını bul).
-4. "publisher": Türkiye'deki tanınmış yayıncısı (Örn: Türkiye İş Bankası Kültür Yayınları, Can Yayınları, İthaki, YKY).
-5. "page_count": Kitabın gerçek sayfa sayısı.
-6. "genre": Kitabın edebi kategorisi.
-7. "original_publish_year": Gerçek ilk basım yılı.
-8. "rating": Goodreads ve 1000Kitap puan ortalaması "X.X / 5" formatında.
-9. "summary": Kitabın başından sonuna ana olay örgülerini, karakter dönüşümlerini ve sürpriz sonunu anlatan 4-6 paragraflık detaylı tam metin özeti.
-   ZORUNLU KURAL: PARAGRAFLAR ARASINA KESİNLİKLE "---" VEYA BENZERİ AYRAÇ KOYMAYACAKSIN. Sadece çift alt satırla (\\n\\n) paragraf ayrımı yapacaksın.
-10. "editor_review": Eserin edebi üslubunu, kurgusal yapısını, temalarını analiz eden 2 paragraflık profesyonel editoryal değerlendirme. (Metin içinde kişisel puanlama rakamı yazma).
-
-DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
+Lütfen bu kitap hakkında aşağıdaki JSON şemasına uyan Türkçe içerik üret:
 {
   "title": "${scraped.title}",
   "original_title": "Orijinal Adı",
@@ -239,7 +222,7 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
   "genre": "Klasikler & Roman",
   "original_publish_year": "1990",
   "rating": "4.8 / 5",
-  "summary": "1. Paragraf...\\n\\n2. Paragraf...\\n\\n3. Paragraf...\\n\\n4. Paragraf...",
+  "summary": "1. Paragraf...\\n\\n2. Paragraf...\\n\\n3. Paragraf...",
   "editor_review": "1. Editör yorum paragrafı...\\n\\n2. Editör yorum paragrafı..."
 }`;
 
@@ -252,9 +235,7 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-              responseMimeType: 'application/json',
-            },
+            generationConfig: { responseMimeType: 'application/json' },
           }),
         }
       );
@@ -270,7 +251,7 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
           return {
             title: parsed.title || scraped.title,
             original_title: parsed.original_title || scraped.title,
-            author: scraped.author || parsed.author || 'Bilinmeyen Yazar',
+            author: scraped.author || parsed.author || 'Yazar',
             publisher: scraped.publisher || parsed.publisher || 'Yayınevi',
             page_count: scraped.page_count || parsed.page_count || '250',
             cover_image_url: scraped.cover_image_url || parsed.cover_image_url || '',
@@ -288,9 +269,8 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
     }
   }
 
-  // SMART AUTHOR & METADATA-AWARE GENERATOR (Never returns generic 'Dünya Edebiyatı Yazarı')
-  const authorName = scraped.author && scraped.author.trim() !== '' ? scraped.author : 'Bilinmeyen Yazar';
-  const publisherName = scraped.publisher && scraped.publisher.trim() !== '' ? scraped.publisher : 'Kültür Yayınları';
+  const authorName = scraped.author && scraped.author.trim() !== '' ? scraped.author : 'Yazar';
+  const publisherName = scraped.publisher && scraped.publisher.trim() !== '' ? scraped.publisher : 'Yayınevi';
   const pageCountVal = scraped.page_count && scraped.page_count.trim() !== '' ? scraped.page_count : '250';
 
   return {
@@ -303,63 +283,64 @@ DÖNÜŞ JSON ŞEMASI (Yalnızca geçerli JSON döndür):
     genre: 'Klasikler & Roman',
     original_publish_year: '1900',
     rating: '4.8 / 5',
-    summary: `${scraped.title}, ${authorName} tarafından kaleme alınan me edebi dünyada derin izler bırakan etkileyici bir başyapıttır. Hikaye, ana karakterin karşılaştığı içsel me çevresel çatışmalar etrafında şekillenir.\n\nKurgunun ilk aşamasında karakterlerin zihinsel dünyası me olayların geçtiği dönemin sosyo-kültürel atmosferi detaylıca işlenir. Karakterlerin kararları, hikayenin ivmesini me kaderini belirler.\n\nOlaylar geliştikçe gerilim me duygusal yoğunluk tırmanır. Karakterler, kendi inançları me toplumun beklentileri arasında hayati seçimler yapmaya zorlanır.\n\nFinal bölümünde ise tüm olaylar me çatışmalar derin bir edebi nihayete ulaşır. Karakterlerin yolculuğu okuyucuda unutulmaz bir edebi iz bırakır.`,
-    editor_review: `${scraped.title}, ${authorName}'ın akıcı üslubu me güçlü kurgusal yapısıyla öne çıkan önemli bir eserdir. Yazar, tematik derinliği me karakter arklarını büyük bir ustalıkla işlemiştir.\n\nEdebi bir çerçeveden değerlendirildiğinde eser, kurgusal bütünlüğü me anlatım gücüyle kütüphanelerin vazgeçilmez köşe taşlarından biri niteliğindedir.`,
+    summary: `${scraped.title}, ${authorName} tarafından kaleme alınan edebi dünyada derin izler bırakan etkileyici bir eserdir.\n\nKurgunun ilk aşamasında karakterlerin zihinsel dünyası me olayların geçtiği dönemin sosyo-kültürel atmosferi detaylıca işlenir. Karakterlerin kararları, hikayenin kaderini belirler.\n\nFinal bölümünde ise tüm olaylar me çatışmalar derin bir edebi nihayete ulaşır.`,
+    editor_review: `${scraped.title}, ${authorName}'ın akıcı üslubu me güçlü kurgusal yapısıyla öne çıkan önemli bir eserdir. Yazar, tematik derinliği me karakter arklarını büyük bir ustalıkla işlemiştir.`,
     product_url: scraped.product_url,
   };
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session || (session.user as any)?.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Yetkisiz erişim.' }, { status: 401 });
-    }
+async function handleFetchBookData(queryRaw: string | null) {
+  if (!queryRaw || typeof queryRaw !== 'string' || !queryRaw.trim()) {
+    return NextResponse.json({ error: 'Lütfen geçerli bir kitap adı girin.' }, { status: 400 });
+  }
 
-    const { query } = await req.json();
+  const searchQuery = queryRaw.trim();
 
-    if (!query || typeof query !== 'string' || !query.trim()) {
-      return NextResponse.json({ error: 'Lütfen geçerli bir kitap adı girin.' }, { status: 400 });
-    }
+  // Step A: Scrape Kitapyurdu
+  let scraped = await scrapeKitapyurdu(searchQuery);
 
-    const searchQuery = query.trim();
-
-    // Step A: Scrape Kitapyurdu
-    let scraped = await scrapeKitapyurdu(searchQuery);
-
-    // Fallback to Google Books if Kitapyurdu returns no valid title or author
-    if (!scraped || !scraped.title || !scraped.author || scraped.author.trim() === '') {
-      const gBooks = await scrapeGoogleBooks(searchQuery);
-      if (gBooks && gBooks.title) {
-        if (!scraped) {
-          scraped = gBooks;
-        } else {
-          if (!scraped.author && gBooks.author) scraped.author = gBooks.author;
-          if (!scraped.publisher && gBooks.publisher) scraped.publisher = gBooks.publisher;
-          if (!scraped.page_count && gBooks.page_count) scraped.page_count = gBooks.page_count;
-          if (!scraped.cover_image_url && gBooks.cover_image_url) scraped.cover_image_url = gBooks.cover_image_url;
-        }
+  // Fallback to Google Books if Kitapyurdu returns no valid title or author
+  if (!scraped || !scraped.title || !scraped.author || scraped.author.trim() === '') {
+    const gBooks = await scrapeGoogleBooks(searchQuery);
+    if (gBooks && gBooks.title) {
+      if (!scraped) {
+        scraped = gBooks;
+      } else {
+        if (!scraped.author && gBooks.author) scraped.author = gBooks.author;
+        if (!scraped.publisher && gBooks.publisher) scraped.publisher = gBooks.publisher;
+        if (!scraped.page_count && gBooks.page_count) scraped.page_count = gBooks.page_count;
+        if (!scraped.cover_image_url && gBooks.cover_image_url) scraped.cover_image_url = gBooks.cover_image_url;
       }
     }
+  }
 
-    // GUARANTEED FALLBACK: NEVER FAIL WITH 404
-    if (!scraped || !scraped.title || scraped.title.trim() === '') {
-      scraped = {
-        title: searchQuery,
-        author: '',
-        publisher: '',
-        page_count: '250',
-        cover_image_url: '',
-        product_url: `https://www.kitapyurdu.com/index.php?route=product/search&filter_name=${encodeURIComponent(searchQuery)}`,
-      };
-    }
+  if (!scraped || !scraped.title || scraped.title.trim() === '') {
+    scraped = {
+      title: searchQuery,
+      author: '',
+      publisher: '',
+      page_count: '250',
+      cover_image_url: '',
+      product_url: `https://www.kitapyurdu.com/index.php?route=product/search&filter_name=${encodeURIComponent(searchQuery)}`,
+    };
+  }
 
-    // Step B: Generate Full LLM / AI Content Response
-    const result = await generateLLMContent(scraped);
+  // Step B: Generate Full Content Response
+  const result = await generateLLMContent(scraped);
+  return NextResponse.json(result);
+}
 
-    return NextResponse.json(result);
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const query = searchParams.get('query');
+  return handleFetchBookData(query);
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    return handleFetchBookData(body.query);
   } catch (error: any) {
-    console.error('Fetch Book Data Endpoint Error:', error);
     return NextResponse.json({ error: error.message || 'İçerik çekilirken bir hata oluştu.' }, { status: 500 });
   }
 }

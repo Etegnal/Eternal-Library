@@ -113,6 +113,8 @@ export default function AdminBooksManager() {
     }
   };
 
+  const [isDragging, setIsDragging] = useState(false);
+
   const handleFileChange = (file: File | null) => {
     if (!file) return;
     setCoverFile(file);
@@ -120,8 +122,22 @@ export default function AdminBooksManager() {
     setCoverPreview(objectUrl);
   };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFileChange(e.dataTransfer.files[0]);
     }
@@ -289,15 +305,20 @@ export default function AdminBooksManager() {
           </label>
 
           <div
-            onDragOver={(e) => e.preventDefault()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className="border-2 border-dashed border-amber-300/80 hover:border-amber-600 rounded-2xl p-6 text-center bg-amber-50/40 transition-colors cursor-pointer relative flex flex-col sm:flex-row items-center justify-center gap-6"
+            className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all cursor-pointer relative flex flex-col sm:flex-row items-center justify-center gap-6 ${
+              isDragging
+                ? 'border-amber-600 bg-amber-200/90 scale-[1.01] shadow-lg ring-4 ring-amber-400/40'
+                : 'border-amber-300/80 hover:border-amber-600 bg-amber-50/40'
+            }`}
           >
             <input
               type="file"
               accept="image/*"
               onChange={(e) => e.target.files && handleFileChange(e.target.files[0])}
-              className="absolute inset-0 opacity-0 cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
             />
 
             {coverPreview ? (
