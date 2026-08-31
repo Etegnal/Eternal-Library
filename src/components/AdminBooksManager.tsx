@@ -83,29 +83,17 @@ export default function AdminBooksManager() {
         if (match) numericRating = match[1];
       }
 
-      // Build structured summary string (clean, no --- separators)
-      const fullSummary = `Orijinal Adı: ${data.original_title || data.title}
-Yayıncı: ${data.publisher || 'Belirtilmedi'} (Türkiye Basım Yılı: ${data.original_publish_year || '2020'})
-Sayfa Sayısı: ${data.page_count || '300'} sayfa
-Platform & Okur Puanı: ${data.rating || '4.8 / 5'}
-
-Özet:
-${data.summary}
-
-Editör Yorumu:
-${data.editor_review}`;
-
-      // Populate Form Fields
+      // Populate Form Fields cleanly without header prefixes
       setFormData({
         title: data.title || autoQuery,
         author: data.author || '',
-        year: data.original_publish_year || '2020',
+        year: data.original_publish_year || '2003',
         pages: data.page_count || '300',
         category: data.genre || 'Klasikler',
-        summary: fullSummary,
+        summary: data.editor_review || '', // Pure Editorial Review text only
         rating: numericRating,
         isReadable: true,
-        content: data.summary,
+        content: data.summary || '', // Pure Full-Text Plot Summary for Read Mode
         buyUrl: data.product_url || '',
       });
 
