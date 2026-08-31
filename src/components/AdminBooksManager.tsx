@@ -23,6 +23,11 @@ export default function AdminBooksManager() {
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
 
+  // AUTO-FETCH STATE (Kitapyurdu Scraper + LLM AI Content Generator)
+  const [autoQuery, setAutoQuery] = useState('');
+  const [isFetchingAuto, setIsFetchingAuto] = useState(false);
+  const [autoStatusMessage, setAutoStatusMessage] = useState<string | null>(null);
+
   // Fetch unique categories from DB to enrich the category pool
   React.useEffect(() => {
     fetch('/api/admin/books')
@@ -41,6 +46,83 @@ export default function AdminBooksManager() {
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleFetchAutoData = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!autoQuery.trim()) {
+      setStatusMessage({ type: 'error', text: 'Lütfen aramak istediğiniz kitap adını girin.' });
+      return;
+    }
+
+    setIsFetchingAuto(true);
+    setAutoStatusMessage("Kitapyurdu'ndan künye verileri çekiliyor ve LLM ile detaylı özet hazırlanıyor...");
+    setStatusMessage(null);
+
+    try {
+      const res = await fetch('/api/admin/fetch-book-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: autoQuery.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Kitap verileri çekilemedi.');
+      }
+
+      // Add fetched genre to available categories pool if custom
+      if (data.genre) {
+        setAvailableCategories((prev) => Array.from(new Set([...prev, data.genre])));
+      }
+
+      // Parse float rating (e.g., "4.7 / 5" -> "4.7")
+      let numericRating = '4.8';
+      if (data.rating) {
+        const match = data.rating.match(/(\d+\.?\d*)/);
+        if (match) numericRating = match[1];
+      }
+
+      // Build structured summary string
+      const fullSummary = `Orijinal Adı: ${data.original_title || data.title}
+Yayıncı: ${data.publisher || 'Belirtilmedi'} (Türkiye Basım Yılı: ${data.original_publish_year || '2020'})
+Sayfa Sayısı: ${data.page_count || '300'} sayfa
+Platform & Okur Puanı: ${data.rating || '4.8 / 5'}
+
+${data.summary}
+
+Editör Yorumu:
+${data.editor_review}`;
+
+      // Populate Form Fields
+      setFormData({
+        title: data.title || autoQuery,
+        author: data.author || '',
+        year: data.original_publish_year || '2020',
+        pages: data.page_count || '300',
+        category: data.genre || 'Klasikler',
+        summary: fullSummary,
+        rating: numericRating,
+        isReadable: false,
+        content: '',
+        buyUrl: data.product_url || '',
+      });
+
+      if (data.cover_image_url) {
+        setCoverPreview(data.cover_image_url);
+      }
+
+      setStatusMessage({
+        type: 'success',
+        text: `"${data.title}" için veriler Kitapyurdu & LLM ile başarıyla çekildi ve forma aktarıldı!`,
+      });
+    } catch (err: any) {
+      setStatusMessage({ type: 'error', text: err.message || 'Kitap verileri çekilirken bir hata oluştu.' });
+    } finally {
+      setIsFetchingAuto(false);
+      setAutoStatusMessage(null);
+    }
+  };
 
   const handleFileChange = (file: File | null) => {
     if (!file) return;
@@ -143,6 +225,51 @@ export default function AdminBooksManager() {
             Mutlak Kitaplık için yeni başyapıt ekleyin. Yüklenen kapak görselleri otomatik olarak <code className="font-mono text-amber-900 bg-amber-100/80 px-1.5 py-0.5 rounded">public/covers/[slug].jpg</code> olarak saklanır.
           </p>
         </div>
+      </div>
+
+      {/* AUTOMATED KITAPYURDU SCRAPER + LLM WIDGET BOX */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-950 via-[#23120A] to-amber-900 border border-amber-500/40 text-amber-100 shadow-cozy space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-amber-300 animate-spin-slow" />
+            <h3 className="font-serif font-bold text-sm text-amber-200 uppercase tracking-wider">
+              Otomatik Kitap Bilgisi Çek & Doldur (Kitapyurdu + LLM AI)
+            </h3>
+          </div>
+          <span className="text-[10px] bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30 font-mono">
+            Scraper + LLM
+          </span>
+        </div>
+
+        <p className="text-xs text-amber-100/80 leading-relaxed font-sans">
+          Sadece kitap adını girin. Sistem Kitapyurdu'ndan doğrulanmış sayfa sayısı, yayınevi ve kapak görselini çekecek; yapay zeka ile tam metin özeti ve editoryal analizi oluşturup aşağıdaki forma otomatik aktaracaktır.
+        </p>
+
+        <form onSubmit={handleFetchAutoData} className="flex flex-col sm:flex-row items-center gap-2 pt-1">
+          <input
+            type="text"
+            value={autoQuery}
+            onChange={(e) => setAutoQuery(e.target.value)}
+            placeholder="Aramak istediğiniz kitap adı (Örn: Dune, Parlayan Sözler, Simyacı)..."
+            className="flex-1 w-full px-4 py-2.5 rounded-xl bg-[#1A0D06] border border-amber-600/50 text-xs font-serif text-amber-100 placeholder:text-amber-300/40 focus:outline-none focus:border-amber-400"
+          />
+
+          <button
+            type="submit"
+            disabled={isFetchingAuto}
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
+          >
+            <Sparkles className="w-4 h-4 text-amber-950" />
+            <span>{isFetchingAuto ? 'Getiriliyor...' : 'Kitap Bilgilerini Getir'}</span>
+          </button>
+        </form>
+
+        {isFetchingAuto && (
+          <div className="flex items-center gap-2 text-xs text-amber-300 font-mono pt-1 animate-pulse">
+            <Sparkles className="w-4 h-4 animate-spin text-amber-400" />
+            <span>{autoStatusMessage || 'İçerik hazırlanıyor...'}</span>
+          </div>
+        )}
       </div>
 
       {/* STATUS NOTIFICATION */}
