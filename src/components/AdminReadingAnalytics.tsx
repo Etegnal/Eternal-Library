@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BookOpen, Feather, Eye, User, Search, RefreshCw, Sparkles, Shield, Clock, Users, ArrowUpRight, Heart, Library } from 'lucide-react';
 import UserActivityModal from '@/components/UserActivityModal';
+import AnalyticsDetailModal from '@/components/AnalyticsDetailModal';
 
 export interface ViewLogItem {
   id: string;
@@ -69,6 +70,7 @@ export default function AdminReadingAnalytics() {
     email?: string | null;
     initialTab?: 'savedBooks' | 'likedPosts' | 'views';
   } | null>(null);
+  const [selectedLogForModal, setSelectedLogForModal] = useState<ViewLogItem | null>(null);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -341,31 +343,17 @@ export default function AdminReadingAnalytics() {
                             </div>
                           </td>
 
-                          {/* Analytics & Geolocation Badges Column */}
+                          {/* Analytics & Geolocation Button Column */}
                           <td className="p-3.5">
-                            <div className="flex flex-wrap items-center gap-1.5">
-                              {/* Location Badge */}
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-amber-100/90 text-amber-900 border border-amber-300/80" title="Şehir ve Ülke">
-                                📍 {locationText}
-                              </span>
-
-                              {/* Device & OS Badge */}
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-stone-100 text-stone-800 border border-stone-300/80" title="Cihaz Türü ve İşletim Sistemi">
-                                📱 {deviceText}
-                              </span>
-
-                              {/* Referrer Badge */}
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-blue-50 text-blue-900 border border-blue-200" title="Ziyaret Kaynağı (Referrer)">
-                                🔗 {referrerText}
-                              </span>
-
-                              {/* IP / Fingerprint Badge */}
-                              {log.ipAddress && (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-purple-50 text-purple-900 border border-purple-200" title="IP Adresi ve Cihaz Hash">
-                                  🆔 {log.ipAddress} {log.fingerprint ? `(#${log.fingerprint.substring(0, 6)})` : ''}
-                                </span>
-                              )}
-                            </div>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedLogForModal(log)}
+                              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-100 to-amber-200/90 hover:from-amber-200 hover:to-amber-300 text-[#78350F] border border-amber-300/90 font-bold text-[11px] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm hover:shadow"
+                              title="Konum, Cihaz, IP ve Referrer detaylarını gör"
+                            >
+                              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+                              <span>📊 Analitik Detayı</span>
+                            </button>
                           </td>
 
                           {/* Post Title Column */}
@@ -532,6 +520,14 @@ export default function AdminReadingAnalytics() {
           userEmail={selectedUserForModal.email}
           initialTab={selectedUserForModal.initialTab || 'savedBooks'}
           onClose={() => setSelectedUserForModal(null)}
+        />
+      )}
+
+      {/* ANALYTICS DETAIL MODAL */}
+      {selectedLogForModal && (
+        <AnalyticsDetailModal
+          log={selectedLogForModal}
+          onClose={() => setSelectedLogForModal(null)}
         />
       )}
 
