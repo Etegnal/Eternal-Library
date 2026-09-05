@@ -55,14 +55,24 @@ model Post {
 }
 
 model ViewRecord {
-  id        String   @id @default(uuid())
-  postId    String
-  userId    String?
-  userEmail String?
-  userName  String?
-  postTitle String?
-  postType  PostType @default(YAZI)
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  postId      String
+  userId      String?
+  userEmail   String?
+  userName    String?
+  postTitle   String?
+  postType    PostType @default(YAZI)
+  createdAt   DateTime @default(now())
+
+  // Enriched Analytics & Tracking Fields
+  ipAddress   String?
+  city        String?
+  country     String?
+  deviceType  String?
+  browser     String?
+  os          String?
+  referrer    String?
+  fingerprint String?
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
   post Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
@@ -244,6 +254,16 @@ model TestResultRecord {
   testTitle   String
   answersJson String            @db.Text
   createdAt   DateTime          @default(now())
+
+  // Enriched Analytics & Tracking Fields
+  ipAddress   String?
+  city        String?
+  country     String?
+  deviceType  String?
+  browser     String?
+  os          String?
+  referrer    String?
+  fingerprint String?
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

@@ -14,6 +14,17 @@ export interface ViewLogItem {
   postTitle: string | null;
   postType: 'YAZI' | 'SIIR';
   createdAt: string;
+
+  // Enriched Analytics & Tracking Fields
+  ipAddress?: string | null;
+  city?: string | null;
+  country?: string | null;
+  deviceType?: string | null;
+  browser?: string | null;
+  os?: string | null;
+  referrer?: string | null;
+  fingerprint?: string | null;
+
   user?: {
     id: string;
     name: string | null;
@@ -270,6 +281,7 @@ export default function AdminReadingAnalytics() {
                 <thead className="bg-[#FDF8EE] border-b border-[#E6D7BC] text-[#78350F] uppercase tracking-wider font-bold text-[11px]">
                   <tr>
                     <th className="p-3.5">Okuyan Kişi</th>
+                    <th className="p-3.5">Konum & Cihaz Analitiği</th>
                     <th className="p-3.5">Okunan Eser</th>
                     <th className="p-3.5">Tür</th>
                     <th className="p-3.5 text-right">Tarih & Saat</th>
@@ -292,6 +304,10 @@ export default function AdminReadingAnalytics() {
                         hour: '2-digit',
                         minute: '2-digit',
                       });
+
+                      const locationText = log.city ? `${log.city}${log.country ? `, ${log.country}` : ''}` : 'Bilinmeyen Konum';
+                      const deviceText = `${log.deviceType || 'Masaüstü'}${log.os || log.browser ? ` (${[log.os, log.browser].filter(Boolean).join(' / ')})` : ''}`;
+                      const referrerText = log.referrer || 'Doğrudan URL';
 
                       return (
                         <tr key={log.id} className="hover:bg-amber-50/50 transition-colors">
@@ -322,6 +338,33 @@ export default function AdminReadingAnalytics() {
                                   {log.userEmail || log.user?.email || 'Misafir Oturumu'}
                                 </div>
                               </div>
+                            </div>
+                          </td>
+
+                          {/* Analytics & Geolocation Badges Column */}
+                          <td className="p-3.5">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {/* Location Badge */}
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-amber-100/90 text-amber-900 border border-amber-300/80" title="Şehir ve Ülke">
+                                📍 {locationText}
+                              </span>
+
+                              {/* Device & OS Badge */}
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-stone-100 text-stone-800 border border-stone-300/80" title="Cihaz Türü ve İşletim Sistemi">
+                                📱 {deviceText}
+                              </span>
+
+                              {/* Referrer Badge */}
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-blue-50 text-blue-900 border border-blue-200" title="Ziyaret Kaynağı (Referrer)">
+                                🔗 {referrerText}
+                              </span>
+
+                              {/* IP / Fingerprint Badge */}
+                              {log.ipAddress && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-purple-50 text-purple-900 border border-purple-200" title="IP Adresi ve Cihaz Hash">
+                                  🆔 {log.ipAddress} {log.fingerprint ? `(#${log.fingerprint.substring(0, 6)})` : ''}
+                                </span>
+                              )}
                             </div>
                           </td>
 
@@ -368,7 +411,7 @@ export default function AdminReadingAnalytics() {
                     })
                   ) : (
                     <tr>
-                      <td colSpan={4} className="p-8 text-center text-[#5C4033] font-serif">
+                      <td colSpan={5} className="p-8 text-center text-[#5C4033] font-serif">
                         {loading ? 'Okuma günlükleri yükleniyor...' : 'Kayıtlı okuma günlüğü bulunamadı.'}
                       </td>
                     </tr>

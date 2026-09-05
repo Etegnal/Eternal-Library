@@ -2,10 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { extractAnalyticsFromRequest } from '@/lib/analytics';
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
+
+    // Read optional fingerprint from body if JSON payload provided
+    let bodyFingerprint: string | undefined = undefined;
+    try {
+      const body = await req.json();
+      if (body && typeof body.fingerprint === 'string') {
+        bodyFingerprint = body.fingerprint;
+      }
+    } catch {
+      // Body might be empty
+    }
+
+    // Extract rich analytics from request headers & geolocation
+    const analytics = extractAnalyticsFromRequest(req, bodyFingerprint);
 
     // Find target post
     const post = await prisma.post.findUnique({
@@ -34,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       }
     }
 
-    // Atomic DB view count increment + Detailed ViewRecord creation
+    // Atomic DB view count increment + Enriched ViewRecord creation
     const [updatedPost] = await prisma.$transaction([
       prisma.post.update({
         where: { id },
@@ -50,6 +65,16 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
           userName,
           postTitle: post.title,
           postType: post.type,
+
+          // Enriched Tracking Metadata
+          ipAddress: analytics.ipAddress,
+          city: analytics.city,
+          country: analytics.country,
+          deviceType: analytics.deviceType,
+          browser: analytics.browser,
+          os: analytics.os,
+          referrer: analytics.referrer,
+          fingerprint: analytics.fingerprint,
         },
       }),
     ]);
