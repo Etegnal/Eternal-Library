@@ -6,15 +6,32 @@ import PoemCard from '@/components/PoemCard';
 import MasterPoetsSection from '@/components/MasterPoetsSection';
 import { Feather } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function PoemsPage() {
   const session = await getServerSession(authOptions);
   const isAdmin = (session?.user as any)?.role === 'ADMIN';
 
+  // Fetch poems with optimized SELECT query (excluding heavy full-text content in listings)
   const poems = await prisma.post.findMany({
     where: { type: 'SIIR' },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      type: true,
+      author: true,
+      coverImage: true,
+      readingTime: true,
+      isFeatured: true,
+      likes: true,
+      views: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     orderBy: { publishedAt: 'desc' },
   });
 
@@ -44,7 +61,7 @@ export default async function PoemsPage() {
         {poems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {poems.map((poem) => (
-              <PoemCard key={poem.id} poem={poem} />
+              <PoemCard key={poem.id} poem={poem as any} />
             ))}
           </div>
         ) : (

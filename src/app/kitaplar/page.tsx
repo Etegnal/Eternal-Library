@@ -5,16 +5,30 @@ import MutlakKitaplikCatalog from '@/components/MutlakKitaplikCatalog';
 import { ensureVerifiedBooksInDb } from '@/lib/syncBooks';
 import { verifiedBooksData } from '@/lib/verifiedBooks';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function BooksPage() {
-  // Ensure the 30 verified masterpieces exist in Neon PostgreSQL DB
+  // Ensure the verified masterpieces exist in Neon PostgreSQL DB
   await ensureVerifiedBooksInDb();
 
-  // Fetch published books from DB (Highest Rated First by default)
+  // Fetch published books with optimized SELECT query (only essential card fields)
   const dbBooks = await prisma.book.findMany({
     where: { isPublished: true },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      author: true,
+      year: true,
+      pages: true,
+      category: true,
+      summary: true,
+      rating: true,
+      isReadable: true,
+      coverUrl: true,
+      createdAt: true,
+    },
     orderBy: [
       { rating: 'desc' },
       { createdAt: 'desc' },

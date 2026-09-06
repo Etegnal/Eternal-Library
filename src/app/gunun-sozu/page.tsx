@@ -3,8 +3,8 @@ import { getTodayQuote } from '@/lib/quotes';
 import CozyQuoteCard from '@/components/CozyQuoteCard';
 import { Sparkles } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function DailyQuotePage() {
   const quote = await getTodayQuote();

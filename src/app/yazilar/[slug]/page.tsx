@@ -8,8 +8,8 @@ import PostCard from '@/components/PostCard';
 import BookReader from '@/components/BookReader';
 import { slugify } from '@/lib/slug';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 interface ArticleDetailProps {
   params: {
@@ -37,11 +37,27 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
     notFound();
   }
 
-  // Fetch 3 related articles
+  // Fetch 3 related articles with SELECT query (only card fields needed for recommendations)
   const relatedArticles = await prisma.post.findMany({
     where: {
       type: 'YAZI',
       id: { not: article.id },
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      type: true,
+      author: true,
+      coverImage: true,
+      readingTime: true,
+      isFeatured: true,
+      likes: true,
+      views: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
     },
     orderBy: { publishedAt: 'desc' },
     take: 3,
@@ -122,7 +138,7 @@ export default async function ArticleDetailPage({ params }: ArticleDetailProps) 
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {relatedArticles.map((relArticle) => (
-              <PostCard key={relArticle.id} post={relArticle} />
+              <PostCard key={relArticle.id} post={relArticle as any} />
             ))}
           </div>
         </div>

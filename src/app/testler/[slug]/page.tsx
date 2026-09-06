@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import TestRunnerClientView from '@/components/TestRunnerClientView';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 interface Props {
   params: {

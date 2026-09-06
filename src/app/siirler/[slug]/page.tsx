@@ -8,8 +8,8 @@ import PoemCard from '@/components/PoemCard';
 import LikeButton from '@/components/LikeButton';
 import { slugify } from '@/lib/slug';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 interface PoemDetailProps {
   params: {
@@ -50,7 +50,9 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
 
     // If still not found, check by title slug matching
     if (!masterPoem) {
-      const allMasterPoets = await prisma.masterPoet.findMany();
+      const allMasterPoets = await prisma.masterPoet.findMany({
+        select: { id: true, title: true, author: true, content: true, excerpt: true, slug: true, year: true, createdAt: true },
+      });
       masterPoem = allMasterPoets.find(
         (mp) =>
           slugify(mp.title) === cleanSlug ||
@@ -89,11 +91,27 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
     notFound();
   }
 
-  // Fetch related poems
+  // Fetch related poems with SELECT query (only card fields needed for recommendations)
   const relatedPoems = await prisma.post.findMany({
     where: {
       type: 'SIIR',
       id: { not: poem.id },
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      type: true,
+      author: true,
+      coverImage: true,
+      readingTime: true,
+      isFeatured: true,
+      likes: true,
+      views: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
     },
     orderBy: { publishedAt: 'desc' },
     take: 3,
@@ -115,6 +133,7 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
           { title: postPoem.title },
         ],
       },
+      select: { year: true },
     });
     if (mp?.year) {
       displayYear = mp.year;
@@ -195,7 +214,7 @@ export default async function PoemDetailPage({ params }: PoemDetailProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {relatedPoems.map((relPoem) => (
-              <PoemCard key={relPoem.id} poem={relPoem} />
+              <PoemCard key={relPoem.id} poem={relPoem as any} />
             ))}
           </div>
         </div>

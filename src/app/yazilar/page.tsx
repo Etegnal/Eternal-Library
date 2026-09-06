@@ -3,12 +3,29 @@ import { prisma } from '@/lib/prisma';
 import PostCard from '@/components/PostCard';
 import { Feather } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function ArticlesPage() {
+  // Fetch articles with optimized SELECT query (excluding heavy full-text content in listings)
   const articles = await prisma.post.findMany({
     where: { type: 'YAZI' },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      type: true,
+      author: true,
+      coverImage: true,
+      readingTime: true,
+      isFeatured: true,
+      likes: true,
+      views: true,
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     orderBy: { publishedAt: 'desc' },
   });
 
@@ -32,7 +49,7 @@ export default async function ArticlesPage() {
       {articles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article) => (
-            <PostCard key={article.id} post={article} />
+            <PostCard key={article.id} post={article as any} />
           ))}
         </div>
       ) : (

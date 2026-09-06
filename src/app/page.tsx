@@ -4,16 +4,34 @@ import HomepageParchment from '@/components/HomepageParchment';
 import { getTodayQuote } from '@/lib/quotes';
 import { prisma } from '@/lib/prisma';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function HomePage() {
   const todayQuote = await getTodayQuote();
+
+  const postSelect = {
+    id: true,
+    title: true,
+    slug: true,
+    excerpt: true,
+    type: true as const,
+    author: true,
+    coverImage: true,
+    readingTime: true,
+    isFeatured: true,
+    likes: true,
+    views: true,
+    publishedAt: true,
+    createdAt: true,
+    updatedAt: true,
+  };
 
   let latestArticles: any[] = [];
   try {
     latestArticles = await prisma.post.findMany({
       where: { type: 'YAZI', isFeatured: true },
+      select: postSelect,
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
@@ -21,6 +39,7 @@ export default async function HomePage() {
     if (latestArticles.length === 0) {
       latestArticles = await prisma.post.findMany({
         where: { type: 'YAZI' },
+        select: postSelect,
         orderBy: { publishedAt: 'desc' },
         take: 4,
       });
@@ -33,6 +52,7 @@ export default async function HomePage() {
   try {
     featuredPoems = await prisma.post.findMany({
       where: { type: 'SIIR', isFeatured: true },
+      select: postSelect,
       orderBy: { publishedAt: 'desc' },
       take: 4,
     });
@@ -40,6 +60,7 @@ export default async function HomePage() {
     if (featuredPoems.length === 0) {
       featuredPoems = await prisma.post.findMany({
         where: { type: 'SIIR' },
+        select: postSelect,
         orderBy: { publishedAt: 'desc' },
         take: 4,
       });

@@ -3,15 +3,23 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { Brain, HelpCircle, ArrowRight, Sparkles, Layers } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 export default async function PsychologicalTestsCatalogPage() {
   let tests: any[] = [];
   try {
     tests = await prisma.psychologicalTest.findMany({
       orderBy: { createdAt: 'desc' },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        description: true,
+        coverImage: true,
+        category: true,
+        order: true,
+        createdAt: true,
         _count: {
           select: { questions: true },
         },

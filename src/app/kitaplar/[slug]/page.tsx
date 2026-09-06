@@ -9,8 +9,8 @@ import BookReviewsSection from '@/components/BookReviewsSection';
 import RecommendedBooksSection from '@/components/RecommendedBooksSection';
 import { ensureVerifiedBooksInDb } from '@/lib/syncBooks';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Enable 1-hour Vercel CDN ISR Caching to save database quota
+export const revalidate = 3600;
 
 interface BookDetailPageProps {
   params: {
@@ -62,10 +62,18 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
     fullPages: verified?.fullPages || dbBook?.bookPages.map((p) => p.content),
   };
 
-  // Fetch recommended books (3 books excluding current)
+  // Fetch recommended books (3 books excluding current) - SELECT only card fields
   const dbOthers = await prisma.book.findMany({
     where: {
       NOT: { slug: bookData.slug },
+    },
+    select: {
+      slug: true,
+      title: true,
+      author: true,
+      category: true,
+      rating: true,
+      coverUrl: true,
     },
     take: 10,
   });
