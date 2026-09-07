@@ -20,6 +20,19 @@ export async function GET(req: NextRequest) {
             ],
           }
         : {},
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        author: true,
+        year: true,
+        pages: true,
+        category: true,
+        summary: true,
+        rating: true,
+        isReadable: true,
+        coverUrl: true,
+      },
       orderBy: { year: 'asc' },
     });
 
@@ -27,15 +40,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(dbBooks);
     }
 
-    const filtered = verifiedBooksData.filter((b) =>
-      b.title.toLowerCase().includes(query) ||
-      b.author.toLowerCase().includes(query) ||
-      b.summary.toLowerCase().includes(query) ||
-      b.category.toLowerCase().includes(query)
-    );
+    const filtered = verifiedBooksData
+      .filter((b) =>
+        b.title.toLowerCase().includes(query) ||
+        b.author.toLowerCase().includes(query) ||
+        b.summary.toLowerCase().includes(query) ||
+        b.category.toLowerCase().includes(query)
+      )
+      .map(({ fullPages, ...rest }) => rest);
 
     return NextResponse.json(filtered);
   } catch (error) {
-    return NextResponse.json(verifiedBooksData);
+    const lightVerified = verifiedBooksData.map(({ fullPages, ...rest }) => rest);
+    return NextResponse.json(lightVerified);
   }
 }

@@ -7,6 +7,20 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const books = await prisma.book.findMany({
+      where: { isPublished: true },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        author: true,
+        year: true,
+        pages: true,
+        category: true,
+        summary: true,
+        rating: true,
+        isReadable: true,
+        coverUrl: true,
+      },
       orderBy: { year: 'asc' },
     });
 
@@ -14,8 +28,10 @@ export async function GET() {
       return NextResponse.json({ books });
     }
 
-    return NextResponse.json({ books: verifiedBooksData });
+    const lightVerified = verifiedBooksData.map(({ fullPages, ...rest }) => rest);
+    return NextResponse.json({ books: lightVerified });
   } catch (error) {
-    return NextResponse.json({ books: verifiedBooksData });
+    const lightVerified = verifiedBooksData.map(({ fullPages, ...rest }) => rest);
+    return NextResponse.json({ books: lightVerified });
   }
 }
