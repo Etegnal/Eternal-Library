@@ -52,11 +52,13 @@ export default async function BooksPage() {
           rating: b.rating,
           isReadable: b.isReadable,
           coverUrl: b.coverUrl,
-          fullPages: verified?.fullPages,
           createdAt: b.createdAt.toISOString(),
         };
       })
-    : verifiedBooksData;
+    : verifiedBooksData.map((vb) => {
+        const { fullPages, ...rest } = vb;
+        return rest;
+      });
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-10">
