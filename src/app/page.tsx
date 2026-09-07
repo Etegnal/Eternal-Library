@@ -4,8 +4,8 @@ import HomepageParchment from '@/components/HomepageParchment';
 import { getTodayQuote } from '@/lib/quotes';
 import { prisma } from '@/lib/prisma';
 
-// Enable 1-hour Vercel CDN ISR Caching to save database quota
-export const revalidate = 3600;
+// Render dynamically so new posts and poems show up instantly
+export const revalidate = 0;
 
 export default async function HomePage() {
   const todayQuote = await getTodayQuote();

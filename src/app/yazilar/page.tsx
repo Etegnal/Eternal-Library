@@ -3,8 +3,8 @@ import { prisma } from '@/lib/prisma';
 import PostCard from '@/components/PostCard';
 import { Feather } from 'lucide-react';
 
-// Enable 1-hour Vercel CDN ISR Caching to save database quota
-export const revalidate = 3600;
+// Render dynamically so newly added articles appear immediately
+export const revalidate = 0;
 
 export default async function ArticlesPage() {
   // Fetch articles with optimized SELECT query (excluding heavy full-text content in listings)
@@ -26,7 +26,10 @@ export default async function ArticlesPage() {
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: { publishedAt: 'desc' },
+    orderBy: [
+      { publishedAt: 'desc' },
+      { createdAt: 'desc' },
+    ],
   });
 
   return (

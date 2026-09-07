@@ -4,8 +4,8 @@ import PoemCard from '@/components/PoemCard';
 import MasterPoetsSection from '@/components/MasterPoetsSection';
 import { Feather } from 'lucide-react';
 
-// Enable 1-hour Vercel CDN ISR Caching to save database quota
-export const revalidate = 3600;
+// Render dynamically so newly added poems appear immediately
+export const revalidate = 0;
 
 export default async function PoemsPage() {
   // Fetch poems with optimized SELECT query (excluding heavy full-text content in listings)
@@ -27,7 +27,10 @@ export default async function PoemsPage() {
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: { publishedAt: 'desc' },
+    orderBy: [
+      { publishedAt: 'desc' },
+      { createdAt: 'desc' },
+    ],
   });
 
   const masterPoets = await prisma.masterPoet.findMany({
