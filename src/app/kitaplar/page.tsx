@@ -2,16 +2,11 @@ import React from 'react';
 import { prisma } from '@/lib/prisma';
 import { Library } from 'lucide-react';
 import MutlakKitaplikCatalog from '@/components/MutlakKitaplikCatalog';
-import { ensureVerifiedBooksInDb } from '@/lib/syncBooks';
-import { verifiedBooksData } from '@/lib/verifiedBooks';
 
-// Enable 1-hour Vercel CDN ISR Caching to save database quota
-export const revalidate = 3600;
+// Render dynamically on-demand to bypass Vercel 19MB static HTML file limit caused by 135 base64 book covers
+export const revalidate = 0;
 
 export default async function BooksPage() {
-  // Ensure the verified masterpieces exist in Neon PostgreSQL DB
-  await ensureVerifiedBooksInDb();
-
   // Fetch published books with optimized SELECT query (only essential card fields)
   const dbBooks = await prisma.book.findMany({
     where: { isPublished: true },
@@ -36,29 +31,21 @@ export default async function BooksPage() {
   });
 
   // Map to VerifiedBook schema with displayYear, id and createdAt
-  const books = dbBooks.length >= 30 
-    ? dbBooks.map((b) => {
-        const verified = verifiedBooksData.find((vb) => vb.slug === b.slug);
-        return {
-          id: b.id,
-          slug: b.slug,
-          title: b.title,
-          author: b.author,
-          year: b.year,
-          displayYear: verified?.displayYear || (b.year < 0 ? `MÖ ${Math.abs(b.year)}` : `${b.year}`),
-          pages: b.pages,
-          category: b.category,
-          summary: b.summary,
-          rating: b.rating,
-          isReadable: b.isReadable,
-          coverUrl: b.coverUrl,
-          createdAt: b.createdAt.toISOString(),
-        };
-      })
-    : verifiedBooksData.map((vb) => {
-        const { fullPages, ...rest } = vb;
-        return rest;
-      });
+  const books = dbBooks.map((b) => ({
+    id: b.id,
+    slug: b.slug,
+    title: b.title,
+    author: b.author,
+    year: b.year,
+    displayYear: b.year < 0 ? `MÖ ${Math.abs(b.year)}` : `${b.year}`,
+    pages: b.pages,
+    category: b.category,
+    summary: b.summary.length > 200 ? `${b.summary.slice(0, 200)}...` : b.summary,
+    rating: b.rating,
+    isReadable: b.isReadable,
+    coverUrl: b.coverUrl,
+    createdAt: b.createdAt.toISOString(),
+  }));
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16 space-y-10">
