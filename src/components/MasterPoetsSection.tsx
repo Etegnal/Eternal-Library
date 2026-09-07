@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Feather, Quote, ArrowRight, PlusCircle } from 'lucide-react';
 import { slugify } from '@/lib/slug';
+import { useSession } from 'next-auth/react';
 
 export interface MasterPoetData {
   id: string;
@@ -20,7 +21,9 @@ interface MasterPoetsSectionProps {
   isAdmin?: boolean;
 }
 
-export default function MasterPoetsSection({ masterPoets = [], isAdmin = false }: MasterPoetsSectionProps) {
+export default function MasterPoetsSection({ masterPoets = [], isAdmin: propIsAdmin }: MasterPoetsSectionProps) {
+  const { data: session } = useSession();
+  const isAdmin = propIsAdmin ?? (session?.user as any)?.role === 'ADMIN';
   return (
     <section className="pt-8 border-t-2 border-[#E6D7BC] space-y-8">
       

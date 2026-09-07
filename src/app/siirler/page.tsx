@@ -1,7 +1,5 @@
 import React from 'react';
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import PoemCard from '@/components/PoemCard';
 import MasterPoetsSection from '@/components/MasterPoetsSection';
 import { Feather } from 'lucide-react';
@@ -10,9 +8,6 @@ import { Feather } from 'lucide-react';
 export const revalidate = 3600;
 
 export default async function PoemsPage() {
-  const session = await getServerSession(authOptions);
-  const isAdmin = (session?.user as any)?.role === 'ADMIN';
-
   // Fetch poems with optimized SELECT query (excluding heavy full-text content in listings)
   const poems = await prisma.post.findMany({
     where: { type: 'SIIR' },
@@ -72,7 +67,7 @@ export default async function PoemsPage() {
       </div>
 
       {/* ÜSTAT KALEMLER SECTION AT THE BOTTOM */}
-      <MasterPoetsSection masterPoets={masterPoets} isAdmin={isAdmin} />
+      <MasterPoetsSection masterPoets={masterPoets} />
 
     </div>
   );
