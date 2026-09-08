@@ -41,10 +41,11 @@ export async function POST(req: NextRequest) {
     const rating = parseFloat(ratingStr) || 4.8;
     const isReadable = isReadableStr === 'true';
 
-    let coverUrl = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600';
+    const directCoverUrl = (formData.get('coverUrl') as string || '').trim();
+    let coverUrl = directCoverUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600';
 
-    // Cover File Upload with Serverless (Vercel) + Local fallback
-    if (file && file.size > 0) {
+    // Cover File Upload with Serverless (Vercel) + Local fallback if no direct coverUrl provided
+    if (!directCoverUrl && file && file.size > 0) {
       try {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);

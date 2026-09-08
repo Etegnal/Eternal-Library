@@ -89,10 +89,11 @@ export async function PUT(
       return NextResponse.json({ error: 'Güncellenecek kitap bulunamadı' }, { status: 404 });
     }
 
-    let coverUrl = existing.coverUrl;
+    const directCoverUrl = (formData.get('coverUrl') as string || '').trim();
+    let coverUrl = directCoverUrl || existing.coverUrl;
 
-    // Cover File Upload with Serverless (Vercel) + Local fallback
-    if (file && file.size > 0) {
+    // Cover File Upload with Serverless (Vercel) + Local fallback if no direct coverUrl provided
+    if (!directCoverUrl && file && file.size > 0) {
       try {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);

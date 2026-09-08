@@ -83,11 +83,14 @@ export default function AdminBooksListManager() {
       b.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [editCoverUrl, setEditCoverUrl] = useState('');
+
   // Handle Edit Click
   const handleOpenEdit = async (book: AdminBookItem) => {
     setEditingBook(book);
     setEditCoverFile(null);
     setEditCoverPreview(book.coverUrl);
+    setEditCoverUrl(book.coverUrl && book.coverUrl.startsWith('http') ? book.coverUrl : '');
 
     const isPreset = DEFAULT_BOOK_CATEGORIES.includes(book.category);
     if (isPreset) {
@@ -154,7 +157,9 @@ export default function AdminBooksListManager() {
       data.append('content', editFormData.content);
       data.append('buyUrl', editFormData.buyUrl);
 
-      if (editCoverFile) {
+      if (editCoverUrl.trim()) {
+        data.append('coverUrl', editCoverUrl.trim());
+      } else if (editCoverFile) {
         data.append('cover', editCoverFile);
       }
 
@@ -422,27 +427,48 @@ export default function AdminBooksListManager() {
             {/* Edit Form */}
             <form onSubmit={handleSaveEdit} className="space-y-5">
               
-              {/* Cover Image Upload Preview */}
-              <div className="flex items-center gap-5 p-4 rounded-2xl bg-amber-50/80 border border-amber-200">
+              {/* Cover Image Upload & URL Preview */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 p-4 rounded-2xl bg-amber-50/80 border border-amber-200">
                 {editCoverPreview && (
                   <div className="relative w-20 h-28 rounded-xl overflow-hidden shadow-md border border-amber-300 shrink-0 bg-amber-950">
                     <Image src={editCoverPreview} alt="Kapak" fill unoptimized className="object-cover" />
                   </div>
                 )}
 
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-[#8B4513] uppercase">
-                    Kapak Görselini Değiştir (Opsiyonel)
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => e.target.files && handleFileChange(e.target.files[0])}
-                    className="text-xs text-[#5C4033] file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-800 file:text-amber-100 hover:file:bg-amber-900 cursor-pointer"
-                  />
-                  <p className="text-[11px] text-stone-500">
-                    Görsel yüklenmezse mevcut kapak resmi korunur.
-                  </p>
+                <div className="space-y-3 flex-1 w-full">
+                  <div>
+                    <label className="block text-xs font-bold text-[#8B4513] uppercase mb-1">
+                      Kapak Görseli İnternet URL'si (Önerilen)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://images.unsplash.com/... veya https://covers.openlibrary.org/..."
+                      value={editCoverUrl}
+                      onChange={(e) => {
+                        const url = e.target.value;
+                        setEditCoverUrl(url);
+                        if (url.trim().startsWith('http')) {
+                          setEditCoverPreview(url.trim());
+                        }
+                      }}
+                      className="w-full p-2.5 rounded-xl bg-white border border-amber-300 text-xs font-mono text-[#362215] focus:outline-none focus:border-amber-600 shadow-sm"
+                    />
+                    <p className="text-[11px] text-amber-800/80 mt-1 font-sans">
+                      🌐 İnternetten kopyaladığınız resim bağlantısını buraya yapıştırabilirsiniz. Veritabanı trafiğini düşürür.
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-amber-200/80">
+                    <label className="block text-[11px] font-bold text-[#8B4513] uppercase mb-1">
+                      Veya Dosya Seç (Opsiyonel):
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => e.target.files && handleFileChange(e.target.files[0])}
+                      className="text-xs text-[#5C4033] file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-amber-800 file:text-amber-100 hover:file:bg-amber-900 cursor-pointer"
+                    />
+                  </div>
                 </div>
               </div>
 

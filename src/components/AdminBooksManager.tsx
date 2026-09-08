@@ -43,6 +43,7 @@ export default function AdminBooksManager() {
   }, []);
 
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverUrl, setCoverUrl] = useState('');
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -99,6 +100,7 @@ export default function AdminBooksManager() {
 
       if (data.cover_image_url) {
         setCoverPreview(data.cover_image_url);
+        setCoverUrl(data.cover_image_url);
       }
 
       setStatusMessage({
@@ -168,7 +170,9 @@ export default function AdminBooksManager() {
       data.append('content', formData.content);
       data.append('buyUrl', formData.buyUrl);
 
-      if (coverFile) {
+      if (coverUrl.trim()) {
+        data.append('coverUrl', coverUrl.trim());
+      } else if (coverFile) {
         data.append('cover', coverFile);
       }
 
@@ -204,6 +208,7 @@ export default function AdminBooksManager() {
       setIsCustomCategory(false);
       setCustomCategory('');
       setCoverFile(null);
+      setCoverUrl('');
       setCoverPreview(null);
     } catch (err: any) {
       setStatusMessage({ type: 'error', text: err.message || 'Bir hata oluştu.' });
@@ -298,20 +303,48 @@ export default function AdminBooksManager() {
       {/* FORM */}
       <form onSubmit={handleSubmit} className="space-y-6">
         
-        {/* DRAG AND DROP COVER UPLOAD AREA */}
-        <div className="space-y-2">
-          <label className="block text-xs font-bold text-[#8B4513] uppercase tracking-wider">
-            Kitap Kapak Görseli (Sürükle-Bırak)
-          </label>
+        {/* DRAG AND DROP & DIRECT URL COVER AREA */}
+        <div className="space-y-3 p-4 rounded-2xl bg-amber-50/50 border border-amber-200/80">
+          <div className="space-y-1">
+            <label className="block text-xs font-bold text-[#8B4513] uppercase tracking-wider">
+              Kapak Görseli İnternet URL'si (Önerilen - Ücretsiz & Hızlı)
+            </label>
+            <input
+              type="url"
+              value={coverUrl}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCoverUrl(val);
+                if (val.trim()) {
+                  setCoverPreview(val.trim());
+                } else if (!coverFile) {
+                  setCoverPreview(null);
+                }
+              }}
+              placeholder="https://images.unsplash.com/photo-... veya https://i.ibb.co/..."
+              className="w-full p-2.5 rounded-xl bg-white border border-amber-300 text-xs font-mono text-[#362215] focus:outline-none focus:border-amber-600"
+            />
+            <p className="text-[11px] text-[#5C4033]">
+              İnternetten bulduğunuz doğrudan resim adresini yapıştırın. Veritabanı kotası harcamaz.
+            </p>
+          </div>
+
+          <div className="relative flex items-center justify-center my-2">
+            <div className="border-t border-amber-200 w-full"></div>
+            <span className="bg-[#FFFDF9] px-3 text-[10px] text-amber-800 font-bold uppercase tracking-wider shrink-0 border border-amber-200 rounded-full">
+              veya Cihazınızdan Yükleyin
+            </span>
+            <div className="border-t border-amber-200 w-full"></div>
+          </div>
 
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all cursor-pointer relative flex flex-col sm:flex-row items-center justify-center gap-6 ${
+            className={`border-2 border-dashed rounded-2xl p-4 text-center transition-all cursor-pointer relative flex flex-col sm:flex-row items-center justify-center gap-4 ${
               isDragging
                 ? 'border-amber-600 bg-amber-200/90 scale-[1.01] shadow-lg ring-4 ring-amber-400/40'
-                : 'border-amber-300/80 hover:border-amber-600 bg-amber-50/40'
+                : 'border-amber-300/80 hover:border-amber-600 bg-white/60'
             }`}
           >
             <input
@@ -322,21 +355,21 @@ export default function AdminBooksManager() {
             />
 
             {coverPreview ? (
-              <div className="relative w-28 h-40 rounded-xl overflow-hidden shadow-lg border border-amber-300 shrink-0 bg-amber-950">
+              <div className="relative w-24 h-36 rounded-xl overflow-hidden shadow-lg border border-amber-300 shrink-0 bg-amber-950">
                 <Image src={coverPreview} alt="Kapak Önizleme" fill unoptimized className="object-cover" />
               </div>
             ) : (
-              <div className="w-16 h-16 rounded-2xl bg-amber-100/80 text-amber-800 flex items-center justify-center border border-amber-300 shrink-0">
-                <Upload className="w-8 h-8 text-[#9A3412]" />
+              <div className="w-12 h-12 rounded-xl bg-amber-100/80 text-amber-800 flex items-center justify-center border border-amber-300 shrink-0">
+                <Upload className="w-6 h-6 text-[#9A3412]" />
               </div>
             )}
 
             <div className="space-y-1 text-left">
               <p className="text-xs font-bold text-[#362215]">
-                {coverFile ? coverFile.name : 'Kapak görselini buraya sürükleyin veya dosya seçin'}
+                {coverFile ? coverFile.name : 'Kapak görselini sürükleyin veya dosya seçin'}
               </p>
               <p className="text-[11px] text-[#5C4033]">
-                Yüklenen görsel <code className="font-mono text-amber-900">public/covers/[slug].jpg</code> yoluna kaydedilecektir. (PNG, JPG, WEBP)
+                Yüklenen görsel <code className="font-mono text-amber-900">public/covers/[slug].jpg</code> olarak saklanır.
               </p>
             </div>
           </div>
