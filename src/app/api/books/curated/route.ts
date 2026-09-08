@@ -24,12 +24,16 @@ export async function GET() {
       orderBy: { year: 'asc' },
     });
 
+    const responseHeaders = {
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+    };
+
     if (books.length > 0) {
-      return NextResponse.json({ books });
+      return NextResponse.json({ books }, { headers: responseHeaders });
     }
 
     const lightVerified = verifiedBooksData.map(({ fullPages, ...rest }) => rest);
-    return NextResponse.json({ books: lightVerified });
+    return NextResponse.json({ books: lightVerified }, { headers: responseHeaders });
   } catch (error) {
     const lightVerified = verifiedBooksData.map(({ fullPages, ...rest }) => rest);
     return NextResponse.json({ books: lightVerified });
